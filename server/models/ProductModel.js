@@ -1,0 +1,78 @@
+const mongoose = require('mongoose');
+
+const packSchema = mongoose.Schema({
+    name: { type: String, required: true }, // e.g., "1 Month Pack"
+    mrp: { type: Number, required: true, default: 0 }, // Original Price
+    sellingPrice: { type: Number, required: true, default: 0 }, // Discounted/Final Price
+    medicines: [{ type: String }], // List of included items e.g. ["Vigor Oil", "Stamina Caps"]
+    isDefault: { type: Boolean, default: false },
+    isActive: { type: Boolean, default: true }
+});
+
+// Virtual for discount percentage
+packSchema.virtual('discountPercentage').get(function () {
+    if (this.mrp > 0 && this.sellingPrice < this.mrp) {
+        return Math.round(((this.mrp - this.sellingPrice) / this.mrp) * 100);
+    }
+    return 0;
+});
+
+// Ensure virtuals are included in JSON
+packSchema.set('toJSON', { virtuals: true });
+packSchema.set('toObject', { virtuals: true });
+
+const productSchema = mongoose.Schema({
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'User',
+    },
+    name: {
+        type: String,
+        required: true,
+    },
+    image: {
+        type: String,
+        required: true,
+    },
+    images: [String], // Array of additional images
+    shortDescription: {
+        type: String,
+        required: true,
+    },
+    fullDescription: {
+        type: String,
+        required: true,
+    },
+    category: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'Category',
+    },
+    packs: [packSchema],
+    discount: {
+        type: Number,
+        default: 0,
+    },
+    countInStock: {
+        type: Number,
+        required: true,
+        default: 100, // Default generous stock as per requirement usually
+    },
+    isActive: {
+        type: Boolean,
+        default: true,
+    },
+    isBestSeller: {
+        type: Boolean,
+        default: false,
+    },
+    isWellness: {
+        type: Boolean,
+        default: false,
+    }
+}, {
+    timestamps: true,
+});
+
+module.exports = mongoose.model('Product', productSchema);
