@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../../api/api';
 import { Eye } from 'lucide-react';
 
 const Orders = () => {
@@ -7,18 +7,10 @@ const Orders = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-
-    const config = {
-        headers: {
-            Authorization: `Bearer ${userInfo?.token}`,
-        },
-    };
-
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const { data } = await axios.get('http://localhost:5000/api/orders', config);
+                const { data } = await api.get('/api/orders');
                 setOrders(data);
                 setLoading(false);
             } catch (err) {

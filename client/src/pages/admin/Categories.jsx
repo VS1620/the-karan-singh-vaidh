@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../../api/api';
 import { Plus, Trash2, Edit } from 'lucide-react';
 
 const Categories = () => {
@@ -9,21 +9,13 @@ const Categories = () => {
     const [description, setDescription] = useState('');
     const [error, setError] = useState(null);
 
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-
-    const config = {
-        headers: {
-            Authorization: `Bearer ${userInfo?.token}`,
-        },
-    };
-
     useEffect(() => {
         fetchCategories();
     }, []);
 
     const fetchCategories = async () => {
         try {
-            const { data } = await axios.get('http://localhost:5000/api/categories');
+            const { data } = await api.get('/api/categories');
             setCategories(data);
             setLoading(false);
         } catch (err) {
@@ -35,7 +27,7 @@ const Categories = () => {
     const submitHandler = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:5000/api/categories', { name, description }, config);
+            await api.post('/api/categories', { name, description });
             setName('');
             setDescription('');
             fetchCategories();
@@ -47,7 +39,7 @@ const Categories = () => {
     const deleteHandler = async (id) => {
         if (window.confirm('Are you sure you want to delete this category?')) {
             try {
-                await axios.delete(`http://localhost:5000/api/categories/${id}`, config);
+                await api.delete(`/api/categories/${id}`);
                 fetchCategories();
             } catch (err) {
                 alert(err.response?.data?.message || err.message);

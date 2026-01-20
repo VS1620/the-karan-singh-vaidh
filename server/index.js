@@ -11,6 +11,7 @@ const categoryRoutes = require('./routes/categoryRoutes');
 const productRoutes = require('./routes/productRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
+const dashboardRoutes = require('./routes/dashboardRoutes');
 
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
@@ -33,9 +34,17 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 // Static folder for uploads
-app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
+const uploadsPath = path.join(__dirname, '/uploads');
+app.use('/uploads', express.static(uploadsPath));
+
+// Ensure uploads directory exists
+const fs = require('fs');
+if (!fs.existsSync(uploadsPath)) {
+    fs.mkdirSync(uploadsPath, { recursive: true });
+}
 
 // Routes
 app.get('/', (req, res) => {

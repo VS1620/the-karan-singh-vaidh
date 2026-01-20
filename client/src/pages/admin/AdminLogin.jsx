@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../api/api';
 import { Lock, Eye, EyeOff } from 'lucide-react';
 
 const AdminLogin = () => {
@@ -21,16 +21,9 @@ const AdminLogin = () => {
         e.preventDefault();
         setError(null);
         try {
-            const config = {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            };
-
-            const { data } = await axios.post(
-                'http://localhost:5000/api/users/login',
-                { email, password },
-                config
+            const { data } = await api.post(
+                '/api/users/login',
+                { email, password }
             );
 
             localStorage.setItem('userInfo', JSON.stringify(data));

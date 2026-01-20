@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../../api/api';
 import { Link, useNavigate } from 'react-router-dom';
 import { Plus, Edit, Trash2, Eye } from 'lucide-react';
 
@@ -9,21 +9,13 @@ const Products = () => {
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-
-    const config = {
-        headers: {
-            Authorization: `Bearer ${userInfo?.token}`,
-        },
-    };
-
     useEffect(() => {
         fetchProducts();
     }, []);
 
     const fetchProducts = async () => {
         try {
-            const { data } = await axios.get('http://localhost:5000/api/products');
+            const { data } = await api.get('/api/products');
             setProducts(data);
             setLoading(false);
         } catch (err) {
@@ -35,7 +27,7 @@ const Products = () => {
     const deleteHandler = async (id) => {
         if (window.confirm('Are you sure you want to delete this product?')) {
             try {
-                await axios.delete(`http://localhost:5000/api/products/${id}`, config);
+                await api.delete(`/api/products/${id}`);
                 fetchProducts();
             } catch (err) {
                 alert(err.response?.data?.message || err.message);

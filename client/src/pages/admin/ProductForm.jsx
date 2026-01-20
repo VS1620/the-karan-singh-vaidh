@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../api/api';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Upload, X, Plus } from 'lucide-react';
 
@@ -23,13 +23,6 @@ const ProductForm = () => {
     const navigate = useNavigate();
     const { id } = useParams();
 
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    const config = {
-        headers: {
-            Authorization: `Bearer ${userInfo?.token}`,
-        },
-    };
-
     useEffect(() => {
         fetchCategories();
         if (id) {
@@ -40,7 +33,7 @@ const ProductForm = () => {
 
     const fetchCategories = async () => {
         try {
-            const { data } = await axios.get('http://localhost:5000/api/categories');
+            const { data } = await api.get('/api/categories');
             setCategories(data);
         } catch (error) {
             console.error(error);
@@ -49,7 +42,7 @@ const ProductForm = () => {
 
     const fetchProduct = async (productId) => {
         try {
-            const { data } = await axios.get(`http://localhost:5000/api/products/${productId}`);
+            const { data } = await api.get(`/api/products/${productId}`);
             setName(data.name);
             // setPrice(data.price); removed
             setImage(data.image);
@@ -82,18 +75,11 @@ const ProductForm = () => {
         setUploading(true);
 
         try {
-            const uploadConfig = {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    // Authorization: `Bearer ${userInfo?.token}`, // Not usually needed for public upload unless protected
-                },
-            };
-
             if (multiple) {
-                const { data } = await axios.post('http://localhost:5000/api/upload/multiple', formData, uploadConfig);
+                const { data } = await api.post('/api/upload/multiple', formData);
                 setImages([...images, ...data]);
             } else {
-                const { data } = await axios.post('http://localhost:5000/api/upload', formData, uploadConfig);
+                const { data } = await api.post('/api/upload', formData);
                 setImage(data);
             }
 
@@ -101,6 +87,7 @@ const ProductForm = () => {
         } catch (error) {
             console.error(error);
             setUploading(false);
+            alert('Image upload failed: ' + (error.response?.data?.message || error.message));
         }
     };
 
@@ -129,9 +116,9 @@ const ProductForm = () => {
 
         try {
             if (isEditMode) {
-                await axios.put(`http://localhost:5000/api/products/${id}`, productData, config);
+                await api.put(`/api/products/${id}`, productData);
             } else {
-                await axios.post('http://localhost:5000/api/products', productData, config);
+                await api.post('/api/products', productData);
             }
             navigate('/admin/products');
         } catch (error) {
