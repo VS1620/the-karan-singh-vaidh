@@ -1,20 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, AlertCircle, Loader2 } from 'lucide-react';
+import { AuthContext } from '../context/AuthContext';
 
 const Login = () => {
     const navigate = useNavigate();
+    const { login } = useContext(AuthContext);
     const [formData, setFormData] = useState({ email: '', password: '' });
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
+        if (error) setError('');
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Simulate login
-        console.log('Login attempt:', formData);
-        navigate('/account');
+        setLoading(true);
+        setError('');
+        try {
+            await login(formData.email, formData.password);
+            navigate('/account');
+        } catch (err) {
+            setError(err.response?.data?.message || err.message || 'Login failed. Please try again.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -27,6 +39,12 @@ const Login = () => {
                     </p>
                 </div>
                 <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+                    {error && (
+                        <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm flex items-center gap-2 animate-in fade-in slide-in-from-top-2">
+                            <AlertCircle size={16} />
+                            {error}
+                        </div>
+                    )}
                     <div className="rounded-md shadow-sm -space-y-px">
                         <div className="mb-4">
                             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email address</label>
@@ -40,6 +58,7 @@ const Login = () => {
                                 placeholder="you@example.com"
                                 value={formData.email}
                                 onChange={handleChange}
+                                disabled={loading}
                             />
                         </div>
                         <div>
@@ -54,6 +73,7 @@ const Login = () => {
                                 placeholder="••••••••"
                                 value={formData.password}
                                 onChange={handleChange}
+                                disabled={loading}
                             />
                         </div>
                     </div>
@@ -69,12 +89,19 @@ const Login = () => {
                     <div>
                         <button
                             type="submit"
-                            className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold rounded-lg text-white bg-ayur-green hover:bg-ayur-olive focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ayur-green transition-colors"
+                            disabled={loading}
+                            className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold rounded-lg text-white bg-ayur-green hover:bg-ayur-olive focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ayur-green transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
                         >
-                            Sign in
-                            <span className="absolute right-4 inset-y-0 flex items-center pl-3">
-                                <ArrowRight size={16} />
-                            </span>
+                            {loading ? (
+                                <Loader2 className="animate-spin" size={20} />
+                            ) : (
+                                <>
+                                    Sign in
+                                    <span className="absolute right-4 inset-y-0 flex items-center pl-3">
+                                        <ArrowRight size={16} />
+                                    </span>
+                                </>
+                            )}
                         </button>
                     </div>
                 </form>

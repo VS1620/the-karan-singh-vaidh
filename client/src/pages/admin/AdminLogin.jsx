@@ -22,7 +22,7 @@ const AdminLogin = () => {
         setError(null);
         try {
             const { data } = await api.post(
-                '/api/users/login',
+                '/users/login',
                 { email, password }
             );
 

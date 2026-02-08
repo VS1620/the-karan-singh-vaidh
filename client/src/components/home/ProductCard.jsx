@@ -1,65 +1,151 @@
-import React from 'react';
-import { ShoppingCart, Star } from 'lucide-react';
+import React, { useContext, useState } from 'react';
+import { ShoppingCart, Star, Minus, Plus, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { getAssetUrl } from '../../api/api';
+import { CartContext } from '../../context/CartContext';
 
 const ProductCard = ({ product }) => {
-    // Reconcile property names between static data and API data
-    const id = product._id || product.id;
+    const { addToCart } = useContext(CartContext);
+    const [imageError, setImageError] = useState(false);
+    const [quantity, setQuantity] = useState(1);
+
+    // Reconcile property names
+    const id = product.slug || product._id || product.id;
     const name = product.name;
-    const image = product.image;
-    const rating = product.rating || 5;
-    const reviews = product.numReviews || product.reviews || 0;
-    const shortDesc = product.shortDescription || product.shortDesc;
+    const image = getAssetUrl(product.image);
+    const rating = product.rating || 4.8;
+    const reviews = product.numReviews || product.reviews || 2500;
+    const tags = product.tags || ["Natural", "Wellness"];
 
-    // Default to the first pack or the popular one for display price
-    const packs = product.packs || [];
-    const defaultPack = packs.find(p => p.isPopular || p.isDefault) || packs[0] || {};
+    // Pack selection
+    const packs = (product.packs && product.packs.length > 0)
+        ? product.packs
+        : [{ name: 'PACK OF 1', sellingPrice: product.price || 0, mrp: product.mrp || 0 }];
 
-    const price = defaultPack.sellingPrice || defaultPack.price || 0;
-    const mrp = defaultPack.mrp || 0;
-    const discount = defaultPack.discount || (mrp > price ? Math.round(((mrp - price) / mrp) * 100) : 0);
+    const [selectedPack, setSelectedPack] = useState(packs.find(p => p.isPopular || p.isDefault) || packs[0]);
+    const [showPackDropdown, setShowPackDropdown] = useState(false);
+
+    const price = selectedPack?.sellingPrice || selectedPack?.price || 0;
+    const mrp = selectedPack?.mrp || 0;
+    const discount = selectedPack.discount || (mrp > price ? Math.round(((mrp - price) / mrp) * 100) : 0);
+
+    const handleAddToCart = () => {
+        addToCart(product, selectedPack, quantity);
+    };
 
     return (
-        <div className="bg-white rounded-lg shadow-sm hover:shadow-xl transition-all duration-300 border border-transparent hover:border-ayur-gold/30 group overflow-hidden flex flex-col h-full">
+        <div className="bg-white rounded-3xl transition-all duration-300 border border-gray-100 hover:border-ayur-green/20 group overflow-hidden flex flex-col h-full w-full shadow-sm hover:shadow-xl relative">
+
+            {/* Discount Badge */}
+            {discount > 0 && (
+                <div className="absolute top-4 left-0 z-20 bg-[#2ECC71] text-white text-[10px] font-bold px-3 py-1 rounded-r-full shadow-md">
+                    {discount}% OFF
+                </div>
+            )}
+
             {/* Image Container */}
-            <Link to={`/product/${id}`} className="relative h-64 overflow-hidden bg-ayur-beige/10 block">
+            <Link to={`/product/${id}`} className="relative w-full aspect-[4/5] overflow-hidden bg-white block">
                 <img
-                    src={image}
+                    src={imageError ? '/logo.png' : image}
                     alt={name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    onError={() => setImageError(true)}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 p-4"
+                    loading="lazy"
                 />
-                {discount > 0 && (
-                    <div className="absolute top-2 left-2 bg-ayur-gold text-ayur-green text-xs font-bold px-2 py-1 rounded">
-                        {discount}% OFF
-                    </div>
-                )}
             </Link>
 
             {/* Content */}
-            <div className="p-4 flex flex-col flex-grow">
-                <div className="mb-2">
-                    <Link to={`/product/${id}`} className="block">
-                        <div className="flex items-center text-yellow-500 text-xs space-x-1 mb-1">
-                            <Star size={12} fill="currentColor" />
-                            <span>{rating}</span>
-                            <span className="text-gray-400">({reviews})</span>
+            <div className="p-4 flex flex-col flex-grow text-center">
+                <div className="flex flex-col items-center mb-1">
+                    {/* Star Rating */}
+
+                    {/* Title */}
+                    {/* Star Rating */}
+                    <div className="flex items-center gap-1 text-[#F1C40F] mb-1">
+                        <div className="flex">
+                            {[...Array(5)].map((_, i) => (
+                                <Star key={i} size={14} fill={i < Math.floor(rating) ? "currentColor" : "none"} className="text-[#F1C40F]" />
+                            ))}
                         </div>
-                        <h3 className="font-serif text-lg text-ayur-green leading-tight line-clamp-2 min-h-[3rem] group-hover:underline decoration-ayur-gold underline-offset-2 transition-all">
+                        <span className="text-[11px] font-bold text-gray-700 ml-1">{rating}</span>
+                    </div>
+
+                    {/* Title */}
+                    <Link to={`/product/${id}`} className="block">
+                        <h3 className="font-bold text-[16px] text-[#1A3C34] mb-1 line-clamp-1 group-hover:text-ayur-gold transition-colors">
                             {name}
                         </h3>
                     </Link>
-                    <p className="text-gray-500 text-xs mt-1 line-clamp-2">{shortDesc}</p>
+
+                    {/* Tags */}
+                    <p className="text-[11px] text-gray-400 font-medium tracking-tight mb-3">
+                        {tags.join(" | ")}
+                    </p>
                 </div>
 
-                {/* Price & Action (Simplified) */}
-                <div className="mt-auto pt-4 flex items-end justify-between">
-                    <div>
-                        {mrp > price && <span className="block text-xs text-gray-400 line-through">₹{mrp}</span>}
-                        <span className="block text-lg font-bold text-ayur-green">₹{price}</span>
+                <div className="mt-auto space-y-4">
+                    {/* Price */}
+                    <div className="flex items-center justify-center gap-2">
+                        <span className="text-lg font-black text-[#1A3C34]">Rs. {price.toFixed(2)}</span>
+                        {mrp > price && (
+                            <span className="text-xs text-gray-400 line-through">Rs. {mrp.toFixed(2)}</span>
+                        )}
                     </div>
-                    <button className="bg-ayur-green hover:bg-ayur-olive text-white p-2 rounded-full transition-colors flex items-center justify-center">
-                        <ShoppingCart size={18} />
-                    </button>
+
+                    {/* Pack Selector */}
+                    <div className="relative">
+                        <button
+                            onClick={() => setShowPackDropdown(!showPackDropdown)}
+                            className="w-full py-1.5 px-4 rounded-full border border-gray-200 text-[10px] font-bold text-[#1A3C34] flex items-center justify-center gap-2 hover:bg-gray-50 uppercase tracking-widest transition-colors"
+                        >
+                            {selectedPack.name} <ChevronDown size={14} className={showPackDropdown ? 'rotate-180 transition-transform' : 'transition-transform'} />
+                        </button>
+
+                        {showPackDropdown && (
+                            <div className="absolute bottom-full left-0 w-full bg-white border border-gray-100 rounded-2xl shadow-2xl z-50 mb-2 py-2 overflow-hidden animate-in fade-in slide-in-from-bottom-2">
+                                {packs.map((pack, idx) => (
+                                    <button
+                                        key={idx}
+                                        className="w-full px-4 py-2 text-left text-[11px] font-bold hover:bg-[#F4F9F6] text-[#1A3C34] transition-colors"
+                                        onClick={() => {
+                                            setSelectedPack(pack);
+                                            setShowPackDropdown(false);
+                                        }}
+                                    >
+                                        {pack.name} - Rs. {pack.sellingPrice}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Quantity & Add to Cart Stack */}
+                    <div className="space-y-2 w-full pt-1">
+                        {/* Quantity Selector */}
+                        <div className="flex items-center justify-between border border-gray-100 bg-[#F8FBF9] rounded-xl h-10 px-4">
+                            <button
+                                onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                                className="p-1 text-[#1A3C34] hover:text-ayur-gold"
+                            >
+                                <Minus size={16} />
+                            </button>
+                            <span className="font-bold text-sm text-[#1A3C34]">{quantity}</span>
+                            <button
+                                onClick={() => setQuantity(quantity + 1)}
+                                className="p-1 text-[#1A3C34] hover:text-ayur-gold"
+                            >
+                                <Plus size={16} />
+                            </button>
+                        </div>
+
+                        {/* Add to Cart Button */}
+                        <button
+                            onClick={handleAddToCart}
+                            className="w-full bg-[#419463] hover:bg-[#357a52] text-white h-11 rounded-xl text-[12px] font-black uppercase tracking-tight transition-all active:scale-[0.98] shadow-md shadow-[#419463]/10"
+                        >
+                            ADD TO CART
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

@@ -16,6 +16,9 @@ const ProductForm = () => {
     const [discount, setDiscount] = useState(0);
     const [isBestSeller, setIsBestSeller] = useState(false);
     const [isWellness, setIsWellness] = useState(false);
+    const [ingredients, setIngredients] = useState('');
+    const [usage, setUsage] = useState('');
+    const [benefits, setBenefits] = useState('');
     const [packs, setPacks] = useState([]); // [{name, price, isDefault}]
     const [uploading, setUploading] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
@@ -33,7 +36,7 @@ const ProductForm = () => {
 
     const fetchCategories = async () => {
         try {
-            const { data } = await api.get('/api/categories');
+            const { data } = await api.get('/categories');
             setCategories(data);
         } catch (error) {
             console.error(error);
@@ -42,19 +45,22 @@ const ProductForm = () => {
 
     const fetchProduct = async (productId) => {
         try {
-            const { data } = await api.get(`/api/products/${productId}`);
+            const { data } = await api.get(`/products/${productId}`);
             setName(data.name);
             // setPrice(data.price); removed
             setImage(data.image);
             setImages(data.images || []);
             setCategory(data.category?._id || data.category);
             setCountInStock(data.countInStock);
-            setShortDescription(data.shortDescription);
-            setFullDescription(data.fullDescription);
-            setDiscount(data.discount);
-            setIsBestSeller(data.isBestSeller);
-            setIsWellness(data.isWellness);
-            setPacks(data.packs || []);
+            setShortDescription(String(data.shortDescription || ''));
+            setFullDescription(String(data.fullDescription || ''));
+            setIngredients(String(data.ingredients || ''));
+            setUsage(String(data.usage || ''));
+            setBenefits(String(data.benefits || ''));
+            setDiscount(data.discount || 0);
+            setIsBestSeller(!!data.isBestSeller);
+            setIsWellness(!!data.isWellness);
+            setPacks(Array.isArray(data.packs) ? data.packs : []);
         } catch (error) {
             console.error(error);
         }
@@ -76,10 +82,10 @@ const ProductForm = () => {
 
         try {
             if (multiple) {
-                const { data } = await api.post('/api/upload/multiple', formData);
+                const { data } = await api.post('/upload/multiple', formData);
                 setImages([...images, ...data]);
             } else {
-                const { data } = await api.post('/api/upload', formData);
+                const { data } = await api.post('/upload', formData);
                 setImage(data);
             }
 
@@ -111,17 +117,27 @@ const ProductForm = () => {
             discount,
             isBestSeller,
             isWellness,
+            ingredients,
+            usage,
+            benefits,
             packs
         };
 
+        console.log('Submitting Product Data:', productData);
+
         try {
             if (isEditMode) {
-                await api.put(`/api/products/${id}`, productData);
+                console.log(`Updating product ${id}...`);
+                const { data } = await api.put(`/products/${id}`, productData);
+                console.log('Update Success:', data);
             } else {
-                await api.post('/api/products', productData);
+                console.log('Creating new product...');
+                const { data } = await api.post('/products', productData);
+                console.log('Create Success:', data);
             }
             navigate('/admin/products');
         } catch (error) {
+            console.error('Submission Error:', error);
             alert(error.response?.data?.message || error.message);
         }
     };
@@ -227,15 +243,15 @@ const ProductForm = () => {
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Gallery Images</label>
                     <div className="flex flex-wrap gap-4 mb-2">
-                        {images.map((img, idx) => (
-                            <div key={idx} className="relative w-20 h-20 border rounded-md overflow-hidden">
+                        {Array.isArray(images) && images.map((img, idx) => (
+                            <div key={idx} className="relative w-20 h-20 border rounded-md overflow-hidden shadow-sm">
                                 <img src={img} alt="" className="w-full h-full object-cover" />
                                 <button
                                     type="button"
                                     onClick={() => setImages(images.filter((_, i) => i !== idx))}
-                                    className="absolute top-0 right-0 bg-red-500 text-white p-0.5"
+                                    className="absolute top-0 right-0 bg-red-500/80 hover:bg-red-600 text-white p-1 rounded-bl-md transition-colors shadow-sm"
                                 >
-                                    <X size={14} />
+                                    <X size={12} />
                                 </button>
                             </div>
                         ))}
@@ -261,9 +277,38 @@ const ProductForm = () => {
                     <label className="block text-sm font-medium text-gray-700">Full Description</label>
                     <textarea
                         className="w-full px-4 py-2 mt-1 border rounded-md focus:ring-emerald-500 focus:border-emerald-500"
-                        rows="5"
+                        rows="4"
                         value={fullDescription}
                         onChange={(e) => setFullDescription(e.target.value)}
+                    />
+                </div>
+                <div>
+                    <label className="block text-sm font-medium text-gray-700">Ingredients (Rich Formatted)</label>
+                    <textarea
+                        className="w-full px-4 py-2 mt-1 border rounded-md focus:ring-emerald-500 focus:border-emerald-500 font-mono text-sm"
+                        rows="4"
+                        value={ingredients}
+                        onChange={(e) => setIngredients(e.target.value)}
+                        placeholder="e.g. Ashwagandha: 100mg, Shatavari: 50mg"
+                    />
+                </div>
+                <div>
+                    <label className="block text-sm font-medium text-gray-700">Usage / Dosage</label>
+                    <textarea
+                        className="w-full px-4 py-2 mt-1 border rounded-md focus:ring-emerald-500 focus:border-emerald-500"
+                        rows="3"
+                        value={usage}
+                        onChange={(e) => setUsage(e.target.value)}
+                        placeholder="e.g. 1 capsule twice a day with warm milk"
+                    />
+                </div>
+                <div>
+                    <label className="block text-sm font-medium text-gray-700">Benefits</label>
+                    <textarea
+                        className="w-full px-4 py-2 mt-1 border rounded-md focus:ring-emerald-500 focus:border-emerald-500"
+                        rows="4"
+                        value={benefits}
+                        onChange={(e) => setBenefits(e.target.value)}
                     />
                 </div>
 

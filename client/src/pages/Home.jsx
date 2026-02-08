@@ -6,6 +6,8 @@ import PillsSection from '../components/home/PillsSection';
 import TrustMarquee from '../components/home/TrustMarquee';
 import WhyUs from '../components/home/WhyUs';
 import HowItWorks from '../components/home/HowItWorks';
+import RealStores from '../components/home/RealStores';
+import FactoryVideo from '../components/home/FactoryVideo';
 import Authenticity from '../components/home/Authenticity';
 import Reviews from '../components/home/Reviews';
 
@@ -21,6 +23,8 @@ const Home = () => {
             <WhyUs />
             <HowItWorks />
             <Authenticity />
+            <RealStores />
+            <FactoryVideo />
             <Reviews />
         </div>
     );

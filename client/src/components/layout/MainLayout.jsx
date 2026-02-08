@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from './Header';
 import Footer from './Footer';
+import FloatingCallButton from './FloatingCallButton';
 
 const MainLayout = ({ children }) => {
     return (
@@ -9,6 +10,7 @@ const MainLayout = ({ children }) => {
             <main className="flex-grow pt-20 bg-white">
                 {children}
             </main>
+            <FloatingCallButton />
             <Footer />
         </div>
     );

@@ -3,6 +3,7 @@ import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { ArrowRight, Star, ShieldCheck, Award } from 'lucide-react';
+import ConsultationModal from './ConsultationModal';
 
 const testimonials = [
     {
@@ -29,6 +30,7 @@ const testimonials = [
 ];
 
 const ProvenResults = () => {
+    const [isModalOpen, setIsModalOpen] = React.useState(false);
     const settings = {
         dots: true,
         arrows: false,
@@ -56,7 +58,7 @@ const ProvenResults = () => {
                     {/* Left Content */}
                     <div className="lg:w-1/2 space-y-8 z-10">
                         <div className="inline-block border border-yellow-500/50 rounded-full px-4 py-1.5">
-                            <span className="text-yellow-400 text-xs font-bold tracking-widest uppercase">100+ Years of Legacy</span>
+                            <span className="text-yellow-400 text-xs font-bold tracking-widest uppercase">Trusted Since 2006</span>
                         </div>
 
                         <h2 className="text-5xl md:text-6xl font-serif text-yellow-500 italic leading-tight">
@@ -71,7 +73,10 @@ const ProvenResults = () => {
                             <button className="bg-yellow-500 hover:bg-yellow-600 text-[#1a4d2e] px-8 py-3.5 rounded-lg font-bold flex items-center gap-2 transition-all">
                                 Shop Now <ArrowRight size={18} />
                             </button>
-                            <button className="border border-white/30 hover:border-white text-white px-8 py-3.5 rounded-lg font-medium transition-all">
+                            <button
+                                onClick={() => setIsModalOpen(true)}
+                                className="border border-white/30 hover:border-white text-white px-8 py-3.5 rounded-lg font-medium transition-all"
+                            >
                                 Consult Ayurveda Expert
                             </button>
                         </div>
@@ -135,6 +140,11 @@ const ProvenResults = () => {
                     </div>
                 </div>
             </div>
+            {/* Appointment Modal */}
+            <ConsultationModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+            />
         </section>
     );
 };
