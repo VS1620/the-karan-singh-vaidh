@@ -5,7 +5,54 @@ const Product = require('../models/ProductModel');
 // @route   GET /api/products
 // @access  Public
 const getProducts = asyncHandler(async (req, res) => {
-    const products = await Product.find({}).populate('category', 'name');
+    const { category, sort, keyword } = req.query;
+
+    let query = {};
+
+    if (category && category !== 'All') {
+        const mongoose = require('mongoose');
+        const Category = require('../models/Category');
+
+        // Check if the provided category is a valid ObjectId
+        if (mongoose.Types.ObjectId.isValid(category)) {
+            query.category = category;
+        } else {
+            // Check by slug first
+            const foundCategory = await Category.findOne({
+                $or: [
+                    { slug: category },
+                    { name: { $regex: new RegExp(`^${category.replace(/-/g, ' ')}$`, 'i') } }
+                ]
+            });
+
+            if (foundCategory) {
+                query.category = foundCategory._id;
+            } else {
+                return res.json([]);
+            }
+        }
+    }
+
+    if (keyword) {
+        query.name = { $regex: keyword, $options: 'i' };
+    }
+
+    let result = Product.find(query)
+        .populate('category', 'name')
+        .select('-fullDescription -ingredients -usage -benefits');
+
+    // Sorting
+    if (sort === 'low') {
+        // Since price is in packs, we might need to sort by the first pack's price
+        // In MongoDB, sorting by an array field property works by using the min/max value in that array
+        result = result.sort({ 'packs.sellingPrice': 1 });
+    } else if (sort === 'high') {
+        result = result.sort({ 'packs.sellingPrice': -1 });
+    } else {
+        result = result.sort({ createdAt: -1 });
+    }
+
+    const products = await result;
     res.json(products);
 });
 
@@ -13,11 +60,48 @@ const getProducts = asyncHandler(async (req, res) => {
 // @route   GET /api/products/:id
 // @access  Public
 const getProductById = asyncHandler(async (req, res) => {
-    const product = await Product.findById(req.params.id).populate('category', 'name');
+    const { id: idOrSlug } = req.params;
+    const mongoose = require('mongoose');
+
+    console.log(`🔍 [Product Request] Resolving: "${idOrSlug}"`);
+
+    let product;
+
+    if (mongoose.Types.ObjectId.isValid(idOrSlug)) {
+        product = await Product.findById(idOrSlug).populate('category', 'name slug');
+    }
+
+    // 2. Try Exact Slug
+    if (!product) {
+        product = await Product.findOne({ slug: idOrSlug }).populate('category', 'name slug');
+    }
+
+    // 3. Try Fuzzy Name/Slug Resolution (Direct DB Query)
+    if (!product) {
+        // Create a regex that allows spaces, hyphens and is case-insensitive
+        const fuzzySearch = idOrSlug.replace(/[-\s]/g, '[-\\s]?');
+        product = await Product.findOne({
+            $or: [
+                { slug: { $regex: new RegExp(`^${fuzzySearch}$`, 'i') } },
+                { name: { $regex: new RegExp(`^${fuzzySearch}$`, 'i') } }
+            ]
+        }).populate('category', 'name slug');
+    }
+
+    // 4. Fallback: Search for any product containing the words (last resort)
+    if (!product) {
+        const words = idOrSlug.split(/[-\s]/).filter(w => w.length > 2);
+        if (words.length > 0) {
+            const wordRegex = new RegExp(words.join('|'), 'i');
+            product = await Product.findOne({ name: { $regex: wordRegex } }).populate('category', 'name slug');
+        }
+    }
 
     if (product) {
+        console.log(`✅ [Product Resolved] "${idOrSlug}" -> "${product.name}"`);
         res.json(product);
     } else {
+        console.error(`❌ [Product Not Found] "${idOrSlug}"`);
         res.status(404);
         throw new Error('Product not found');
     }
@@ -44,7 +128,12 @@ const createProduct = asyncHandler(async (req, res) => {
     // but typical admin flow is "Create" -> "Edit", or just "Create with Data".
     // Let's support "Create with Data" if provided, else defaults.
     if (req.body.name) {
-        const { name, image, images, category, countInStock, shortDescription, fullDescription, packs, discount, isBestSeller, isWellness } = req.body;
+        const {
+            name, image, images, category, countInStock,
+            shortDescription, fullDescription, packs,
+            discount, isBestSeller, isWellness,
+            ingredients, usage, benefits
+        } = req.body;
 
         // Validation: Must have at least one pack with sellingPrice
         if (!packs || packs.length === 0) {
@@ -60,7 +149,7 @@ const createProduct = asyncHandler(async (req, res) => {
 
         product.name = name;
         product.image = image;
-        product.images = images;
+        product.images = Array.isArray(images) ? images : [];
         product.category = category;
         product.countInStock = countInStock;
         product.shortDescription = shortDescription;
@@ -69,6 +158,9 @@ const createProduct = asyncHandler(async (req, res) => {
         product.discount = discount;
         product.isBestSeller = isBestSeller;
         product.isWellness = isWellness;
+        product.ingredients = ingredients;
+        product.usage = usage;
+        product.benefits = benefits;
     }
 
     const createdProduct = await product.save();
@@ -81,36 +173,40 @@ const createProduct = asyncHandler(async (req, res) => {
 const updateProduct = asyncHandler(async (req, res) => {
     const {
         name,
-        price,
         image,
         images,
         category,
         countInStock,
         shortDescription,
         fullDescription,
-        packs, // Array of packs
+        packs,
         discount,
         isActive,
         isBestSeller,
-        isWellness
+        isWellness,
+        ingredients,
+        usage,
+        benefits
     } = req.body;
 
     const product = await Product.findById(req.params.id);
 
     if (product) {
-        product.name = name || product.name;
-        // product.price removed - strictly pack based now
-        product.image = image || product.image;
-        product.images = images || product.images;
-        product.category = category || product.category;
+        product.name = name !== undefined ? name : product.name;
+        product.image = image !== undefined ? image : product.image;
+        product.images = Array.isArray(images) ? images : (product.images || []);
+        product.category = category !== undefined ? category : product.category;
         product.countInStock = countInStock !== undefined ? countInStock : product.countInStock;
-        product.shortDescription = shortDescription || product.shortDescription;
-        product.fullDescription = fullDescription || product.fullDescription;
-        product.packs = packs || product.packs;
+        product.shortDescription = shortDescription !== undefined ? shortDescription : product.shortDescription;
+        product.fullDescription = fullDescription !== undefined ? fullDescription : product.fullDescription;
+        product.packs = packs !== undefined ? packs : product.packs;
         product.discount = discount !== undefined ? discount : product.discount;
         product.isActive = isActive !== undefined ? isActive : product.isActive;
         product.isBestSeller = isBestSeller !== undefined ? isBestSeller : product.isBestSeller;
         product.isWellness = isWellness !== undefined ? isWellness : product.isWellness;
+        product.ingredients = ingredients !== undefined ? ingredients : product.ingredients;
+        product.usage = usage !== undefined ? usage : product.usage;
+        product.benefits = benefits !== undefined ? benefits : product.benefits;
 
         const updatedProduct = await product.save();
         res.json(updatedProduct);

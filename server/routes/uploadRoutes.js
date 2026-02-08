@@ -1,45 +1,72 @@
 const path = require('path');
 const express = require('express');
 const multer = require('multer');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const router = express.Router();
 
-const storage = multer.diskStorage({
-    destination(req, file, cb) {
-        cb(null, 'uploads/');
-    },
-    filename(req, file, cb) {
-        cb(
-            null,
-            `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`
-        );
-    },
+// Configure Cloudinary
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-function checkFileType(file, cb) {
-    const filetypes = /jpg|jpeg|png|webp/;
-    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = filetypes.test(file.mimetype);
-
-    if (extname && mimetype) {
-        return cb(null, true);
-    } else {
-        cb('Images only!');
-    }
-}
-
-const upload = multer({
-    storage,
-    fileFilter: function (req, file, cb) {
-        checkFileType(file, cb);
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'the-karan-singh-vaidh/products',
+        allowed_formats: ['jpg', 'png', 'jpeg', 'webp'],
+        public_id: (req, file) => `${file.fieldname}-${Date.now()}`,
     },
 });
 
-router.post('/', upload.single('image'), (req, res) => {
-    res.send(`/${req.file.path.replace(/\\/g, '/')}`);
+const upload = multer({ storage });
+
+router.post('/', (req, res) => {
+    upload.single('image')(req, res, (err) => {
+        if (err) {
+            return res.status(400).json({
+                message: (err instanceof multer.MulterError) ? `Multer error: ${err.message}` : (err.message || err)
+            });
+        }
+
+        if (!req.file) {
+            return res.status(400).json({ message: 'No file uploaded or incorrect field name. Use "image".' });
+        }
+
+        try {
+            // Cloudinary returns the full URL in path or secure_url
+            // We use the full URL directly as it's persistent across environments
+            const finalPath = req.file.path || req.file.secure_url;
+            res.send(finalPath);
+        } catch (error) {
+            console.error('Path construction error:', error);
+            res.status(500).json({ message: 'Error processing file path' });
+        }
+    });
 });
-router.post('/multiple', upload.array('images', 10), (req, res) => {
-    const paths = req.files.map(file => `/${file.path.replace(/\\/g, '/')}`);
-    res.send(paths);
+
+router.post('/multiple', (req, res) => {
+    upload.array('images', 10)(req, res, (err) => {
+        if (err) {
+            return res.status(400).json({
+                message: (err instanceof multer.MulterError) ? `Multer error: ${err.message}` : (err.message || err)
+            });
+        }
+
+        if (!req.files || req.files.length === 0) {
+            return res.json([]);
+        }
+
+        try {
+            const paths = req.files.map(file => file.path || file.secure_url);
+            res.json(paths);
+        } catch (error) {
+            console.error('Multiple path construction error:', error);
+            res.status(500).json({ message: 'Error processing file paths' });
+        }
+    });
 });
 
 module.exports = router;

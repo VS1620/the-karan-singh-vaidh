@@ -31,6 +31,11 @@ const productSchema = mongoose.Schema({
         type: String,
         required: true,
     },
+    slug: {
+        type: String,
+        unique: true,
+        sparse: true,
+    },
     image: {
         type: String,
         required: true,
@@ -46,8 +51,20 @@ const productSchema = mongoose.Schema({
     },
     category: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true,
+        required: [true, 'Please select a category'],
         ref: 'Category',
+    },
+    ingredients: {
+        type: String,
+        required: false,
+    },
+    usage: {
+        type: String,
+        required: false,
+    },
+    benefits: {
+        type: String,
+        required: false,
     },
     packs: [packSchema],
     discount: {
@@ -74,5 +91,25 @@ const productSchema = mongoose.Schema({
 }, {
     timestamps: true,
 });
+
+productSchema.pre('save', async function () {
+    if (this.isModified('name')) {
+        let baseSlug = this.name.toLowerCase().split(' ').join('-').replace(/[^\w-]+/g, '');
+        let slug = baseSlug;
+        let counter = 1;
+
+        while (true) {
+            const existing = await mongoose.model('Product').findOne({ slug, _id: { $ne: this._id } });
+            if (!existing) break;
+            slug = `${baseSlug}-${counter}`;
+            counter++;
+        }
+        this.slug = slug;
+    }
+});
+
+productSchema.index({ name: 'text' });
+productSchema.index({ category: 1 });
+productSchema.index({ createdAt: -1 });
 
 module.exports = mongoose.model('Product', productSchema);
