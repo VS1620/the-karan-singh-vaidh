@@ -25,13 +25,6 @@ const ProductDetails = () => {
         const fetchProduct = async () => {
             try {
                 const { data } = await api.get(`/products/${id}`);
-
-                // Ensure we are always using the canonical SEO slug in the URL
-                if (data.slug && id !== data.slug) {
-                    navigate(`/product/${data.slug}`, { replace: true });
-                    return;
-                }
-
                 setProduct(data);
                 if (data && data.packs && data.packs.length > 0) {
                     const defaultIndex = data.packs.findIndex(p => p.isDefault);
@@ -52,15 +45,6 @@ const ProductDetails = () => {
                     setRelatedProducts([...filtered, ...others]);
                 } else {
                     setRelatedProducts(filtered);
-                }
-
-                // Update SEO Meta Tags
-                if (data.name) {
-                    document.title = `${data.name} | The Karan Singh Vaidh`;
-                }
-                const metaDesc = document.querySelector('meta[name="description"]');
-                if (metaDesc && data.shortDescription) {
-                    metaDesc.setAttribute("content", data.shortDescription);
                 }
 
                 setLoading(false);
@@ -179,7 +163,7 @@ const ProductDetails = () => {
                     {/* RIGHT: Product Info & Actions */}
                     <div className="lg:w-[45%] flex flex-col pt-2 px-4 md:px-0">
                         {/* Title & Reviews */}
-                        <h1 className="text-2xl lg:text-4xl font-bold text-gray-900 mb-2 leading-tight uppercase">{product.slug}</h1>
+                        <h1 className="text-2xl lg:text-4xl font-bold text-gray-900 mb-2 leading-tight">{product.name}</h1>
                         <p className="text-gray-500 text-sm mb-4 leading-relaxed line-clamp-2 md:line-clamp-none">{product.shortDescription}</p>
 
                         {/* Tags */}

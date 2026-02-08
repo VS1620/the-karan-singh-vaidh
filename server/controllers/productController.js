@@ -60,55 +60,17 @@ const getProducts = asyncHandler(async (req, res) => {
     res.json(products);
 });
 
+// @desc    Fetch single product
+// @route   GET /api/products/:id
+// @access  Public
 const getProductById = asyncHandler(async (req, res) => {
-    let { id } = req.params;
-    const mongoose = require('mongoose');
+    const product = await Product.findById(req.params.id).populate('category', 'name');
 
-    console.log(`[SEO-DEBUG] Starting lookup for identifier: "${id}"`);
-
-    try {
-        let product;
-
-        // 1. Normalize input: strictly trim and handle nulls
-        id = (id || '').trim();
-        if (!id) {
-            console.warn('[SEO-DEBUG] Empty identifier received');
-            res.status(400);
-            throw new Error('Product identifier is required');
-        }
-
-        // 2. Try lookup by ObjectId first (traditional)
-        if (mongoose.Types.ObjectId.isValid(id)) {
-            console.log(`[SEO-DEBUG] Identifying as ObjectId: ${id}`);
-            product = await Product.findById(id).populate('category', 'name');
-        }
-
-        // 3. If not found by ID, try lookup by Slug (SEO)
-        if (!product) {
-            const normalizedSlug = id.toLowerCase();
-            console.log(`[SEO-DEBUG] Identifier not found as ID or is not an ID. Searching by slug: "${normalizedSlug}"`);
-
-            // Explicitly search by slug field
-            product = await Product.findOne({ slug: normalizedSlug }).populate('category', 'name');
-        }
-
-        if (product) {
-            console.log(`[SEO-DEBUG] Success: Found product "${product.name}" (ID: ${product._id})`);
-            return res.json(product);
-        } else {
-            console.error(`[SEO-DEBUG] Failure: No product matches identifier "${id}"`);
-            res.status(404);
-            return res.json({ message: 'Product not found', identifier: id });
-        }
-    } catch (error) {
-        console.error(`[SEO-CRITICAL-ERROR] Crash prevented in getProductById:`, error.message);
-        console.error(error.stack);
-        res.status(500);
-        return res.json({
-            message: 'Internal Server Error during product lookup',
-            error: error.message,
-            identifier: id
-        });
+    if (product) {
+        res.json(product);
+    } else {
+        res.status(404);
+        throw new Error('Product not found');
     }
 });
 

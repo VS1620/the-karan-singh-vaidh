@@ -112,7 +112,8 @@ const CheckoutPage = () => {
             rzp.open();
         } catch (error) {
             console.error('Razorpay Error:', error);
-            alert('Error initiating Razorpay payment. Please try again.');
+            const errorMessage = error.response?.data?.message || error.message || 'Error initiating Razorpay payment. Please try again.';
+            alert(errorMessage);
         } finally {
             setLoading(false);
         }

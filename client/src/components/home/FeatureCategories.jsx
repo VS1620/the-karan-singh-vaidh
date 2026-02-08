@@ -17,49 +17,49 @@ const categories = [
         name: 'Kidney Stone',
         description: 'Advanced Ayurvedic formula to naturally dissolve and flush out stones without pain.',
         image: kidneyStoneImg,
-        link: '/product/kidney-stone'
+        link: '/product/697631c6bd94a7bc32bec1e2'
     },
     {
         id: 2,
         name: 'Gall Bladder',
         description: 'Potent herbal support for gallbladder health and stone management.',
         image: gallBladderImg,
-        link: '/product/gall-bladder'
+        link: '/product/697628febd94a7bc32bebce1'
     },
     {
         id: 3,
         name: 'Piles Care',
         description: 'Quick relief from pain, swelling, and bleeding with natural healing herbs.',
         image: pilesImg,
-        link: '/product/piles'
+        link: '/product/6976370fbd94a7bc32bec3fe'
     },
     {
         id: 4,
         name: 'Gastric Solution',
         description: 'Effective relief from acidity, bloating, and chronic gas issues.',
         image: gastricImg,
-        link: '/product/gastritis-digestion'
+        link: '/product/69762e8dbd94a7bc32bec05a'
     },
     {
         id: 5,
         name: 'Asthma Care',
         description: 'Strengthen your lungs and breathe purely with ancient respiratory support.',
         image: asthmaImg,
-        link: '/product/asthma'
+        link: '/product/69761e95bd94a7bc32beb945'
     },
     {
         id: 6,
         name: 'Diabetes Care',
         description: 'Holistic management of blood sugar levels with natural insulin support.',
         image: diabetesImg,
-        link: '/product/diabetes'
+        link: '/product/6976241fbd94a7bc32beba87'
     },
     {
         id: 7,
         name: 'Migraine Relief',
         description: 'Soothe neurological pathways to eliminate recurrent headaches and stress.',
         image: migraineImg,
-        link: '/product/migraine'
+        link: '/product/6976341abd94a7bc32bec2a8    '
     }
 ];
 

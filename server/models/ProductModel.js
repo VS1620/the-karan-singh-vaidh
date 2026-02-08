@@ -31,12 +31,6 @@ const productSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    slug: {
-        type: String,
-        required: true,
-        unique: true,
-        lowercase: true,
-    },
     image: {
         type: String,
         required: true,
@@ -93,36 +87,7 @@ const productSchema = mongoose.Schema({
     timestamps: true,
 });
 
-// Generate slug from name before saving
-productSchema.pre('validate', async function () {
-    if (this.name && !this.slug) {
-        const slugify = require('slugify');
-        let generatedSlug = slugify(this.name, { lower: true, strict: true });
-
-        // Ensure uniqueness
-        const Product = mongoose.model('Product');
-        let slugExists = await Product.findOne({ slug: generatedSlug, _id: { $ne: this._id } });
-        let counter = 1;
-        while (slugExists) {
-            const tempSlug = `${generatedSlug}-${counter}`;
-            slugExists = await Product.findOne({ slug: tempSlug, _id: { $ne: this._id } });
-            if (!slugExists) {
-                generatedSlug = tempSlug;
-                break;
-            }
-            counter++;
-        }
-        this.slug = generatedSlug;
-    } else if (this.name && this.isModified('name')) {
-        // If name changed but slug exists, we should probably update it too for consistency
-        // But some SEOs prefer keeping old slugs. Let's force lowercase/strict at least.
-        const slugify = require('slugify');
-        this.slug = slugify(this.slug || this.name, { lower: true, strict: true });
-    }
-});
-
 productSchema.index({ name: 'text' });
-// Removed redundant productSchema.index({ slug: 1 }); as it is already marked unique: true in schema
 productSchema.index({ category: 1 });
 productSchema.index({ createdAt: -1 });
 

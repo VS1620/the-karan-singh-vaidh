@@ -44,7 +44,7 @@ const ProductCard = ({ product }) => {
             )}
 
             {/* Image Container */}
-            <Link to={`/product/${product.slug || id}`} className="relative w-full aspect-[4/5] overflow-hidden bg-white block">
+            <Link to={`/product/${id}`} className="relative w-full aspect-[4/5] overflow-hidden bg-white block">
                 <img
                     src={imageError ? '/logo.png' : image}
                     alt={name}
@@ -71,7 +71,7 @@ const ProductCard = ({ product }) => {
                     </div>
 
                     {/* Title */}
-                    <Link to={`/product/${product.slug || id}`} className="block">
+                    <Link to={`/product/${id}`} className="block">
                         <h3 className="font-bold text-[16px] text-[#1A3C34] mb-1 line-clamp-1 group-hover:text-ayur-gold transition-colors">
                             {name}
                         </h3>
