@@ -91,16 +91,7 @@ console.log('✅ Appointment routes loaded');
 
 // Routes
 app.get('/', (req, res) => {
-    res.json({ message: 'The Karan Singh Vaidh API is running...' });
-});
-
-app.get('/api/health', (req, res) => {
-    res.json({
-        status: 'ok',
-        version: '1.2.0',
-        timestamp: new Date().toISOString(),
-        dbStatus: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
-    });
+    res.json({ message: 'The Karan Singh  Vaidh API is running...' });
 });
 
 // Error Handling

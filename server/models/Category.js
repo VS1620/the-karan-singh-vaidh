@@ -6,11 +6,6 @@ const categorySchema = mongoose.Schema({
         required: true,
         unique: true,
     },
-    slug: {
-        type: String,
-        unique: true,
-        sparse: true,
-    },
     description: {
         type: String,
     },
@@ -23,22 +18,6 @@ const categorySchema = mongoose.Schema({
     }
 }, {
     timestamps: true,
-});
-
-categorySchema.pre('save', async function () {
-    if (this.isModified('name')) {
-        let baseSlug = this.name.toLowerCase().split(' ').join('-').replace(/[^\w-]+/g, '');
-        let slug = baseSlug;
-        let counter = 1;
-
-        while (true) {
-            const existing = await mongoose.model('Category').findOne({ slug, _id: { $ne: this._id } });
-            if (!existing) break;
-            slug = `${baseSlug}-${counter}`;
-            counter++;
-        }
-        this.slug = slug;
-    }
 });
 
 module.exports = mongoose.model('Category', categorySchema);

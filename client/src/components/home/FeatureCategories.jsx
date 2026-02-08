@@ -17,49 +17,49 @@ const categories = [
         name: 'Kidney Stone',
         description: 'Advanced Ayurvedic formula to naturally dissolve and flush out stones without pain.',
         image: kidneyStoneImg,
-        link: '/product/kidney-stone-care'
+        link: '/product/kidney-stone'
     },
     {
         id: 2,
         name: 'Gall Bladder',
         description: 'Potent herbal support for gallbladder health and stone management.',
         image: gallBladderImg,
-        link: '/product/gall-bladder-care'
+        link: '/product/gall-bladder'
     },
     {
         id: 3,
         name: 'Piles Care',
         description: 'Quick relief from pain, swelling, and bleeding with natural healing herbs.',
         image: pilesImg,
-        link: '/product/piles-care'
+        link: '/product/piles'
     },
     {
         id: 4,
         name: 'Gastric Solution',
         description: 'Effective relief from acidity, bloating, and chronic gas issues.',
         image: gastricImg,
-        link: '/product/gastric-solution'
+        link: '/product/gastritis-digestion'
     },
     {
         id: 5,
         name: 'Asthma Care',
         description: 'Strengthen your lungs and breathe purely with ancient respiratory support.',
         image: asthmaImg,
-        link: '/product/asthma-care'
+        link: '/product/asthma'
     },
     {
         id: 6,
         name: 'Diabetes Care',
         description: 'Holistic management of blood sugar levels with natural insulin support.',
         image: diabetesImg,
-        link: '/product/diabetes-care'
+        link: '/product/diabetes'
     },
     {
         id: 7,
         name: 'Migraine Relief',
         description: 'Soothe neurological pathways to eliminate recurrent headaches and stress.',
         image: migraineImg,
-        link: '/product/migraine-relief'
+        link: '/product/migraine'
     }
 ];
 

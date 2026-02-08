@@ -1,7 +1,5 @@
 const asyncHandler = require('express-async-handler');
-const mongoose = require('mongoose');
 const Product = require('../models/ProductModel');
-const Category = require('../models/Category');
 
 // @desc    Fetch all products
 // @route   GET /api/products
@@ -12,21 +10,28 @@ const getProducts = asyncHandler(async (req, res) => {
     let query = {};
 
     if (category && category !== 'All') {
+        const mongoose = require('mongoose');
+        const Category = require('../models/Category');
+
         // Check if the provided category is a valid ObjectId
         if (mongoose.Types.ObjectId.isValid(category)) {
             query.category = category;
         } else {
-            // Check by slug first
+            // If not a valid ID, it's likely a name or slug (e.g., 'kidney-stone')
+            // Convert 'kidney-stone' to 'Kidney Stone' loosely for search
+            const searchName = category
+                .split('-')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ');
+
             const foundCategory = await Category.findOne({
-                $or: [
-                    { slug: category },
-                    { name: { $regex: new RegExp(`^${category.replace(/-/g, ' ')}$`, 'i') } }
-                ]
+                name: { $regex: new RegExp(`^${searchName}$`, 'i') }
             });
 
             if (foundCategory) {
                 query.category = foundCategory._id;
             } else {
+                // Return empty if category name doesn't exist
                 return res.json([]);
             }
         }
@@ -55,60 +60,54 @@ const getProducts = asyncHandler(async (req, res) => {
     res.json(products);
 });
 
-// @desc    Fetch single product
-// @route   GET /api/products/:id
-// @access  Public
 const getProductById = asyncHandler(async (req, res) => {
+    let { id } = req.params;
+    const mongoose = require('mongoose');
+
+    console.log(`[SEO-DEBUG] Starting lookup for identifier: "${id}"`);
+
     try {
-        const { id: idOrSlug } = req.params;
-
-        console.log(`🔍 [Product Request] Resolving: "${idOrSlug}"`);
-
         let product;
 
-        if (mongoose.Types.ObjectId.isValid(idOrSlug)) {
-            product = await Product.findById(idOrSlug).populate('category', 'name slug');
+        // 1. Normalize input: strictly trim and handle nulls
+        id = (id || '').trim();
+        if (!id) {
+            console.warn('[SEO-DEBUG] Empty identifier received');
+            res.status(400);
+            throw new Error('Product identifier is required');
         }
 
-        // 2. Try Exact Slug
-        if (!product) {
-            product = await Product.findOne({ slug: idOrSlug }).populate('category', 'name slug');
+        // 2. Try lookup by ObjectId first (traditional)
+        if (mongoose.Types.ObjectId.isValid(id)) {
+            console.log(`[SEO-DEBUG] Identifying as ObjectId: ${id}`);
+            product = await Product.findById(id).populate('category', 'name');
         }
 
-        // 3. Try Fuzzy Name/Slug Resolution (Direct DB Query)
+        // 3. If not found by ID, try lookup by Slug (SEO)
         if (!product) {
-            // Create a regex that allows spaces, hyphens and is case-insensitive
-            const fuzzySearch = idOrSlug.replace(/[-\s]/g, '[-\\s]?');
-            product = await Product.findOne({
-                $or: [
-                    { slug: { $regex: new RegExp(`^${fuzzySearch}$`, 'i') } },
-                    { name: { $regex: new RegExp(`^${fuzzySearch}$`, 'i') } }
-                ]
-            }).populate('category', 'name slug');
-        }
+            const normalizedSlug = id.toLowerCase();
+            console.log(`[SEO-DEBUG] Identifier not found as ID or is not an ID. Searching by slug: "${normalizedSlug}"`);
 
-        // 4. Fallback: Search for any product containing the words (last resort)
-        if (!product) {
-            const words = idOrSlug.split(/[-\s]/).filter(w => w.length > 2);
-            if (words.length > 0) {
-                const wordRegex = new RegExp(words.join('|'), 'i');
-                product = await Product.findOne({ name: { $regex: wordRegex } }).populate('category', 'name slug');
-            }
+            // Explicitly search by slug field
+            product = await Product.findOne({ slug: normalizedSlug }).populate('category', 'name');
         }
 
         if (product) {
-            console.log(`✅ [Product Resolved] "${idOrSlug}" -> "${product.name}"`);
-            res.json(product);
+            console.log(`[SEO-DEBUG] Success: Found product "${product.name}" (ID: ${product._id})`);
+            return res.json(product);
         } else {
-            console.error(`❌ [Product Not Found] "${idOrSlug}"`);
+            console.error(`[SEO-DEBUG] Failure: No product matches identifier "${id}"`);
             res.status(404);
-            throw new Error('Product not found');
+            return res.json({ message: 'Product not found', identifier: id });
         }
     } catch (error) {
-        console.error(`💥 [Product Resolution Error]: ${error.message}`);
-        res.status(500).json({
-            message: error.message,
-            stack: process.env.NODE_ENV === 'production' ? null : error.stack
+        console.error(`[SEO-CRITICAL-ERROR] Crash prevented in getProductById:`, error.message);
+        console.error(error.stack);
+        res.status(500);
+        return res.json({
+            message: 'Internal Server Error during product lookup',
+            error: error.message,
+            identifier: id
         });
     }
 });

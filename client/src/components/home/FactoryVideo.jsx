@@ -1,6 +1,6 @@
 import React from 'react';
 // import factoryVideo from '../../assets/for website factory edit.mp4';
-const factoryVideo = ""; // Placeholder to prevent build errors
+const factoryVideo = "https://www.w3schools.com/html/mov_bbb.mp4"; // Placeholder video URL for build fix
 
 const FactoryVideo = () => {
     return (

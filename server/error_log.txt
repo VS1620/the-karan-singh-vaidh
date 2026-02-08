@@ -3140,3 +3140,107 @@ Error: Invalid email or password
 Error: Product not found
     at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\productController.js:78:15
     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+[2026-02-08T13:05:39.281Z] 404 - Not Found - /api/health
+Error: Not Found - /api/health
+    at notFound (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\middleware\errorMiddleware.js:2:19)
+    at Layer.handleRequest (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:342:13)
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:297:9
+    at processParams (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:582:12)
+    at next (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:291:5)
+    at logger (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\morgan\index.js:144:5)
+    at Layer.handleRequest (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:342:13)
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:297:9
+
+[2026-02-08T13:05:40.981Z] 404 - Not Found - /api/health
+Error: Not Found - /api/health
+    at notFound (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\middleware\errorMiddleware.js:2:19)
+    at Layer.handleRequest (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:342:13)
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:297:9
+    at processParams (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:582:12)
+    at next (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:291:5)
+    at logger (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\morgan\index.js:144:5)
+    at Layer.handleRequest (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:342:13)
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:297:9
+
+[2026-02-08T13:05:41.972Z] 404 - Not Found - /api/health
+Error: Not Found - /api/health
+    at notFound (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\middleware\errorMiddleware.js:2:19)
+    at Layer.handleRequest (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:342:13)
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:297:9
+    at processParams (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:582:12)
+    at next (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:291:5)
+    at logger (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\morgan\index.js:144:5)
+    at Layer.handleRequest (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:342:13)
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:297:9
+
+[2026-02-08T13:05:42.753Z] 404 - Not Found - /api/health
+Error: Not Found - /api/health
+    at notFound (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\middleware\errorMiddleware.js:2:19)
+    at Layer.handleRequest (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:342:13)
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:297:9
+    at processParams (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:582:12)
+    at next (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:291:5)
+    at logger (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\morgan\index.js:144:5)
+    at Layer.handleRequest (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:342:13)
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:297:9
+
+[2026-02-08T13:05:43.662Z] 404 - Not Found - /api/health
+Error: Not Found - /api/health
+    at notFound (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\middleware\errorMiddleware.js:2:19)
+    at Layer.handleRequest (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:342:13)
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:297:9
+    at processParams (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:582:12)
+    at next (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:291:5)
+    at logger (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\morgan\index.js:144:5)
+    at Layer.handleRequest (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:342:13)
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:297:9
+
+[2026-02-08T13:26:47.609Z] 404 - Not Found - /api/health
+Error: Not Found - /api/health
+    at notFound (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\middleware\errorMiddleware.js:2:19)
+    at Layer.handleRequest (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:342:13)
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:297:9
+    at processParams (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:582:12)
+    at next (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:291:5)
+    at logger (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\morgan\index.js:144:5)
+    at Layer.handleRequest (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:342:13)
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:297:9
+
+[2026-02-08T14:05:09.745Z] 404 - Not Found - /api/health
+Error: Not Found - /api/health
+    at notFound (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\middleware\errorMiddleware.js:2:19)
+    at Layer.handleRequest (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:342:13)
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:297:9
+    at processParams (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:582:12)
+    at next (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:291:5)
+    at logger (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\morgan\index.js:144:5)
+    at Layer.handleRequest (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:342:13)
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:297:9
+
+[2026-02-08T14:05:11.307Z] 404 - Not Found - /api/health
+Error: Not Found - /api/health
+    at notFound (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\middleware\errorMiddleware.js:2:19)
+    at Layer.handleRequest (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:342:13)
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:297:9
+    at processParams (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:582:12)
+    at next (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:291:5)
+    at logger (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\morgan\index.js:144:5)
+    at Layer.handleRequest (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:342:13)
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:297:9

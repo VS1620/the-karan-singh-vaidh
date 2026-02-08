@@ -6,7 +6,7 @@ import { Star, Check, ShoppingCart, Truck, ShieldCheck, Heart, Info, Phone } fro
 import { CartContext } from '../context/CartContext';
 
 const ProductDetails = () => {
-    const { idOrSlug } = useParams();
+    const { id } = useParams();
     const navigate = useNavigate();
     const { addToCart } = useContext(CartContext);
 
@@ -24,7 +24,14 @@ const ProductDetails = () => {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const { data } = await api.get(`/products/${idOrSlug}`);
+                const { data } = await api.get(`/products/${id}`);
+
+                // Ensure we are always using the canonical SEO slug in the URL
+                if (data.slug && id !== data.slug) {
+                    navigate(`/product/${data.slug}`, { replace: true });
+                    return;
+                }
+
                 setProduct(data);
                 if (data && data.packs && data.packs.length > 0) {
                     const defaultIndex = data.packs.findIndex(p => p.isDefault);
@@ -34,17 +41,26 @@ const ProductDetails = () => {
                 // Fetch related products
                 const { data: allProducts } = await api.get('/products');
                 const filtered = allProducts
-                    .filter(p => (p._id || p.id) !== data._id && p.category?.name === data.category?.name)
+                    .filter(p => (p._id || p.id) !== id && p.category?.name === data.category?.name)
                     .slice(0, 4);
 
                 // If not enough related products in same category, just take other products
                 if (filtered.length < 4) {
                     const others = allProducts
-                        .filter(p => (p._id || p.id) !== data._id && !filtered.find(f => (f._id || f.id) === (p._id || p.id)))
+                        .filter(p => (p._id || p.id) !== id && !filtered.find(f => (f._id || f.id) === (p._id || p.id)))
                         .slice(0, 4 - filtered.length);
                     setRelatedProducts([...filtered, ...others]);
                 } else {
                     setRelatedProducts(filtered);
+                }
+
+                // Update SEO Meta Tags
+                if (data.name) {
+                    document.title = `${data.name} | The Karan Singh Vaidh`;
+                }
+                const metaDesc = document.querySelector('meta[name="description"]');
+                if (metaDesc && data.shortDescription) {
+                    metaDesc.setAttribute("content", data.shortDescription);
                 }
 
                 setLoading(false);
@@ -54,7 +70,7 @@ const ProductDetails = () => {
             }
         };
         fetchProduct();
-    }, [idOrSlug]);
+    }, [id]);
 
     const handleAddToCart = () => {
         if (!product || !product.packs || product.packs.length === 0) return;
@@ -86,21 +102,8 @@ const ProductDetails = () => {
     // Helper for visual tags
     const getProductTags = () => {
         const tags = [];
-        if (product.category?.name) {
-            tags.push({
-                label: product.category.name,
-                color: 'bg-green-100 text-green-800',
-                link: `/shop?category=${product.category.slug || product.category._id}`
-            });
-        }
-        if (product.isWellness) {
-            tags.push({
-                label: 'Wellness',
-                color: 'bg-blue-100 text-blue-800',
-                // Assuming there's a way to filter wellness, otherwise just text
-                link: null
-            });
-        }
+        if (product.category?.name) tags.push({ label: product.category.name, color: 'bg-green-100 text-green-800' });
+        if (product.isWellness) tags.push({ label: 'Wellness', color: 'bg-blue-100 text-blue-800' });
         // Add default tags if none exist to match design aesthetic
         if (tags.length === 0) {
             tags.push({ label: 'Ayurvedic', color: 'bg-orange-100 text-orange-800' });
@@ -176,21 +179,15 @@ const ProductDetails = () => {
                     {/* RIGHT: Product Info & Actions */}
                     <div className="lg:w-[45%] flex flex-col pt-2 px-4 md:px-0">
                         {/* Title & Reviews */}
-                        <h1 className="text-2xl lg:text-4xl font-bold text-gray-900 mb-2 leading-tight">{product.name}</h1>
+                        <h1 className="text-2xl lg:text-4xl font-bold text-gray-900 mb-2 leading-tight uppercase">{product.slug}</h1>
                         <p className="text-gray-500 text-sm mb-4 leading-relaxed line-clamp-2 md:line-clamp-none">{product.shortDescription}</p>
 
                         {/* Tags */}
                         <div className="flex flex-wrap gap-2 mb-4">
                             {getProductTags().map((tag, i) => (
-                                tag.link ? (
-                                    <Link key={i} to={tag.link} className={`text-[10px] font-bold uppercase px-2 py-1 rounded-md tracking-wider transition-colors hover:opacity-80 ${tag.color}`}>
-                                        {tag.label}
-                                    </Link>
-                                ) : (
-                                    <span key={i} className={`text-[10px] font-bold uppercase px-2 py-1 rounded-md tracking-wider ${tag.color}`}>
-                                        {tag.label}
-                                    </span>
-                                )
+                                <span key={i} className={`text-[10px] font-bold uppercase px-2 py-1 rounded-md tracking-wider ${tag.color}`}>
+                                    {tag.label}
+                                </span>
                             ))}
                         </div>
 

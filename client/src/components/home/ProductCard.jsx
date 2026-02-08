@@ -10,7 +10,7 @@ const ProductCard = ({ product }) => {
     const [quantity, setQuantity] = useState(1);
 
     // Reconcile property names
-    const id = product.slug || product._id || product.id;
+    const id = product._id || product.id;
     const name = product.name;
     const image = getAssetUrl(product.image);
     const rating = product.rating || 4.8;
@@ -44,7 +44,7 @@ const ProductCard = ({ product }) => {
             )}
 
             {/* Image Container */}
-            <Link to={`/product/${id}`} className="relative w-full aspect-[4/5] overflow-hidden bg-white block">
+            <Link to={`/product/${product.slug || id}`} className="relative w-full aspect-[4/5] overflow-hidden bg-white block">
                 <img
                     src={imageError ? '/logo.png' : image}
                     alt={name}
@@ -71,7 +71,7 @@ const ProductCard = ({ product }) => {
                     </div>
 
                     {/* Title */}
-                    <Link to={`/product/${id}`} className="block">
+                    <Link to={`/product/${product.slug || id}`} className="block">
                         <h3 className="font-bold text-[16px] text-[#1A3C34] mb-1 line-clamp-1 group-hover:text-ayur-gold transition-colors">
                             {name}
                         </h3>

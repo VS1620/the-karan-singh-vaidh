@@ -5,6 +5,7 @@ import { Upload, X, Plus } from 'lucide-react';
 
 const ProductForm = () => {
     const [name, setName] = useState('');
+    const [slug, setSlug] = useState('');
     // Price removed
     const [image, setImage] = useState('');
     const [images, setImages] = useState([]);
@@ -47,6 +48,7 @@ const ProductForm = () => {
         try {
             const { data } = await api.get(`/products/${productId}`);
             setName(data.name);
+            setSlug(data.slug || '');
             // setPrice(data.price); removed
             setImage(data.image);
             setImages(data.images || []);
@@ -107,6 +109,7 @@ const ProductForm = () => {
 
         const productData = {
             name,
+            slug,
             // price removed
             image,
             images,
@@ -192,6 +195,16 @@ const ProductForm = () => {
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             required
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">SEO Slug (Optional)</label>
+                        <input
+                            type="text"
+                            className="w-full px-4 py-2 mt-1 border rounded-md focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50"
+                            value={slug}
+                            onChange={(e) => setSlug(e.target.value)}
+                            placeholder="auto-generated-if-blank"
                         />
                     </div>
                     <div>
