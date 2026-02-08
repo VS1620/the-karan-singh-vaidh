@@ -1,5 +1,7 @@
 const asyncHandler = require('express-async-handler');
+const mongoose = require('mongoose');
 const Product = require('../models/ProductModel');
+const Category = require('../models/Category');
 
 // @desc    Fetch all products
 // @route   GET /api/products
@@ -10,9 +12,6 @@ const getProducts = asyncHandler(async (req, res) => {
     let query = {};
 
     if (category && category !== 'All') {
-        const mongoose = require('mongoose');
-        const Category = require('../models/Category');
-
         // Check if the provided category is a valid ObjectId
         if (mongoose.Types.ObjectId.isValid(category)) {
             query.category = category;
@@ -60,50 +59,57 @@ const getProducts = asyncHandler(async (req, res) => {
 // @route   GET /api/products/:id
 // @access  Public
 const getProductById = asyncHandler(async (req, res) => {
-    const { id: idOrSlug } = req.params;
-    const mongoose = require('mongoose');
+    try {
+        const { id: idOrSlug } = req.params;
 
-    console.log(`🔍 [Product Request] Resolving: "${idOrSlug}"`);
+        console.log(`🔍 [Product Request] Resolving: "${idOrSlug}"`);
 
-    let product;
+        let product;
 
-    if (mongoose.Types.ObjectId.isValid(idOrSlug)) {
-        product = await Product.findById(idOrSlug).populate('category', 'name slug');
-    }
-
-    // 2. Try Exact Slug
-    if (!product) {
-        product = await Product.findOne({ slug: idOrSlug }).populate('category', 'name slug');
-    }
-
-    // 3. Try Fuzzy Name/Slug Resolution (Direct DB Query)
-    if (!product) {
-        // Create a regex that allows spaces, hyphens and is case-insensitive
-        const fuzzySearch = idOrSlug.replace(/[-\s]/g, '[-\\s]?');
-        product = await Product.findOne({
-            $or: [
-                { slug: { $regex: new RegExp(`^${fuzzySearch}$`, 'i') } },
-                { name: { $regex: new RegExp(`^${fuzzySearch}$`, 'i') } }
-            ]
-        }).populate('category', 'name slug');
-    }
-
-    // 4. Fallback: Search for any product containing the words (last resort)
-    if (!product) {
-        const words = idOrSlug.split(/[-\s]/).filter(w => w.length > 2);
-        if (words.length > 0) {
-            const wordRegex = new RegExp(words.join('|'), 'i');
-            product = await Product.findOne({ name: { $regex: wordRegex } }).populate('category', 'name slug');
+        if (mongoose.Types.ObjectId.isValid(idOrSlug)) {
+            product = await Product.findById(idOrSlug).populate('category', 'name slug');
         }
-    }
 
-    if (product) {
-        console.log(`✅ [Product Resolved] "${idOrSlug}" -> "${product.name}"`);
-        res.json(product);
-    } else {
-        console.error(`❌ [Product Not Found] "${idOrSlug}"`);
-        res.status(404);
-        throw new Error('Product not found');
+        // 2. Try Exact Slug
+        if (!product) {
+            product = await Product.findOne({ slug: idOrSlug }).populate('category', 'name slug');
+        }
+
+        // 3. Try Fuzzy Name/Slug Resolution (Direct DB Query)
+        if (!product) {
+            // Create a regex that allows spaces, hyphens and is case-insensitive
+            const fuzzySearch = idOrSlug.replace(/[-\s]/g, '[-\\s]?');
+            product = await Product.findOne({
+                $or: [
+                    { slug: { $regex: new RegExp(`^${fuzzySearch}$`, 'i') } },
+                    { name: { $regex: new RegExp(`^${fuzzySearch}$`, 'i') } }
+                ]
+            }).populate('category', 'name slug');
+        }
+
+        // 4. Fallback: Search for any product containing the words (last resort)
+        if (!product) {
+            const words = idOrSlug.split(/[-\s]/).filter(w => w.length > 2);
+            if (words.length > 0) {
+                const wordRegex = new RegExp(words.join('|'), 'i');
+                product = await Product.findOne({ name: { $regex: wordRegex } }).populate('category', 'name slug');
+            }
+        }
+
+        if (product) {
+            console.log(`✅ [Product Resolved] "${idOrSlug}" -> "${product.name}"`);
+            res.json(product);
+        } else {
+            console.error(`❌ [Product Not Found] "${idOrSlug}"`);
+            res.status(404);
+            throw new Error('Product not found');
+        }
+    } catch (error) {
+        console.error(`💥 [Product Resolution Error]: ${error.message}`);
+        res.status(500).json({
+            message: error.message,
+            stack: process.env.NODE_ENV === 'production' ? null : error.stack
+        });
     }
 });
 
