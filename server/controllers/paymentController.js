@@ -2,16 +2,35 @@ const asyncHandler = require('express-async-handler');
 const Razorpay = require('razorpay');
 const crypto = require('crypto');
 
-const razorpay = new Razorpay({
-    key_id: process.env.RAZORPAY_KEY_ID,
-    key_secret: process.env.RAZORPAY_KEY_SECRET,
-});
+const asyncHandler = require('express-async-handler');
+const Razorpay = require('razorpay');
+const crypto = require('crypto');
+
+// Lazy initialization or conditional check to prevent crash on startup
+let razorpay;
+try {
+    if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
+        razorpay = new Razorpay({
+            key_id: process.env.RAZORPAY_KEY_ID,
+            key_secret: process.env.RAZORPAY_KEY_SECRET,
+        });
+    } else {
+        console.warn("[WARNIING] Razorpay keys (RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET) are missing. Payment routes will fail if called.");
+    }
+} catch (error) {
+    console.error("[ERROR] Failed to initialize Razorpay:", error.message);
+}
 
 // @desc    Create Razorpay order
 // @route   POST /api/payment/order
 // @access  Private
 const createRazorpayOrder = asyncHandler(async (req, res) => {
     const { amount } = req.body;
+
+    if (!razorpay) {
+        res.status(503);
+        throw new Error('Payment service unavailable: Razorpay not configured');
+    }
 
     if (!amount) {
         res.status(400);
@@ -39,6 +58,11 @@ const createRazorpayOrder = asyncHandler(async (req, res) => {
 // @access  Private
 const verifyPayment = asyncHandler(async (req, res) => {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+
+    if (!process.env.RAZORPAY_KEY_SECRET) {
+        res.status(503);
+        throw new Error('Payment service unavailable: Razorpay secret missing');
+    }
 
     const body = razorpay_order_id + "|" + razorpay_payment_id;
 
