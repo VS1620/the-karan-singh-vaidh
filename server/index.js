@@ -90,6 +90,7 @@ app.use('/api/appointments', appointmentRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/otp', otpRoutes);
 console.log('✅ ALL Server Routes (Users, Products, Orders, OTP, etc.) loaded');
+console.log('🚀 DEPLOYMENT TIMESTAMP: ' + new Date().toLocaleString());
 
 // Debug helper to log registered routes
 app._router.stack.forEach((r) => {

@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler');
-const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
+const axios = require('axios');
 
 // Store OTPs in memory (Phone -> { otp, expires })
 const otpStore = new Map();
@@ -39,42 +39,38 @@ const sendOTP = asyncHandler(async (req, res) => {
     // EXACT Template Message (MUST MATCH PHP Exactly including \n)
     const message = `Dear Customer, your OTP for registration with KARAN SINGH VAIDH is ${otp}. Please use this code to complete your sign-up on www.thekaransinghvaidh.com\n-KARAN SINGH VAIDH`;
 
-    const params = new URLSearchParams({
-        username: SMS_API_CONFIG.username,
-        password: SMS_API_CONFIG.password,
-        key: SMS_API_CONFIG.key,
-        campaign: SMS_API_CONFIG.campaign,
-        routeid: SMS_API_CONFIG.routeid,
-        type: 'text',
-        contacts: phone,
-        senderid: SMS_API_CONFIG.senderId,
-        msg: message,
-        template_id: SMS_API_CONFIG.templateId,
-        pe_id: SMS_API_CONFIG.entityId,
-    });
+    const params = new URLSearchParams();
+    params.append('username', SMS_API_CONFIG.username);
+    params.append('password', SMS_API_CONFIG.password);
+    params.append('key', SMS_API_CONFIG.key);
+    params.append('campaign', SMS_API_CONFIG.campaign);
+    params.append('routeid', SMS_API_CONFIG.routeid);
+    params.append('type', 'text');
+    params.append('contacts', phone);
+    params.append('senderid', SMS_API_CONFIG.senderId);
+    params.append('msg', message);
+    params.append('template_id', SMS_API_CONFIG.templateId);
+    params.append('pe_id', SMS_API_CONFIG.entityId);
 
     try {
-        console.log(`Sending OTP to ${phone}...`);
+        console.log(`[OTP] Attempting to send to ${phone}...`);
 
-        const response = await fetch(SMS_API_CONFIG.url, {
-            method: 'POST',
-            body: params,
+        const response = await axios.post(SMS_API_CONFIG.url, params, {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
         });
 
-        const result = await response.text();
-        console.log(`SMS API Response: ${result}`);
+        console.log(`[OTP] SMS API Response Raw:`, response.data);
 
         res.status(200).json({
             success: true,
             message: 'OTP sent successfully',
         });
     } catch (error) {
-        console.error('Error sending SMS:', error);
+        console.error('[OTP] Error details:', error.response?.data || error.message);
         res.status(500);
-        throw new Error('Failed to send OTP. Please try again later.');
+        throw new Error('Failed to send OTP via SMS provider.');
     }
 });
 
