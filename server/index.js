@@ -14,6 +14,7 @@ const uploadRoutes = require('./routes/uploadRoutes');
 const appointmentRoutes = require('./routes/appointmentRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
+const otpRoutes = require('./routes/otpRoutes');
 
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
@@ -87,7 +88,17 @@ app.use('/api/upload', uploadRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/payment', paymentRoutes);
-console.log('✅ Appointment routes loaded');
+app.use('/api/otp', otpRoutes);
+console.log('✅ ALL Server Routes (Users, Products, Orders, OTP, etc.) loaded');
+
+// Debug helper to log registered routes
+app._router.stack.forEach((r) => {
+    if (r.route && r.route.path) {
+        console.log(`Route registered: ${r.route.path}`);
+    } else if (r.name === 'router') {
+        console.log(`Router mounted at: ${r.regexp}`);
+    }
+});
 
 // Routes
 app.get('/', (req, res) => {
