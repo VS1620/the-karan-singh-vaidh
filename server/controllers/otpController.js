@@ -1,18 +1,23 @@
 const asyncHandler = require('express-async-handler');
-const axios = require('axios');
+
+/**
+ * We use node-fetch for compatibility as it's already in the package.json.
+ * For Node 18+, we can use global fetch, but we'll stick to the existing dependency for safety.
+ */
+const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 // Store OTPs in memory (Phone -> { otp, expires })
 const otpStore = new Map();
 
-// API Credentials (from USER_REQUEST & PHP Code)
+// SMSMedia API Details (Hardcoded fallbacks from USER_REQUEST & PHP)
 const SMS_API_CONFIG = {
     url: process.env.SMS_API_URL || 'https://login.smsmedia.org/app/smsapi/index.php',
-    username: process.env.SMS_API_USERNAME,
-    password: process.env.SMS_API_PASSWORD,
-    key: process.env.SMS_API_KEY,
-    senderId: process.env.SMS_API_SENDER_ID,
-    templateId: process.env.SMS_API_TEMPLATE_ID,
-    entityId: process.env.SMS_API_ENTITY_ID,
+    username: process.env.SMS_API_USERNAME || 'KSV',
+    password: process.env.SMS_API_PASSWORD || 'KSV',
+    key: process.env.SMS_API_KEY || '5691C5CFEA6273',
+    senderId: process.env.SMS_API_SENDER_ID || 'KSVAYR',
+    templateId: process.env.SMS_API_TEMPLATE_ID || '1707176417936482061',
+    entityId: process.env.SMS_API_ENTITY_ID || '1701176321009709060',
     campaign: process.env.SMS_API_CAMPAIGN || '10598',
     routeid: process.env.SMS_API_ROUTE_ID || '100867'
 };
@@ -27,7 +32,7 @@ const sendOTP = asyncHandler(async (req, res) => {
 
     if (!phone || phone.length !== 10) {
         res.status(400);
-        throw new Error('Please provide a valid 10-digit phone number');
+        throw new Error('Please enter a valid 10-digit phone number');
     }
 
     // Generate 6-digit OTP
@@ -36,41 +41,47 @@ const sendOTP = asyncHandler(async (req, res) => {
 
     otpStore.set(phone, { otp, expires });
 
-    // EXACT Template Message (MUST MATCH PHP Exactly including \n)
-    const message = `Dear Customer, your OTP for registration with KARAN SINGH VAIDH is ${otp}. Please use this code to complete your sign-up on www.thekaransinghvaidh.com\n-KARAN SINGH VAIDH`;
+    // EXACT Message Format from PHP (DLT sensitive)
+    const name = "Customer";
+    const message = `Dear ${name}, your OTP for registration with KARAN SINGH VAIDH is ${otp}. Please use this code to complete your sign-up on www.thekaransinghvaidh.com\n-KARAN SINGH VAIDH`;
 
-    const params = new URLSearchParams();
-    params.append('username', SMS_API_CONFIG.username);
-    params.append('password', SMS_API_CONFIG.password);
-    params.append('key', SMS_API_CONFIG.key);
-    params.append('campaign', SMS_API_CONFIG.campaign);
-    params.append('routeid', SMS_API_CONFIG.routeid);
-    params.append('type', 'text');
-    params.append('contacts', phone);
-    params.append('senderid', SMS_API_CONFIG.senderId);
-    params.append('msg', message);
-    params.append('template_id', SMS_API_CONFIG.templateId);
-    params.append('pe_id', SMS_API_CONFIG.entityId);
+    // PHP uses body params with multipart/form-data or urlencoded
+    const params = new URLSearchParams({
+        username: SMS_API_CONFIG.username,
+        password: SMS_API_CONFIG.password,
+        key: SMS_API_CONFIG.key,
+        campaign: SMS_API_CONFIG.campaign,
+        routeid: SMS_API_CONFIG.routeid,
+        type: 'text',
+        contacts: phone,
+        senderid: SMS_API_CONFIG.senderId,
+        msg: message,
+        template_id: SMS_API_CONFIG.templateId,
+        pe_id: SMS_API_CONFIG.entityId,
+    });
 
     try {
-        console.log(`[OTP] Attempting to send to ${phone}...`);
+        console.log(`[OTP] Sending to ${phone}...`);
 
-        const response = await axios.post(SMS_API_CONFIG.url, params, {
+        const response = await fetch(SMS_API_CONFIG.url, {
+            method: 'POST',
+            body: params.toString(),
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
         });
 
-        console.log(`[OTP] SMS API Response Raw:`, response.data);
+        const result = await response.text();
+        console.log(`[OTP] API Response: ${result}`);
 
         res.status(200).json({
             success: true,
             message: 'OTP sent successfully',
         });
     } catch (error) {
-        console.error('[OTP] Error details:', error.response?.data || error.message);
+        console.error('[OTP] Fetch Exception:', error.message);
         res.status(500);
-        throw new Error('Failed to send OTP via SMS provider.');
+        throw new Error('Network error while connecting to SMS provider');
     }
 });
 
@@ -84,32 +95,32 @@ const verifyOTP = asyncHandler(async (req, res) => {
 
     if (!phone || !otp) {
         res.status(400);
-        throw new Error('Please provide phone number and OTP');
+        throw new Error('Missing phone or OTP');
     }
 
     const storedData = otpStore.get(phone);
 
     if (!storedData) {
         res.status(400);
-        throw new Error('OTP not found for this number. Please resend.');
+        throw new Error('OTP not found. Request a new one.');
     }
 
     if (Date.now() > storedData.expires) {
         otpStore.delete(phone);
         res.status(400);
-        throw new Error('OTP has expired. Please request a new one.');
+        throw new Error('OTP expired');
     }
 
     if (storedData.otp !== otp) {
         res.status(400);
-        throw new Error('Incorrect OTP. Please try again.');
+        throw new Error('Incorrect OTP');
     }
 
-    // Success - clean up and confirm
+    // Success - clean up
     otpStore.delete(phone);
     res.status(200).json({
         success: true,
-        message: 'OTP verified successfully'
+        message: 'Verified'
     });
 });
 
