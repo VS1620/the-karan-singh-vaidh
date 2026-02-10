@@ -92,14 +92,8 @@ app.use('/api/otp', otpRoutes);
 console.log('✅ ALL Server Routes (Users, Products, Orders, OTP, etc.) loaded');
 console.log('🚀 DEPLOYMENT TIMESTAMP: ' + new Date().toLocaleString());
 
-// Debug helper to log registered routes
-app._router.stack.forEach((r) => {
-    if (r.route && r.route.path) {
-        console.log(`Route registered: ${r.route.path}`);
-    } else if (r.name === 'router') {
-        console.log(`Router mounted at: ${r.regexp}`);
-    }
-});
+// Confirm route registration
+console.log('✅ Server routes initialized successfully');
 
 // Routes
 app.get('/', (req, res) => {

@@ -3257,3 +3257,8 @@ Error: Not Found - /api/health
     at Layer.handleRequest (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\lib\layer.js:152:17)
     at trimPrefix (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:342:13)
     at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:297:9
+
+[2026-02-10T15:41:27.997Z] 400 - Incorrect OTP
+Error: Incorrect OTP
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\otpController.js:107:15
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)

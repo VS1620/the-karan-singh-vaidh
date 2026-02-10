@@ -1,15 +1,12 @@
 const asyncHandler = require('express-async-handler');
+const OTP = require('../models/OTP');
 
 /**
  * We use node-fetch for compatibility as it's already in the package.json.
- * For Node 18+, we can use global fetch, but we'll stick to the existing dependency for safety.
  */
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
-// Store OTPs in memory (Phone -> { otp, expires })
-const otpStore = new Map();
-
-// SMSMedia API Details (Hardcoded fallbacks from USER_REQUEST & PHP)
+// SMSMedia API Details
 const SMS_API_CONFIG = {
     url: process.env.SMS_API_URL || 'https://login.smsmedia.org/app/smsapi/index.php',
     username: process.env.SMS_API_USERNAME || 'KSV',
@@ -37,15 +34,15 @@ const sendOTP = asyncHandler(async (req, res) => {
 
     // Generate 6-digit OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    const expires = Date.now() + 5 * 60 * 1000; // 5 minutes
 
-    otpStore.set(phone, { otp, expires });
+    // Save to Database (Replace existing OTP for this phone if any)
+    await OTP.deleteOne({ phone });
+    await OTP.create({ phone, otp });
 
     // EXACT Message Format from PHP (DLT sensitive)
     const name = "Customer";
     const message = `Dear ${name}, your OTP for registration with KARAN SINGH VAIDH is ${otp}. Please use this code to complete your sign-up on www.thekaransinghvaidh.com\n-KARAN SINGH VAIDH`;
 
-    // PHP uses body params with multipart/form-data or urlencoded
     const params = new URLSearchParams({
         username: SMS_API_CONFIG.username,
         password: SMS_API_CONFIG.password,
@@ -98,30 +95,26 @@ const verifyOTP = asyncHandler(async (req, res) => {
         throw new Error('Missing phone or OTP');
     }
 
-    const storedData = otpStore.get(phone);
+    const otpRecord = await OTP.findOne({ phone }).sort({ createdAt: -1 });
 
-    if (!storedData) {
+    if (!otpRecord) {
         res.status(400);
-        throw new Error('OTP not found. Request a new one.');
+        throw new Error('OTP not found or expired. Request a new one.');
     }
 
-    if (Date.now() > storedData.expires) {
-        otpStore.delete(phone);
-        res.status(400);
-        throw new Error('OTP expired');
-    }
-
-    if (storedData.otp !== otp) {
+    if (otpRecord.otp !== otp) {
         res.status(400);
         throw new Error('Incorrect OTP');
     }
 
     // Success - clean up
-    otpStore.delete(phone);
+    await OTP.deleteOne({ _id: otpRecord._id });
+
     res.status(200).json({
         success: true,
         message: 'Verified'
     });
 });
+
 
 module.exports = { sendOTP, verifyOTP };
