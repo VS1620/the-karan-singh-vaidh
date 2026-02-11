@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
 
 const packSchema = mongoose.Schema({
     name: { type: String, required: true }, // e.g., "1 Month Pack"
@@ -30,6 +31,11 @@ const productSchema = mongoose.Schema({
     name: {
         type: String,
         required: true,
+    },
+    slug: {
+        type: String,
+        unique: true,
+        index: true,
     },
     image: {
         type: String,
@@ -90,5 +96,38 @@ const productSchema = mongoose.Schema({
 productSchema.index({ name: 'text' });
 productSchema.index({ category: 1 });
 productSchema.index({ createdAt: -1 });
+
+// Pre-save hook to generate slug from product name
+productSchema.pre('save', async function (next) {
+    // Only generate slug if name is modified or slug doesn't exist
+    if (this.isModified('name') || !this.slug) {
+        let baseSlug = slugify(this.name, {
+            lower: true,
+            strict: true,
+            remove: /[*+~.()'"!:@]/g
+        });
+
+        let slug = baseSlug;
+        let counter = 1;
+
+        // Check for uniqueness and append number if needed
+        while (true) {
+            const existingProduct = await mongoose.model('Product').findOne({
+                slug: slug,
+                _id: { $ne: this._id } // Exclude current document
+            });
+
+            if (!existingProduct) {
+                break;
+            }
+
+            slug = `${baseSlug}-${counter}`;
+            counter++;
+        }
+
+        this.slug = slug;
+    }
+    next();
+});
 
 module.exports = mongoose.model('Product', productSchema);

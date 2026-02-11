@@ -64,7 +64,17 @@ const getProducts = asyncHandler(async (req, res) => {
 // @route   GET /api/products/:id
 // @access  Public
 const getProductById = asyncHandler(async (req, res) => {
-    const product = await Product.findById(req.params.id).populate('category', 'name');
+    const mongoose = require('mongoose');
+    let product;
+
+    // Check if the parameter is a valid MongoDB ObjectId
+    if (mongoose.Types.ObjectId.isValid(req.params.id) && req.params.id.length === 24) {
+        // Query by ID for backward compatibility
+        product = await Product.findById(req.params.id).populate('category', 'name');
+    } else {
+        // Query by slug for SEO-friendly URLs
+        product = await Product.findOne({ slug: req.params.id }).populate('category', 'name');
+    }
 
     if (product) {
         res.json(product);
