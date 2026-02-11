@@ -64,6 +64,7 @@ const getProducts = asyncHandler(async (req, res) => {
 // @route   GET /api/products/:id
 // @access  Public
 const getProductById = asyncHandler(async (req, res) => {
+    // Support both MongoDB IDs and slugs for product lookup
     const mongoose = require('mongoose');
     let product;
 
