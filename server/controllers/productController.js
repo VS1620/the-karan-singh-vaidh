@@ -65,6 +65,7 @@ const getProducts = asyncHandler(async (req, res) => {
 // @access  Public
 const getProductById = asyncHandler(async (req, res) => {
     // Support both MongoDB IDs and slugs for product lookup
+    // Deployed: 2026-02-11 21:45 IST - Force restart
     const mongoose = require('mongoose');
     let product;
 
