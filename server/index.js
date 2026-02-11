@@ -116,19 +116,21 @@ const connectDB = async () => {
         console.log(`MongoDB Connected: ${conn.connection.host}`);
     } catch (error) {
         console.error(`MongoDB Connection Error: ${error.message}`);
-        process.exit(1); // Exit if DB connection fails in production
+        // Don't exit immediately - server can still respond to health checks
+        console.error('Server will continue running but database operations will fail');
     }
 };
 
-// Start Server
-connectDB().then(() => {
-    app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT}`);
-        if (process.env.CLOUDINARY_CLOUD_NAME) {
-            console.log('✅ Cloudinary storage is configured');
-        } else {
-            console.error('❌ Cloudinary configuration missing from .env');
-        }
-    });
+// Start Server FIRST (so Render detects the port)
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+    console.log(`🚀 DEPLOYMENT TIMESTAMP: ${new Date().toLocaleString()}`);
+    if (process.env.CLOUDINARY_CLOUD_NAME) {
+        console.log('✅ Cloudinary storage is configured');
+    } else {
+        console.error('❌ Cloudinary configuration missing from .env');
+    }
+
+    // Connect to database AFTER server is listening
+    connectDB();
 });
-// Force restart: Removed Price Field Schema Update
