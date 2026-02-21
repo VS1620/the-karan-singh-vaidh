@@ -5,7 +5,7 @@ const packSchema = mongoose.Schema({
     name: { type: String, required: true }, // e.g., "1 Month Pack"
     mrp: { type: Number, required: true, default: 0 }, // Original Price
     sellingPrice: { type: Number, required: true, default: 0 }, // Discounted/Final Price
-    medicines: [{ type: String }], // List of included items e.g. ["Vigor Oil", "Stamina Caps"]
+    medicines: [mongoose.Schema.Types.Mixed], // Accepts both strings (legacy) and {name, image} objects
     isDefault: { type: Boolean, default: false },
     isActive: { type: Boolean, default: true }
 });
@@ -98,7 +98,7 @@ productSchema.index({ category: 1 });
 productSchema.index({ createdAt: -1 });
 
 // Pre-save hook to generate slug from product name
-productSchema.pre('save', async function (next) {
+productSchema.pre('save', async function () {
     // Only generate slug if name is modified or slug doesn't exist
     if (this.isModified('name') || !this.slug) {
         let baseSlug = slugify(this.name, {
@@ -127,7 +127,6 @@ productSchema.pre('save', async function (next) {
 
         this.slug = slug;
     }
-    next();
 });
 
 module.exports = mongoose.model('Product', productSchema);

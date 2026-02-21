@@ -60,7 +60,14 @@ const ProductForm = () => {
             setDiscount(data.discount || 0);
             setIsBestSeller(!!data.isBestSeller);
             setIsWellness(!!data.isWellness);
-            setPacks(Array.isArray(data.packs) ? data.packs : []);
+            // Normalize medicines to objects {name, image}
+            const normalizedPacks = (Array.isArray(data.packs) ? data.packs : []).map(pack => ({
+                ...pack,
+                medicines: (pack.medicines || []).map(m =>
+                    typeof m === 'string' ? { name: m, image: '' } : m
+                )
+            }));
+            setPacks(normalizedPacks);
         } catch (error) {
             console.error(error);
         }
@@ -158,16 +165,19 @@ const ProductForm = () => {
         setPacks(newPacks);
     };
 
-    const handleMedicineChange = (packIndex, medIndex, value) => {
+    const handleMedicineChange = (packIndex, medIndex, field, value) => {
         const newPacks = [...packs];
-        newPacks[packIndex].medicines[medIndex] = value;
+        if (typeof newPacks[packIndex].medicines[medIndex] === 'string') {
+            newPacks[packIndex].medicines[medIndex] = { name: newPacks[packIndex].medicines[medIndex], image: '' };
+        }
+        newPacks[packIndex].medicines[medIndex][field] = value;
         setPacks(newPacks);
     };
 
     const addMedicine = (packIndex) => {
         const newPacks = [...packs];
         if (!newPacks[packIndex].medicines) newPacks[packIndex].medicines = [];
-        newPacks[packIndex].medicines.push('');
+        newPacks[packIndex].medicines.push({ name: '', image: '' });
         setPacks(newPacks);
     };
 
@@ -175,6 +185,18 @@ const ProductForm = () => {
         const newPacks = [...packs];
         newPacks[packIndex].medicines.splice(medIndex, 1);
         setPacks(newPacks);
+    };
+
+    const uploadMedicineImage = async (packIndex, medIndex, file) => {
+        const formData = new FormData();
+        formData.append('image', file);
+        try {
+            const { data } = await api.post('/upload', formData);
+            handleMedicineChange(packIndex, medIndex, 'image', data);
+        } catch (error) {
+            console.error(error);
+            alert('Image upload failed: ' + (error.response?.data?.message || error.message));
+        }
     };
 
     return (
@@ -363,20 +385,41 @@ const ProductForm = () => {
                                     <label className="text-xs font-bold text-gray-600">Included Medicines / Items</label>
                                     <button type="button" onClick={() => addMedicine(index)} className="text-xs text-blue-600 hover:underline">+ Add Item</button>
                                 </div>
-                                {pack.medicines && pack.medicines.map((med, mIndex) => (
-                                    <div key={mIndex} className="flex gap-2 mb-2">
-                                        <input
-                                            type="text"
-                                            className="flex-1 px-2 py-1 text-sm border rounded"
-                                            placeholder="Item Name (e.g. Vigor Oil)"
-                                            value={med}
-                                            onChange={(e) => handleMedicineChange(index, mIndex, e.target.value)}
-                                        />
-                                        <button type="button" onClick={() => removeMedicine(index, mIndex)} className="text-red-400 hover:text-red-600">
-                                            <X size={14} />
-                                        </button>
-                                    </div>
-                                ))}
+                                {pack.medicines && pack.medicines.map((med, mIndex) => {
+                                    const medName = typeof med === 'string' ? med : (med.name || '');
+                                    const medImage = typeof med === 'object' ? (med.image || '') : '';
+                                    return (
+                                        <div key={mIndex} className="flex gap-2 mb-2 items-center">
+                                            {/* Small image preview */}
+                                            {medImage ? (
+                                                <img src={medImage} alt="" className="w-10 h-10 object-cover rounded border border-gray-200 flex-shrink-0" />
+                                            ) : (
+                                                <div className="w-10 h-10 bg-gray-100 rounded border border-dashed border-gray-300 flex items-center justify-center flex-shrink-0">
+                                                    <span className="text-gray-400 text-[8px] text-center leading-tight">img</span>
+                                                </div>
+                                            )}
+                                            <input
+                                                type="text"
+                                                className="flex-1 px-2 py-1 text-sm border rounded"
+                                                placeholder="Item Name (e.g. Vigor Oil)"
+                                                value={medName}
+                                                onChange={(e) => handleMedicineChange(index, mIndex, 'name', e.target.value)}
+                                            />
+                                            <label className="cursor-pointer bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded text-xs text-gray-600 flex items-center gap-1 flex-shrink-0">
+                                                <Upload size={12} />
+                                                <input
+                                                    type="file"
+                                                    accept="image/*"
+                                                    className="hidden"
+                                                    onChange={(e) => e.target.files[0] && uploadMedicineImage(index, mIndex, e.target.files[0])}
+                                                />
+                                            </label>
+                                            <button type="button" onClick={() => removeMedicine(index, mIndex)} className="text-red-400 hover:text-red-600 flex-shrink-0">
+                                                <X size={14} />
+                                            </button>
+                                        </div>
+                                    );
+                                })}
                                 {(!pack.medicines || pack.medicines.length === 0) && <p className="text-xs text-gray-400 italic">No items added yet.</p>}
                             </div>
 

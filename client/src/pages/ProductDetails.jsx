@@ -17,6 +17,7 @@ const ProductDetails = () => {
     const [activeTab, setActiveTab] = useState('benefits');
     const [imageError, setImageError] = useState(false);
     const [relatedProducts, setRelatedProducts] = useState([]);
+    const [lightboxImage, setLightboxImage] = useState(null);
 
     // Fallback image URL (Data URI for performance)
     const fallbackImage = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="600" height="600"%3E%3Crect fill="%23F4F7F6" width="600" height="600"/%3E%3Ctext fill="%23849A8E" font-family="system-ui" font-size="24" x="50%25" y="50%25" text-anchor="middle" dominant-baseline="middle"%3ENo Image%3C/text%3E%3C/svg%3E';
@@ -285,14 +286,52 @@ const ProductDetails = () => {
                                     Included in this pack:
                                 </h4>
                                 <div className="bg-emerald-50/60 rounded-xl p-4 border border-emerald-100/50">
-                                    <div className="grid grid-cols-1 gap-2">
-                                        {currentPack.medicines.map((med, idx) => (
-                                            <div key={idx} className="flex items-start gap-3">
-                                                <div className="min-w-[4px] h-[4px] mt-2 rounded-full bg-emerald-500"></div>
-                                                <span className="text-xs font-semibold text-gray-700 leading-relaxed uppercase">{med}</span>
-                                            </div>
-                                        ))}
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                        {currentPack.medicines.map((med, idx) => {
+                                            const medName = typeof med === 'string' ? med : (med.name || '');
+                                            const medImage = typeof med === 'object' ? (med.image || '') : '';
+                                            return (
+                                                <div key={idx} className="flex flex-col items-center gap-2">
+                                                    {medImage ? (
+                                                        <img
+                                                            src={getAssetUrl(medImage)}
+                                                            alt={medName}
+                                                            className="w-full aspect-square rounded-xl object-cover border border-emerald-100 shadow-sm cursor-zoom-in hover:scale-105 transition-transform duration-200"
+                                                            onClick={() => setLightboxImage(getAssetUrl(medImage))}
+                                                            onError={(e) => { e.target.style.display = 'none'; }}
+                                                        />
+                                                    ) : (
+                                                        <div className="w-full aspect-square rounded-xl bg-emerald-100 flex items-center justify-center">
+                                                            <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+                                                        </div>
+                                                    )}
+                                                    <span className="text-[10px] font-bold text-gray-700 text-center uppercase tracking-wide leading-tight">{medName}</span>
+                                                </div>
+                                            );
+                                        })}
                                     </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Lightbox Modal */}
+                        {lightboxImage && (
+                            <div
+                                className="fixed inset-0 bg-black/80 z-[999] flex items-center justify-center p-4 backdrop-blur-sm"
+                                onClick={() => setLightboxImage(null)}
+                            >
+                                <div className="relative max-w-lg w-full" onClick={(e) => e.stopPropagation()}>
+                                    <button
+                                        onClick={() => setLightboxImage(null)}
+                                        className="absolute -top-3 -right-3 bg-white text-gray-800 rounded-full w-8 h-8 flex items-center justify-center shadow-lg font-bold text-lg hover:bg-gray-100 z-10"
+                                    >
+                                        ✕
+                                    </button>
+                                    <img
+                                        src={lightboxImage}
+                                        alt=""
+                                        className="w-full max-h-[80vh] object-contain rounded-2xl shadow-2xl"
+                                    />
                                 </div>
                             </div>
                         )}

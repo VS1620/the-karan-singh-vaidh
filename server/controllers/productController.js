@@ -187,6 +187,9 @@ const updateProduct = asyncHandler(async (req, res) => {
         product.usage = usage !== undefined ? usage : product.usage;
         product.benefits = benefits !== undefined ? benefits : product.benefits;
 
+        // Required for Mongoose to detect changes inside Mixed-type arrays (medicines)
+        product.markModified('packs');
+
         const updatedProduct = await product.save();
         res.json(updatedProduct);
     } else {
