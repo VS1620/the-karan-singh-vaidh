@@ -99,7 +99,7 @@ console.log('✅ Server routes initialized successfully');
 
 // Routes
 app.get('/', (req, res) => {
-    res.json({ message: 'The Karan Singh  Vaidh API is running [v1.2.2]...' });
+    res.json({ message: 'The Karan Singh  Vaidh API is running [v1.2.3]...' });
 });
 
 app.get('/api/version', (req, res) => {
