@@ -1,0 +1,15 @@
+# Robots.txt for The Karan Singh Vaidh - Ancient Ayurvedas
+# https://thekaransinghvaidh.com
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /checkout
+Disallow: /account
+Disallow: /cart
+
+# Sitemap
+Sitemap: https://thekaransinghvaidh.com/sitemap.xml
+
+# Crawl delay (optional, helps prevent server overload)
+Crawl-delay: 1

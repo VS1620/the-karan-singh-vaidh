@@ -14,7 +14,7 @@ const orderSchema = mongoose.Schema({
             price: { type: Number, required: true },
             pack: {
                 name: { type: String, required: true },
-                medicines: [{ type: String }],
+                medicines: [mongoose.Schema.Types.Mixed],
                 variant: { type: String } // Optional: e.g. "Starter"
             },
             product: {
@@ -28,6 +28,7 @@ const orderSchema = mongoose.Schema({
         address: { type: String, required: true },
         city: { type: String, required: true },
         postalCode: { type: String, required: true },
+        state: { type: String, required: true },
         country: { type: String, required: true },
         phone: { type: String, required: true },
         email: { type: String, required: true },
@@ -83,6 +84,12 @@ const orderSchema = mongoose.Schema({
         type: String,
         enum: ['Pending', 'Processing', 'Completed', 'Cancelled'],
         default: 'Pending',
+    },
+    shiprocketShipmentId: {
+        type: String,
+    },
+    shiprocketAwb: {
+        type: String,
     }
 }, {
     timestamps: true,

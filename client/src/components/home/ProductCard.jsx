@@ -10,7 +10,8 @@ const ProductCard = ({ product }) => {
     const [quantity, setQuantity] = useState(1);
 
     // Reconcile property names
-    const id = product._id || product.id;
+    // Use ID for now - slugs will be used once all products have them
+    const id = product.slug || product._id || product.id;
     const name = product.name;
     const image = getAssetUrl(product.image);
     const rating = product.rating || 4.8;

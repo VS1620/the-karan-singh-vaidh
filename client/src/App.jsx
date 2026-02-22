@@ -16,6 +16,7 @@ import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
 import AboutUs from './pages/AboutUs';
 import ContactUs from './pages/ContactUs';
+import OrderSuccess from './pages/OrderSuccess';
 
 // Policy Pages
 import PrivacyPolicy from './pages/PrivacyPolicy';
@@ -49,6 +50,7 @@ function App() {
               <Route path="/product/:id" element={<ProductDetails />} />
               <Route path="/cart" element={<CartPage />} />
               <Route path="/checkout" element={<CheckoutPage />} />
+              <Route path="/order-success/:id" element={<OrderSuccess />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/account" element={<MyAccount />} />

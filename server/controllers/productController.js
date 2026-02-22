@@ -126,6 +126,49 @@ const createProduct = asyncHandler(async (req, res) => {
             throw new Error('At least one pack must have a valid selling price.');
         }
 
+        // Normalize packs and medicines
+        if (Array.isArray(packs)) {
+            product.packs = packs.map(pack => {
+                let normalizedMedicines = [];
+                if (Array.isArray(pack.medicines)) {
+                    normalizedMedicines = pack.medicines.map(m => {
+                        if (typeof m === 'string') {
+                            const trimmed = m.trim();
+                            if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
+                                try {
+                                    return JSON.parse(trimmed);
+                                } catch (e) {
+                                    return m;
+                                }
+                            }
+                        }
+                        return m;
+                    });
+                } else if (typeof pack.medicines === 'string') {
+                    const trimmed = pack.medicines.trim();
+                    if (trimmed.startsWith('[') || trimmed.startsWith('{')) {
+                        try {
+                            const parsed = JSON.parse(trimmed);
+                            normalizedMedicines = Array.isArray(parsed) ? parsed : [parsed];
+                        } catch (e) {
+                            normalizedMedicines = [pack.medicines];
+                        }
+                    } else {
+                        normalizedMedicines = [pack.medicines];
+                    }
+                }
+
+                return {
+                    ...pack,
+                    medicines: normalizedMedicines
+                };
+            });
+        }
+
+        console.log('--- PRODUCT DATA PRE-SAVE ---');
+        console.log(`Product Name: ${name}`);
+        console.log(`Deploy Time: 2026-02-22 16:15 IST`);
+
         product.name = name;
         product.image = image;
         product.images = Array.isArray(images) ? images : [];
@@ -133,7 +176,7 @@ const createProduct = asyncHandler(async (req, res) => {
         product.countInStock = countInStock;
         product.shortDescription = shortDescription;
         product.fullDescription = fullDescription;
-        product.packs = packs;
+        // product.packs already set above
         product.discount = discount;
         product.isBestSeller = isBestSeller;
         product.isWellness = isWellness;
@@ -178,7 +221,49 @@ const updateProduct = asyncHandler(async (req, res) => {
         product.countInStock = countInStock !== undefined ? countInStock : product.countInStock;
         product.shortDescription = shortDescription !== undefined ? shortDescription : product.shortDescription;
         product.fullDescription = fullDescription !== undefined ? fullDescription : product.fullDescription;
-        product.packs = packs !== undefined ? packs : product.packs;
+
+        // Normalize and update packs
+        if (packs !== undefined && Array.isArray(packs)) {
+            product.packs = packs.map(pack => {
+                let normalizedMedicines = [];
+                if (Array.isArray(pack.medicines)) {
+                    normalizedMedicines = pack.medicines.map(m => {
+                        if (typeof m === 'string') {
+                            const trimmed = m.trim();
+                            if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
+                                try {
+                                    return JSON.parse(trimmed);
+                                } catch (e) {
+                                    return m;
+                                }
+                            }
+                        }
+                        return m;
+                    });
+                } else if (typeof pack.medicines === 'string') {
+                    const trimmed = pack.medicines.trim();
+                    if (trimmed.startsWith('[') || trimmed.startsWith('{')) {
+                        try {
+                            const parsed = JSON.parse(trimmed);
+                            normalizedMedicines = Array.isArray(parsed) ? parsed : [parsed];
+                        } catch (e) {
+                            normalizedMedicines = [pack.medicines];
+                        }
+                    } else {
+                        normalizedMedicines = [pack.medicines];
+                    }
+                }
+
+                return {
+                    ...pack,
+                    medicines: normalizedMedicines
+                };
+            });
+        }
+
+        console.log(`--- UPDATING PRODUCT: ${req.params.id} ---`);
+        console.log(`Deploy Time: 2026-02-22 16:20 IST`);
+
         product.discount = discount !== undefined ? discount : product.discount;
         product.isActive = isActive !== undefined ? isActive : product.isActive;
         product.isBestSeller = isBestSeller !== undefined ? isBestSeller : product.isBestSeller;

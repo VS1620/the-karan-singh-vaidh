@@ -19,6 +19,7 @@ const CheckoutPage = () => {
         address: '',
         city: '',
         postalCode: '',
+        state: '',
         country: 'India',
     });
 
@@ -76,7 +77,7 @@ const CheckoutPage = () => {
 
                         if (verifyData.success) {
                             // 3. Place Order with isPaid: true
-                            await api.post('/orders', {
+                            const { data: createdOrder } = await api.post('/orders', {
                                 ...orderData,
                                 paymentMethod: 'Online Payment (Razorpay)',
                                 isPaid: true,
@@ -90,8 +91,7 @@ const CheckoutPage = () => {
                             });
 
                             clearCart();
-                            alert('Order Placed and Paid Successfully!');
-                            navigate('/my-account');
+                            navigate(`/order-success/${createdOrder._id}`);
                         }
                     } catch (err) {
                         console.error('Verification Error:', err);
@@ -139,6 +139,7 @@ const CheckoutPage = () => {
                 address: form.address,
                 city: form.city,
                 postalCode: form.postalCode,
+                state: form.state,
                 country: form.country,
                 phone: form.phone,
                 email: form.email,
@@ -155,10 +156,9 @@ const CheckoutPage = () => {
             await handleRazorpayPayment(orderData);
         } else {
             try {
-                await api.post('/orders', orderData);
+                const { data: createdOrder } = await api.post('/orders', orderData);
                 clearCart();
-                alert('Order Placed Successfully!');
-                navigate('/my-account');
+                navigate(`/order-success/${createdOrder._id}`);
             } catch (error) {
                 console.error(error);
                 alert('Error placing order. Please try again.');
@@ -210,6 +210,10 @@ const CheckoutPage = () => {
                                     <label className="block text-sm font-medium text-gray-700">Pincode</label>
                                     <input required type="text" name="postalCode" value={form.postalCode} onChange={handleChange} className="w-full px-4 py-2 mt-1 border rounded-lg focus:ring-emerald-500" />
                                 </div>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">State</label>
+                                <input required type="text" name="state" value={form.state} onChange={handleChange} className="w-full px-4 py-2 mt-1 border rounded-lg focus:ring-emerald-500" placeholder="e.g. Haryana, Delhi, Mumbai" />
                             </div>
                         </form>
                     </div>

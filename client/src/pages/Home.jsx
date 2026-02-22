@@ -9,6 +9,7 @@ import HowItWorks from '../components/home/HowItWorks';
 import RealStores from '../components/home/RealStores';
 import Authenticity from '../components/home/Authenticity';
 import Reviews from '../components/home/Reviews';
+import FactoryVideo from '../components/home/FactoryVideo';
 
 
 const Home = () => {
@@ -23,6 +24,7 @@ const Home = () => {
             <HowItWorks />
             <Authenticity />
             <RealStores />
+            <FactoryVideo />
             <Reviews />
         </div>
     );

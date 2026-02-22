@@ -21,7 +21,10 @@ const run = async () => {
                 {
                     name: 'Test Pack',
                     sellingPrice: 100, // Valid selling price
-                    mrp: 120
+                    mrp: 120,
+                    medicines: [
+                        { name: 'Med 1', image: 'med1.jpg' }
+                    ]
                 }
             ]
         });

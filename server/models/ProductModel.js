@@ -1,11 +1,16 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
 
+const medicineSchema = mongoose.Schema({
+    name: { type: String, required: false },
+    image: { type: String, required: false }
+}, { _id: false, strict: false }); // strict: false allows legacy strings if they somehow bypass validation
+
 const packSchema = mongoose.Schema({
     name: { type: String, required: true }, // e.g., "1 Month Pack"
     mrp: { type: Number, required: true, default: 0 }, // Original Price
     sellingPrice: { type: Number, required: true, default: 0 }, // Discounted/Final Price
-    medicines: [mongoose.Schema.Types.Mixed], // Accepts both strings (legacy) and {name, image} objects
+    medicines: [mongoose.Schema.Types.Mixed], // Keep as Mixed for maximum flexibility but documented as objects
     isDefault: { type: Boolean, default: false },
     isActive: { type: Boolean, default: true }
 });

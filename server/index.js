@@ -15,6 +15,7 @@ const appointmentRoutes = require('./routes/appointmentRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const otpRoutes = require('./routes/otpRoutes');
+const shiprocketRoutes = require('./routes/shiprocketRoutes');
 
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
@@ -89,6 +90,7 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/otp', otpRoutes);
+app.use('/api/shiprocket', shiprocketRoutes);
 console.log('✅ ALL Server Routes (Users, Products, Orders, OTP, etc.) loaded');
 console.log('🚀 DEPLOYMENT TIMESTAMP: ' + new Date().toLocaleString());
 
