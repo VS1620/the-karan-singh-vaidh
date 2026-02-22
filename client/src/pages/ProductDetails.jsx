@@ -288,8 +288,16 @@ const ProductDetails = () => {
                                 <div className="bg-emerald-50/60 rounded-xl p-4 border border-emerald-100/50">
                                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                                         {currentPack.medicines.map((med, idx) => {
-                                            const medName = typeof med === 'string' ? med : (med.name || '');
-                                            const medImage = typeof med === 'object' ? (med.image || '') : '';
+                                            let medData = med;
+                                            if (typeof med === 'string' && med.trim().startsWith('{')) {
+                                                try {
+                                                    medData = JSON.parse(med);
+                                                } catch (e) {
+                                                    // Keep as string if parsing fails
+                                                }
+                                            }
+                                            const medName = typeof medData === 'string' ? medData : (medData.name || '');
+                                            const medImage = typeof medData === 'object' ? (medData.image || '') : '';
                                             return (
                                                 <div key={idx} className="flex flex-col items-center gap-2">
                                                     {medImage ? (
