@@ -102,6 +102,14 @@ app.get('/', (req, res) => {
     res.json({ message: 'The Karan Singh  Vaidh API is running...' });
 });
 
+app.get('/api/version', (req, res) => {
+    res.json({
+        version: '1.2.0',
+        deployedAt: '2026-02-22 18:30 IST',
+        status: 'Schema fixes implemented'
+    });
+});
+
 // Error Handling
 app.use(notFound);
 app.use(errorHandler);
