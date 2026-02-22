@@ -1,6 +1,6 @@
 {
   "name": "server",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -10,7 +10,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "The Karan Singh Vaidh Backend - Updated 2026-02-22",
   "dependencies": {
     "axios": "^1.13.5",
     "bcryptjs": "^3.0.3",
