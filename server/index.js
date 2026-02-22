@@ -104,9 +104,23 @@ app.get('/', (req, res) => {
 
 app.get('/api/version', (req, res) => {
     res.json({
-        version: '1.2.0',
-        deployedAt: '2026-02-22 18:30 IST',
+        version: '1.2.1',
+        deployedAt: '2026-02-22 18:35 IST',
         status: 'Schema fixes implemented'
+    });
+});
+
+app.get('/api/diagnose', (req, res) => {
+    const Product = require('./models/ProductModel');
+    const paths = [];
+    Product.schema.eachPath((path, type) => {
+        paths.push({ path, instance: type.instance });
+    });
+    res.json({
+        paths,
+        mongooseVersion: require('mongoose').version,
+        nodeVersion: process.version,
+        now: new Date().toLocaleString()
     });
 });
 
