@@ -7,7 +7,7 @@ import axios from "axios";
  */
 const BASE_URL = window.location.hostname === 'localhost'
     ? "http://localhost:5000"
-    : (import.meta.env.VITE_API_URL || "https://the-karan-singh-vaidh.onrender.com");
+    : (import.meta.env.VITE_API_URL || window.location.origin);
 
 /**
  * Get absolute URL for assets (images/uploads)

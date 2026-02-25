@@ -1,6 +1,5 @@
 const asyncHandler = require('express-async-handler');
 const Order = require('../models/Order');
-const { pushOrderToShiprocket } = require('./shiprocketController');
 
 // @desc    Create new order
 // @route   POST /api/orders
@@ -35,13 +34,24 @@ const addOrderItems = asyncHandler(async (req, res) => {
         const createdOrder = await order.save();
 
         // Push to Shiprocket ONLY if it's COD. 
-        // For Prepaid, we will push after successful payment in updateOrderToPaid.
-        if (createdOrder.paymentMethod === 'COD') {
-            const shiprocketResponse = await pushOrderToShiprocket(createdOrder);
-            if (shiprocketResponse) {
-                createdOrder.shiprocketShipmentId = shiprocketResponse.shipment_id;
-                createdOrder.shiprocketAwb = shiprocketResponse.awb_code;
+        // For Prepaid, we will push after successful payment in paymentController/verifyPayment.
+        if (createdOrder.paymentMethod === 'COD' || createdOrder.paymentMethod === 'Cash on Delivery') {
+            const { createFullShipment } = require('../services/shiprocketService');
+            const shipmentData = await createFullShipment(createdOrder);
+
+            if (shipmentData) {
+                createdOrder.shiprocket_order_id = shipmentData.shiprocket_order_id;
+                createdOrder.shipment_id = shipmentData.shipment_id;
+                createdOrder.awb_code = shipmentData.awb_code;
+                createdOrder.courier_name = shipmentData.courier_name;
+                createdOrder.tracking_url = shipmentData.tracking_url;
+                createdOrder.shipment_status = shipmentData.shipment_status;
                 await createdOrder.save();
+                console.log(`✅ Shipment created for COD order: ${createdOrder._id}`);
+            } else {
+                createdOrder.shipment_status = 'Failed';
+                await createdOrder.save();
+                console.error(`❌ Shipment creation failed for COD order: ${createdOrder._id}`);
             }
         }
 
@@ -83,16 +93,6 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
         };
 
         const updatedOrder = await order.save();
-
-        // Push to Shiprocket for Prepaid orders now that they are paid
-        if (!updatedOrder.shiprocketShipmentId) {
-            const shiprocketResponse = await pushOrderToShiprocket(updatedOrder);
-            if (shiprocketResponse) {
-                updatedOrder.shiprocketShipmentId = shiprocketResponse.shipment_id;
-                updatedOrder.shiprocketAwb = shiprocketResponse.awb_code;
-                await updatedOrder.save();
-            }
-        }
 
         res.json(updatedOrder);
     } else {

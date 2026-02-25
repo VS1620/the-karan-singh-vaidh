@@ -15,7 +15,7 @@ const appointmentRoutes = require('./routes/appointmentRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const otpRoutes = require('./routes/otpRoutes');
-const shiprocketRoutes = require('./routes/shiprocketRoutes');
+const shipmentRoutes = require('./routes/shipmentRoutes');
 
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
@@ -90,7 +90,7 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/otp', otpRoutes);
-app.use('/api/shiprocket', shiprocketRoutes);
+app.use('/api/shipment', shipmentRoutes);
 console.log('✅ ALL Server Routes (Users, Products, Orders, OTP, etc.) loaded');
 console.log('🚀 DEPLOYMENT TIMESTAMP: ' + new Date().toLocaleString());
 
@@ -104,9 +104,9 @@ app.get('/', (req, res) => {
 
 app.get('/api/version', (req, res) => {
     res.json({
-        version: '1.2.1',
-        deployedAt: '2026-02-22 18:35 IST',
-        status: 'Schema fixes implemented'
+        version: '1.3.0',
+        deployedAt: new Date().toLocaleString(),
+        status: 'Complete Shiprocket Automation Implemented'
     });
 });
 

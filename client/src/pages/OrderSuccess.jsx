@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import api, { getAssetUrl } from '../api/api';
+import ShipmentTracker from '../components/ShipmentTracker';
 
 const OrderSuccess = () => {
     const { id } = useParams();
@@ -117,6 +118,17 @@ const OrderSuccess = () => {
                         <div className="bg-white rounded-lg p-6 shadow-sm flex justify-between items-center text-xl font-semibold">
                             <span>₹{order.totalPrice.toFixed(2)} INR</span>
                         </div>
+
+                        {/* Shipment Tracking Card */}
+                        <ShipmentTracker
+                            orderId={order._id}
+                            initialData={{
+                                awb_code: order.awb_code,
+                                courier_name: order.courier_name,
+                                tracking_url: order.tracking_url,
+                                shipment_status: order.shipment_status,
+                            }}
+                        />
 
                         {/* Items & Breakdown */}
                         <div className="bg-white rounded-lg p-6 shadow-sm">

@@ -85,12 +85,18 @@ const orderSchema = mongoose.Schema({
         enum: ['Pending', 'Processing', 'Completed', 'Cancelled'],
         default: 'Pending',
     },
-    shiprocketShipmentId: {
-        type: String,
-    },
-    shiprocketAwb: {
-        type: String,
-    }
+
+    // ── Payment ────────────────────────────────────────────────
+    razorpay_payment_id: { type: String },
+    payment_status: { type: String, default: 'Pending' },
+
+    // ── Shiprocket Shipment Fields ─────────────────────────────
+    shiprocket_order_id: { type: String },
+    shipment_id: { type: String },
+    awb_code: { type: String },
+    courier_name: { type: String },
+    tracking_url: { type: String },
+    shipment_status: { type: String, default: 'Pending' },
 }, {
     timestamps: true,
 });

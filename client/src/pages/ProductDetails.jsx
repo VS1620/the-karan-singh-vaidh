@@ -18,6 +18,7 @@ const ProductDetails = () => {
     const [imageError, setImageError] = useState(false);
     const [relatedProducts, setRelatedProducts] = useState([]);
     const [lightboxImage, setLightboxImage] = useState(null);
+    const [selectedImage, setSelectedImage] = useState(null);
 
     // Fallback image URL (Data URI for performance)
     const fallbackImage = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="600" height="600"%3E%3Crect fill="%23F4F7F6" width="600" height="600"/%3E%3Ctext fill="%23849A8E" font-family="system-ui" font-size="24" x="50%25" y="50%25" text-anchor="middle" dominant-baseline="middle"%3ENo Image%3C/text%3E%3C/svg%3E';
@@ -30,6 +31,9 @@ const ProductDetails = () => {
                 if (data && data.packs && data.packs.length > 0) {
                     const defaultIndex = data.packs.findIndex(p => p.isDefault);
                     setSelectedPackIndex(defaultIndex >= 0 ? defaultIndex : 0);
+                }
+                if (data && data.image) {
+                    setSelectedImage(data.image);
                 }
 
                 // Fetch related products
@@ -107,7 +111,11 @@ const ProductDetails = () => {
                         {/* Vertical Thumbnail Strip - Desktop Only */}
                         <div className="hidden lg:flex flex-col gap-3 w-20 flex-shrink-0">
                             <div
-                                className={`w-20 h-20 rounded-lg border-2 overflow-hidden cursor-pointer transition-all ${!activeTab ? 'border-ayur-gold' : 'border-gray-200 hover:border-gray-300'}`}
+                                onClick={() => {
+                                    setSelectedImage(product.image);
+                                    setImageError(false);
+                                }}
+                                className={`w-20 h-20 rounded-lg border-2 overflow-hidden cursor-pointer transition-all ${selectedImage === product.image ? 'border-ayur-gold' : 'border-gray-200 hover:border-gray-300'}`}
                             >
                                 <img
                                     src={imageError || !product.image ? fallbackImage : getAssetUrl(product.image)}
@@ -117,7 +125,14 @@ const ProductDetails = () => {
                                 />
                             </div>
                             {product.images?.map((img, i) => (
-                                <div key={i} className="w-20 h-20 rounded-lg border border-gray-200 overflow-hidden cursor-pointer hover:border-ayur-gold transition-all">
+                                <div
+                                    key={i}
+                                    onClick={() => {
+                                        setSelectedImage(img);
+                                        setImageError(false);
+                                    }}
+                                    className={`w-20 h-20 rounded-lg border-2 overflow-hidden cursor-pointer transition-all ${selectedImage === img ? 'border-ayur-gold' : 'border-gray-200 hover:border-gray-300'}`}
+                                >
                                     <img
                                         src={getAssetUrl(img)}
                                         alt={`Thumbnail ${i}`}
@@ -131,18 +146,25 @@ const ProductDetails = () => {
                         {/* Main Image Stage */}
                         <div className="flex-grow md:rounded-2xl overflow-hidden relative group aspect-square lg:aspect-auto lg:h-[600px] flex md:items-center md:justify-center md:bg-gray-50/30">
                             <img
-                                src={imageError || !product.image ? fallbackImage : getAssetUrl(product.image)}
+                                src={imageError || !selectedImage ? (product.image ? getAssetUrl(product.image) : fallbackImage) : getAssetUrl(selectedImage)}
                                 alt={product.name}
                                 className="w-full h-full object-cover md:object-contain p-0 md:p-8 transition-transform duration-500 group-hover:scale-105"
                                 onError={(e) => {
                                     if (!imageError) setImageError(true);
+                                    e.target.src = fallbackImage;
                                 }}
                             />
                         </div>
 
                         {/* Horizontal Thumbnail Strip - Mobile Only */}
                         <div className="flex lg:hidden gap-3 overflow-x-auto no-scrollbar pb-2 px-4">
-                            <div className="w-16 h-16 flex-shrink-0 rounded-lg border-2 border-ayur-gold overflow-hidden">
+                            <div
+                                onClick={() => {
+                                    setSelectedImage(product.image);
+                                    setImageError(false);
+                                }}
+                                className={`w-16 h-16 flex-shrink-0 rounded-lg border-2 overflow-hidden ${selectedImage === product.image ? 'border-ayur-gold' : 'border-gray-200'}`}
+                            >
                                 <img
                                     src={imageError || !product.image ? fallbackImage : getAssetUrl(product.image)}
                                     className="w-full h-full object-cover"
@@ -150,7 +172,14 @@ const ProductDetails = () => {
                                 />
                             </div>
                             {product.images?.map((img, i) => (
-                                <div key={i} className="w-16 h-16 flex-shrink-0 rounded-lg border border-gray-200 overflow-hidden">
+                                <div
+                                    key={i}
+                                    onClick={() => {
+                                        setSelectedImage(img);
+                                        setImageError(false);
+                                    }}
+                                    className={`w-16 h-16 flex-shrink-0 rounded-lg border-2 overflow-hidden ${selectedImage === img ? 'border-ayur-gold' : 'border-gray-200'}`}
+                                >
                                     <img
                                         src={getAssetUrl(img)}
                                         className="w-full h-full object-cover"

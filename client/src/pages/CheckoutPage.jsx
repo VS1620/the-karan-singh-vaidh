@@ -68,33 +68,47 @@ const CheckoutPage = () => {
                 order_id: razorpayOrder.id,
                 handler: async function (response) {
                     try {
-                        // 2. Verify Payment on server
+                        // 2. Create the MongoDB order first (so we have a mongo_order_id)
+                        const { data: createdOrder } = await api.post('/orders', {
+                            ...orderData,
+                            paymentMethod: 'Online Payment (Razorpay)',
+                            isPaid: true,
+                            paidAt: new Date(),
+                            paymentResult: {
+                                id: response.razorpay_payment_id,
+                                status: 'success',
+                                update_time: new Date().toISOString(),
+                                email_address: form.email
+                            }
+                        });
+
+                        // 3. Verify Payment — pass mongo_order_id so backend auto-creates shipment
                         const { data: verifyData } = await api.post('/payment/verify', {
                             razorpay_order_id: response.razorpay_order_id,
                             razorpay_payment_id: response.razorpay_payment_id,
                             razorpay_signature: response.razorpay_signature,
+                            mongo_order_id: createdOrder._id,
                         });
 
                         if (verifyData.success) {
-                            // 3. Place Order with isPaid: true
-                            const { data: createdOrder } = await api.post('/orders', {
-                                ...orderData,
-                                paymentMethod: 'Online Payment (Razorpay)',
-                                isPaid: true,
-                                paidAt: new Date(),
-                                paymentResult: {
-                                    id: response.razorpay_payment_id,
-                                    status: 'success',
-                                    update_time: new Date().toISOString(),
-                                    email_address: form.email
+                            // 4. If shipment wasn't auto-created via verify, call create explicitly
+                            if (!verifyData.shiprocket?.awb_code) {
+                                try {
+                                    await api.post('/shipment/create', {
+                                        order_id: createdOrder._id,
+                                        razorpay_payment_id: response.razorpay_payment_id,
+                                    });
+                                } catch (shipErr) {
+                                    // Non-blocking: shipment failure never prevents order success
+                                    console.warn('Shipment create call failed (non-blocking):', shipErr.message);
                                 }
-                            });
+                            }
 
                             clearCart();
                             navigate(`/order-success/${createdOrder._id}`);
                         }
                     } catch (err) {
-                        console.error('Verification Error:', err);
+                        console.error('Payment/Order Error:', err);
                         alert('Payment verification failed. Please contact support.');
                     }
                 },

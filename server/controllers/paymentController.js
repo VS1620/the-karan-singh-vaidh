@@ -1,15 +1,26 @@
+/**
+ * paymentController.js
+ * Handles Razorpay order creation and payment verification.
+ * After successful verification, automatically triggers Shiprocket shipment creation.
+ */
+
 const asyncHandler = require('express-async-handler');
 const Razorpay = require('razorpay');
 const crypto = require('crypto');
+const Order = require('../models/Order');
+const { createFullShipment } = require('../services/shiprocketService');
 
 const razorpay = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
     key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
-// @desc    Create Razorpay order
-// @route   POST /api/payment/order
-// @access  Private
+// ─────────────────────────────────────────────────────────────────────────────
+/**
+ * @desc    Create Razorpay order (before payment)
+ * @route   POST /api/payment/order
+ * @access  Private
+ */
 const createRazorpayOrder = asyncHandler(async (req, res) => {
     const { amount } = req.body;
 
@@ -19,45 +30,101 @@ const createRazorpayOrder = asyncHandler(async (req, res) => {
     }
 
     const options = {
-        amount: Math.round(amount * 100), // amount in the smallest currency unit (paise)
+        amount: Math.round(amount * 100), // Convert to paise
         currency: 'INR',
-        receipt: `receipt_order_${Date.now()}`,
+        receipt: `rcpt_${Date.now()}`,
     };
 
     try {
         const order = await razorpay.orders.create(options);
         res.status(201).json(order);
     } catch (error) {
-        console.error('Razorpay Order Error:', error);
+        console.error('❌ Razorpay Order Creation Error:', error);
         res.status(500);
         throw new Error(error.error?.description || error.message || 'Razorpay order creation failed');
     }
 });
 
-// @desc    Verify Razorpay payment
-// @route   POST /api/payment/verify
-// @access  Private
+// ─────────────────────────────────────────────────────────────────────────────
+/**
+ * @desc    Verify Razorpay payment signature. On success, auto-create Shiprocket shipment.
+ * @route   POST /api/payment/verify
+ * @access  Private
+ * @body    { razorpay_order_id, razorpay_payment_id, razorpay_signature, mongo_order_id? }
+ */
 const verifyPayment = asyncHandler(async (req, res) => {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+    const {
+        razorpay_order_id,
+        razorpay_payment_id,
+        razorpay_signature,
+        mongo_order_id  // Optional: if provided, auto-create shipment after verify
+    } = req.body;
 
-    const body = razorpay_order_id + "|" + razorpay_payment_id;
+    // ── 1. Verify Razorpay signature ──────────────────────────────────────────
+    const body = `${razorpay_order_id}|${razorpay_payment_id}`;
 
     const expectedSignature = crypto
         .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
-        .update(body.toString())
+        .update(body)
         .digest('hex');
 
     const isAuthentic = expectedSignature === razorpay_signature;
 
-    if (isAuthentic) {
-        res.status(200).json({
-            message: 'Payment verified successfully',
-            success: true,
-        });
-    } else {
+    if (!isAuthentic) {
         res.status(400);
-        throw new Error('Invalid signature, payment verification failed');
+        throw new Error('Invalid payment signature — verification failed');
     }
+
+    // ── 2. Payment is verified ────────────────────────────────────────────────
+    console.log(`✅ Razorpay payment verified: ${razorpay_payment_id}`);
+
+    // ── 3. Optional: auto-create Shiprocket shipment if order_id is provided ──
+    let shiprocketData = null;
+    if (mongo_order_id) {
+        try {
+            const order = await Order.findById(mongo_order_id);
+
+            if (order) {
+                // Save payment ID first
+                order.razorpay_payment_id = razorpay_payment_id;
+                await order.save();
+
+                // Create Shiprocket shipment
+                console.log(`📦 Auto-creating Shiprocket shipment for order: ${mongo_order_id}`);
+                shiprocketData = await createFullShipment(order);
+
+                if (shiprocketData) {
+                    order.shiprocket_order_id = shiprocketData.shiprocket_order_id;
+                    order.shipment_id = shiprocketData.shipment_id;
+                    order.awb_code = shiprocketData.awb_code;
+                    order.courier_name = shiprocketData.courier_name;
+                    order.tracking_url = shiprocketData.tracking_url;
+                    order.shipment_status = shiprocketData.shipment_status;
+                    await order.save();
+
+                    console.log(`✅ Shiprocket shipment auto-created for order ${mongo_order_id} | AWB: ${shiprocketData.awb_code}`);
+                } else {
+                    console.warn(`⚠️ Shiprocket auto-create returned null for order ${mongo_order_id} — will need manual retry`);
+                }
+            }
+        } catch (shipErr) {
+            // Do NOT block payment success response for a Shiprocket error
+            console.error('❌ Shiprocket auto-create failed (non-blocking):', shipErr.message);
+        }
+    }
+
+    res.status(200).json({
+        success: true,
+        message: 'Payment verified successfully',
+        razorpay_payment_id,
+        shiprocket: shiprocketData ? {
+            shiprocket_order_id: shiprocketData.shiprocket_order_id,
+            awb_code: shiprocketData.awb_code,
+            courier_name: shiprocketData.courier_name,
+            tracking_url: shiprocketData.tracking_url,
+            shipment_status: shiprocketData.shipment_status,
+        } : null,
+    });
 });
 
 module.exports = {
