@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Instagram, Youtube, Mail, Phone, MapPin } from 'lucide-react';
+import { Instagram, Youtube, Mail, Phone, MapPin, ChevronDown } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { FaFacebookSquare } from 'react-icons/fa';
 import logo from '../../assets/thekaransinghvaidh-logo.png';
 
 const Footer = () => {
+    const [isOpen, setIsOpen] = useState(false);
+
     return (
         <footer className="bg-gradient-to-br from-[#1a4d3e] via-[#2C5F4F] to-[#1a4d3e] text-white">
             {/* Main Footer Content */}
@@ -24,60 +27,79 @@ const Footer = () => {
                         </div>
 
                         {/* Tagline */}
-                        <p className="text-xl md:text-2xl text-[#d4af37] font-bold mb-6 leading-tight">
+                        {/* <p className="text-xl md:text-2xl text-[#d4af37] font-bold mb-6 leading-tight">
                             Ancient Wisdom for Modern Wellness
-                        </p>
+                        </p> */}
 
 
                         {/* Our Hospital & Facilities */}
-                        <div className="space-y-6">
-                            <h3 className="text-xl font-bold text-white uppercase tracking-wider border-b border-[#d4af37]/30 pb-2">
-                                Our Hospital & Facilities
-                            </h3>
+                        <div className="space-y-4">
+                            <button
+                                onClick={() => setIsOpen(!isOpen)}
+                                className="w-full flex items-center justify-between text-xl font-bold text-white uppercase tracking-wider border-b border-[#d4af37]/30 pb-2 group transition-colors hover:text-[#d4af37]"
+                            >
+                                <span>Our Hospital & Facilities</span>
+                                <ChevronDown
+                                    size={24}
+                                    className={`text-[#d4af37] transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
+                                />
+                            </button>
 
-                            {/* Hospital */}
-                            <div>
-                                <h4 className="text-base font-bold text-[#d4af37] mb-2 flex items-center gap-2">
-                                    Hospital
-                                </h4>
-                                <div className="text-sm text-gray-100 leading-relaxed space-y-1">
-                                    <p className="font-semibold text-white">Karan Singh Vaidh Hospital – Excellence in Patient Care</p>
-                                    <p>📍 Anji, Radhasoami Satsang Road, Reboun P.O., Solan, Himachal Pradesh – 173211</p>
-                                </div>
-                            </div>
+                            <AnimatePresence>
+                                {isOpen && (
+                                    <motion.div
+                                        initial={{ height: 0, opacity: 0 }}
+                                        animate={{ height: 'auto', opacity: 1 }}
+                                        exit={{ height: 0, opacity: 0 }}
+                                        transition={{ duration: 0.3 }}
+                                        className="overflow-hidden space-y-6 pt-2"
+                                    >
+                                        {/* Hospital */}
+                                        <div>
+                                            <h4 className="text-base font-bold text-[#d4af37] mb-2 flex items-center gap-2">
+                                                Hospital
+                                            </h4>
+                                            <div className="text-sm text-gray-100 leading-relaxed space-y-1">
+                                                <p className="font-semibold text-white">Karan Singh Vaidh Ayurvedic Hospital – Excellence in Patient Care</p>
+                                                <p>📍 Anji, Radhasoami Satsang Road, Reboun P.O., Solan, Himachal Pradesh – 173211</p>
+                                            </div>
+                                        </div>
 
-                            {/* Corporate Office */}
-                            <div>
-                                <h4 className="text-base font-bold text-[#d4af37] mb-2 flex items-center gap-2">
-                                    Corporate Office / Patient Care & Information Centre
-                                </h4>
-                                <div className="text-sm text-gray-100 leading-relaxed space-y-1">
-                                    <p className="font-semibold text-white">Supporting Your Health Journey & Patient Assistance</p>
-                                    <p>📍 Hospital Road, Kotlanala, Solan, Himachal Pradesh – 173212</p>
-                                </div>
-                            </div>
+                                        {/* Corporate Office */}
+                                        <div>
+                                            <h4 className="text-base font-bold text-[#d4af37] mb-2 flex items-center gap-2">
+                                                Corporate Office / Patient Care & Information Centre
+                                            </h4>
+                                            <div className="text-sm text-gray-100 leading-relaxed space-y-1">
+                                                <p className="font-semibold text-white">Supporting Your Health Journey & Patient Assistance</p>
+                                                <p>📍Near Apex Hospital, Kotlanala, Solan, Himachal Pradesh – 173212</p>
+                                            </div>
+                                        </div>
 
-                            {/* Manufacturing Plant */}
-                            <div>
-                                <h4 className="text-base font-bold text-[#d4af37] mb-2 flex items-center gap-2">
-                                    Manufacturing Plant
-                                </h4>
-                                <div className="text-sm text-gray-100 leading-relaxed space-y-1">
-                                    <p className="font-semibold text-white">Quality Ayurvedic Medicines Made with Care</p>
-                                    <p>📍 Radiana, P.O. Solan, Himachal Pradesh – 173206</p>
-                                </div>
-                            </div>
+                                        {/* Manufacturing Plant */}
+                                        <div>
+                                            <h4 className="text-base font-bold text-[#d4af37] mb-2 flex items-center gap-2">
+                                                Manufacturing Plant
+                                            </h4>
+                                            <div className="text-sm text-gray-100 leading-relaxed space-y-1">
+                                                <p className="font-semibold text-white">Quality Ayurvedic Medicines Made with Care</p>
+                                                <p>📍 Radiana, P.O. Solan, Himachal Pradesh – 173206</p>
+                                            </div>
+                                        </div>
 
-                            {/* Warehouse */}
-                            <div>
-                                <h4 className="text-base font-bold text-[#d4af37] mb-2 flex items-center gap-2">
-                                    Warehouse & Dispatch Office
-                                </h4>
-                                <div className="text-sm text-gray-100 leading-relaxed space-y-1">
-                                    <p className="font-semibold text-white">Ensuring Timely Delivery Across Himachal Pradesh, India, Asia & Worldwide</p>
-                                    <p>📍 Subathu, Solan, Himachal Pradesh – 173206</p>
-                                </div>
-                            </div>
+                                        {/* Warehouse */}
+                                        <div>
+                                            <h4 className="text-base font-bold text-[#d4af37] mb-2 flex items-center gap-2">
+                                                Warehouse & Dispatch Office
+                                            </h4>
+                                            <div className="text-sm text-gray-100 leading-relaxed space-y-1">
+                                                <p className="font-semibold text-white">Ensuring Timely Delivery Across Himachal Pradesh, India, Asia & Worldwide</p>
+                                                <p>📍 Subathu, Solan, Himachal Pradesh – 173206</p>
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
 
                             {/* Contact Info */}
                             <div className="space-y-3 pt-3 border-t border-[#d4af37]/30">
@@ -90,12 +112,13 @@ const Footer = () => {
                                 </a>
 
                                 <a
-                                    href="mailto:thekaransinghvaidh@gmail.com"
+                                    href="mailto:info@thekaransinghvaidh.com"
                                     className="flex items-center gap-3 text-base text-gray-100 hover:text-[#d4af37] transition-colors group"
                                 >
                                     <Mail size={20} className="text-[#d4af37] group-hover:scale-110 transition-transform" />
-                                    <span className="font-medium">thekaransinghvaidh@gmail.com</span>
+                                    <span className="font-medium">info@thekaransinghvaidh.com</span>
                                 </a>
+
                             </div>
                         </div>
                     </div>
@@ -240,6 +263,61 @@ const Footer = () => {
                 </div>
             </div>
 
+            {/* Platform Availability & Payment Methods */}
+            <div className="border-t border-white/10">
+                <div className="max-w-7xl mx-auto px-6 md:px-12 py-10">
+                    <div className="flex flex-col lg:flex-row gap-10 lg:gap-24">
+                        {/* Availability */}
+                        <div className="space-y-4">
+                            <h5 className="text-xs font-bold text-[#d4af37] uppercase tracking-[0.2em] mb-4">
+                                Also available on:
+                            </h5>
+                            <div className="flex items-center gap-3">
+                                <div className="bg-white p-2 rounded-lg h-12 w-28 flex items-center justify-center shadow-md transition-transform hover:scale-105">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon" className="max-h-8" />
+                                </div>
+                                <div className="bg-white p-2 rounded-lg h-12 w-28 flex items-center justify-center shadow-md transition-transform hover:scale-105">
+                                    <img src="https://kapiva-in-nextjs.pages.dev/assets/images/footer/top_strip/flipkart.png?webp" alt="Flipkart" className="max-h-8" />
+                                </div>
+                                <div className="bg-white p-2 rounded-lg h-12 w-28 flex items-center justify-center shadow-md transition-transform hover:scale-105">
+                                    <img src="https://static.cdnlogo.com/logos/i/39/indiamart.svg" alt="IndiaMart" className="max-h-6 object-contain" />
+                                </div>
+                            </div>
+                        </div>
+
+                                            <div className="space-y-4">
+                            <h5 className="text-xs font-bold text-[#d4af37] uppercase tracking-[0.2em] mb-4">
+                                We Accept:
+                            </h5>
+                            <div className="flex items-center gap-2">
+                                <div className="bg-white px-2 py-2 rounded-lg h-11 min-w-[80px] flex items-center justify-center shadow-md transition-transform hover:scale-105">
+                                    <img src="https://kapiva-in-nextjs.pages.dev/assets/images/footer/bottom_strip/amazon_pay.png?webp" alt="Amazon Pay" className="max-h-7 object-contain" />
+                                </div>
+                                <div className="bg-white px-2 py-2 rounded-lg h-11 min-w-[80px] flex items-center justify-center shadow-md transition-transform hover:scale-105">
+                                    <img src="https://kapiva-in-nextjs.pages.dev/assets/images/footer/bottom_strip/bhim_upi.png?webp" alt="UPI" className="max-h-7 object-contain" />
+                                </div>
+                                <div className="bg-[#f0f0f0] rounded-full h-12 w-12 flex flex-col items-center justify-center text-center border border-gray-300 shadow-inner group flex-shrink-0">
+                                    <span className="text-[6px] text-gray-500 leading-tight uppercase font-bold">Pay Online</span>
+                                    <span className="text-[9px] font-black text-gray-800 leading-none">OR COD</span>
+                                </div>
+                                <div className="bg-white px-2 py-2 rounded-lg h-11 min-w-[80px] flex items-center justify-center shadow-md transition-transform hover:scale-105">
+                                    <img src="https://kapiva-in-nextjs.pages.dev/assets/images/footer/bottom_strip/google_pay.png?webp  " alt="GPay" className="max-h-7 object-contain" />
+                                </div>
+                                <div className="bg-white px-2 py-2 rounded-lg h-11 min-w-[80px] flex items-center justify-center shadow-md transition-transform hover:scale-105">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" className="max-h-8 object-contain" />
+                                </div>
+                                <div className="bg-white px-2 py-2 rounded-lg h-11 min-w-[80px] flex items-center justify-center shadow-md transition-transform hover:scale-105">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/d/d1/RuPay.svg" alt="RuPay" className="max-h-7 object-contain" />
+                                </div>
+                                <div className="bg-white px-2 py-2 rounded-lg h-11 min-w-[80px] flex items-center justify-center shadow-md transition-transform hover:scale-105">
+                                    <img src="https://kapiva-in-nextjs.pages.dev/assets/images/footer/bottom_strip/visa.png?webp" alt="Visa" className="max-h-7 object-contain" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             {/* Bottom Bar */}
             <div className="border-t border-white/20 bg-black/20">
                 <div className="max-w-7xl mx-auto px-6 md:px-12 py-5">
@@ -247,9 +325,9 @@ const Footer = () => {
                         <p className="text-gray-200">
                             © {new Date().getFullYear()} Karan Singh Vaidh - A unit of Maxxi Pharma Pvt Ltd. All rights reserved.
                         </p>
-                        <p className="text-gray-200">
-                            Developed by A unit of Maxxi Pharma Pvt Ltd
-                        </p>
+                        {/* <p className="text-gray-200">
+                            A unit of Maxxi Pharma Pvt Ltd
+                        </p> */}
                     </div>
                 </div>
             </div>

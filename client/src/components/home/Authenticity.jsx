@@ -10,7 +10,7 @@ const Authenticity = () => {
     const checkItems = [
         "30-Minute 1-on-1 Consultation With Karan Singh Vaidh",
         "Specialized in Kidney & Gallbladder Stones",
-        "Over 25+ Years of Expert Experience",
+        "Over 23+ Years of Expert Experience",
         "Deep Rooted Ayurvedic Wisdom"
     ];
 
@@ -108,7 +108,7 @@ const Authenticity = () => {
                                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-[1000ms]" />
                             </button>
                             <p className="mt-4 text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] ml-4 italic opacity-70">
-                                Trusted Heritage Since 2006
+                                Trusted Heritage Since 2003
                             </p>
                         </motion.div>
                     </div>

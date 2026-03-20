@@ -84,10 +84,13 @@ const Shop = () => {
         'Kidney Stone': { image: kidneyStoneImg, color: 'bg-emerald-100 text-emerald-600', label: 'Kidney Stone' },
     };
 
+    const [showAllCategories, setShowAllCategories] = useState(false);
+    const displayedCategories = showAllCategories ? categories : categories?.slice(0, 5);
+
     return (
         <div className="min-h-screen bg-gray-50 pt-16 lg:pt-24 pb-12 -mt-16">
             <ScrollToTop />
-
+            
             {/* Mobile Scrolling Marquee - Fills the gap with dynamic info */}
             <div className="lg:hidden bg-ayur-green text-white py-2.5 overflow-hidden sticky top-0 z-40 shadow-md">
                 <style>
@@ -138,7 +141,6 @@ const Shop = () => {
                         </div>
 
                         {categories?.map(cat => {
-                            console.log('Rendering mobile category:', cat?.name);
                             const config = categoryConfig[cat?.name] || { image: allProductsImg };
                             const isSelected = selectedCategory === cat._id;
 
@@ -195,7 +197,7 @@ const Shop = () => {
                 <div className="flex flex-col lg:flex-row gap-8">
                     {/* Sidebar Filters */}
                     <aside className="hidden lg:block lg:w-[15%]">
-                        <div className="bg-white p-7 rounded-2xl shadow-sm border border-gray-100 sticky top-28 transition-all hover:shadow-md">
+                        <div className="bg-white p-7 rounded-2xl shadow-sm border border-gray-100 sticky top-28 transition-all hover:shadow-md max-h-[calc(100vh-140px)] overflow-y-auto">
                             <h3 className="font-serif text-2xl text-gray-900 mb-8 pb-3 border-b-2 border-ayur-green/10 flex items-center gap-2">
                                 <span className="w-1.5 h-6 bg-ayur-green rounded-full"></span>
                                 Categories
@@ -216,8 +218,7 @@ const Shop = () => {
                                         <span className="text-sm tracking-wide">All Products</span>
                                     </button>
                                 </li>
-                                {categories?.map(cat => {
-                                    console.log('Rendering desktop category:', cat?.name);
+                                {displayedCategories?.map(cat => {
                                     const config = categoryConfig[cat?.name] || { image: allProductsImg };
                                     const isSelected = selectedCategory === cat._id;
 
@@ -240,6 +241,15 @@ const Shop = () => {
                                     );
                                 })}
                             </ul>
+
+                            {categories?.length > 5 && (
+                                <button
+                                    onClick={() => setShowAllCategories(!showAllCategories)}
+                                    className="mt-4 w-full text-xs font-bold text-ayur-green hover:text-ayur-olive transition-colors flex items-center justify-center gap-2 py-2 border border-ayur-green/10 rounded-lg hover:bg-ayur-green/5"
+                                >
+                                    {showAllCategories ? 'Show Less' : `+ See More (${categories.length - 5})`}
+                                </button>
+                            )}
 
                             <div className="mt-12 pt-10 border-t border-gray-50">
                                 <h4 className="text-[10px] font-extrabold text-gray-400 uppercase tracking-[0.2em] mb-6">Why shop with us?</h4>

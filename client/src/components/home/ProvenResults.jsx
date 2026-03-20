@@ -58,7 +58,7 @@ const ProvenResults = () => {
                     {/* Left Content */}
                     <div className="lg:w-1/2 space-y-8 z-10">
                         <div className="inline-block border border-yellow-500/50 rounded-full px-4 py-1.5">
-                            <span className="text-yellow-400 text-xs font-bold tracking-widest uppercase">Trusted Since 2006</span>
+                            <span className="text-yellow-400 text-xs font-bold tracking-widest uppercase">Trusted Since 2003</span>
                         </div>
 
                         <h2 className="text-5xl md:text-6xl font-serif text-yellow-500 italic leading-tight">

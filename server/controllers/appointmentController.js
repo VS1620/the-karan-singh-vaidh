@@ -8,13 +8,14 @@ const createAppointment = asyncHandler(async (req, res) => {
     console.log('--- NEW APPOINTMENT REQUEST ---');
     console.log('Request Body:', req.body);
 
-    const { name, phone, email, concern, preferredDate, preferredTime } = req.body;
+    const { name, phone, email, service, concern, preferredDate, preferredTime } = req.body;
 
     // Clean up empty strings for optional fields
     const appointmentData = {
         name,
         phone,
         email: email || undefined,
+        service,
         concern,
         preferredDate: preferredDate || null,
         preferredTime

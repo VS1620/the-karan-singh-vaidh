@@ -60,6 +60,13 @@ const categories = [
         description: 'Soothe neurological pathways to eliminate recurrent headaches and stress.',
         image: migraineImg,
         link: '/product/6976341abd94a7bc32bec2a8    '
+    },
+    {
+        id: 8,
+        name: 'Over Weight',
+        description: 'Natural metabolism booster and fat burner to achieve your ideal weight safely.',
+        image: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=2070",
+        link: '/product/over-weight'
     }
 ];
 

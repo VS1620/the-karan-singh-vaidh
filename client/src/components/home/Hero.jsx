@@ -74,7 +74,7 @@ const Hero = () => {
         },
         {
             id: 1,
-            title: "Ayurvedic Legacy Since 2006",
+            title: "Ayurvedic Legacy Since 2003",
             subtitle: "Trusted ancient formulations for modern lifestyle diseases",
             cta: "Shop Now",
             link: "/shop",

@@ -76,21 +76,23 @@ const verifyPayment = asyncHandler(async (req, res) => {
     }
 
     // ── 2. Payment is verified ────────────────────────────────────────────────
-    console.log(`✅ Razorpay payment verified: ${razorpay_payment_id}`);
+    console.log(`[PAYMENT] ✅ Razorpay signature verified: ${razorpay_payment_id}`);
 
-    // ── 3. Optional: auto-create Shiprocket shipment if order_id is provided ──
+    // ── 3. Auto-create Shiprocket shipment for successful prepaid payment ─────
     let shiprocketData = null;
     if (mongo_order_id) {
         try {
             const order = await Order.findById(mongo_order_id);
 
             if (order) {
-                // Save payment ID first
+                // Important: Mark as paid first
+                order.isPaid = true;
+                order.paidAt = Date.now();
+                order.payment_status = 'Completed';
                 order.razorpay_payment_id = razorpay_payment_id;
                 await order.save();
 
-                // Create Shiprocket shipment
-                console.log(`📦 Auto-creating Shiprocket shipment for order: ${mongo_order_id}`);
+                console.log(`[PAYMENT] 📦 Creating Shiprocket shipment for prepaid order: ${mongo_order_id}`);
                 shiprocketData = await createFullShipment(order);
 
                 if (shiprocketData) {
@@ -102,14 +104,18 @@ const verifyPayment = asyncHandler(async (req, res) => {
                     order.shipment_status = shiprocketData.shipment_status;
                     await order.save();
 
-                    console.log(`✅ Shiprocket shipment auto-created for order ${mongo_order_id} | AWB: ${shiprocketData.awb_code}`);
+                    console.log(`[PAYMENT] ✅ Shiprocket shipment created for order ${mongo_order_id} | AWB: ${shiprocketData.awb_code}`);
                 } else {
-                    console.warn(`⚠️ Shiprocket auto-create returned null for order ${mongo_order_id} — will need manual retry`);
+                    console.error(`[PAYMENT] ❌ Shiprocket auto-create returned null for order ${mongo_order_id}`);
+                    order.shipment_status = 'Shipment Failed - Manual Action Required';
+                    await order.save();
                 }
+            } else {
+                console.error(`[PAYMENT] ❌ Order not found for shipment creation: ${mongo_order_id}`);
             }
         } catch (shipErr) {
-            // Do NOT block payment success response for a Shiprocket error
-            console.error('❌ Shiprocket auto-create failed (non-blocking):', shipErr.message);
+            console.error('[PAYMENT] ❌ Shiprocket integration error:', shipErr.message);
+            // Non-blocking but logged
         }
     }
 

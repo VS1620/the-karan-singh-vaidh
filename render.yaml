@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: the-karan-singh-vaidh-backend
+    runtime: node
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+    # Persistent disk — keeps uploads/ folder alive across deploys & restarts
+    # Free plan: not available — upgrade to Render Starter ($7/mo) for disk
+    # Uncomment lines below when you have a paid plan:
+    # disk:
+    #   name: uploads-disk
+    #   mountPath: /opt/render/project/src/uploads
+    #   sizeGB: 1

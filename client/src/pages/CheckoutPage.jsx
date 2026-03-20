@@ -60,7 +60,7 @@ const CheckoutPage = () => {
             });
 
             const options = {
-                key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_live_SDApTPGDY3ioLj',
+                key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_live_SL5SABtfYmhkMp',
                 amount: razorpayOrder.amount,
                 currency: razorpayOrder.currency,
                 name: 'The Karan Singh Vaidh',

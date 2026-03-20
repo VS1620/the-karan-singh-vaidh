@@ -23,7 +23,14 @@ const ShipmentTracker = ({ orderId, initialData = {} }) => {
             const { data } = await api.get(`/shipment/track/${orderId}`);
             setTracking(data);
         } catch (err) {
-            setError(err.response?.data?.message || 'Unable to fetch tracking info');
+            const status = err.response?.status;
+            // 404 means route not found or order not in DB yet — treat silently as "Pending"
+            if (status === 404) {
+                console.warn('Shipment track: 404 – order may not have shipment yet.');
+                setTracking(prev => ({ ...prev, shipment_status: 'Pending' }));
+            } else {
+                setError(err.response?.data?.message || 'Unable to fetch tracking info');
+            }
         } finally {
             setLoading(false);
             setRefreshing(false);
@@ -31,6 +38,7 @@ const ShipmentTracker = ({ orderId, initialData = {} }) => {
     };
 
     useEffect(() => {
+        // Only auto-fetch if we don't already have an AWB and order is not brand new (Pending)
         if (orderId && !initialData?.awb_code) {
             fetchTracking();
         }

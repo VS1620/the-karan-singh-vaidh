@@ -36,7 +36,10 @@ const addOrderItems = asyncHandler(async (req, res) => {
         // Push to Shiprocket ONLY if it's COD. 
         // For Prepaid, we will push after successful payment in paymentController/verifyPayment.
         if (createdOrder.paymentMethod === 'COD' || createdOrder.paymentMethod === 'Cash on Delivery') {
+            console.log(`[ORDER] 🚚 Processing COD order for Shiprocket: ${createdOrder._id}`);
             const { createFullShipment } = require('../services/shiprocketService');
+
+            // Re-fetch order to ensure relations are populated if needed (though createFullShipment handles the document)
             const shipmentData = await createFullShipment(createdOrder);
 
             if (shipmentData) {
@@ -47,11 +50,12 @@ const addOrderItems = asyncHandler(async (req, res) => {
                 createdOrder.tracking_url = shipmentData.tracking_url;
                 createdOrder.shipment_status = shipmentData.shipment_status;
                 await createdOrder.save();
-                console.log(`✅ Shipment created for COD order: ${createdOrder._id}`);
+                console.log(`[ORDER] ✅ Shiprocket shipment created for COD: ${createdOrder._id}`);
             } else {
-                createdOrder.shipment_status = 'Failed';
+                console.error(`[ORDER] ❌ Shiprocket shipment failed for COD: ${createdOrder._id}`);
+                // We don't mark it as "Failed" in DB yet, maybe "Pending Shipment" or just leave it for manual retry
+                createdOrder.shipment_status = 'Shipment Failed - Manual Action Required';
                 await createdOrder.save();
-                console.error(`❌ Shipment creation failed for COD order: ${createdOrder._id}`);
             }
         }
 

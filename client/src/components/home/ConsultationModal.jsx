@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Calendar, Clock, User, Phone, Mail, FileText, Send, CheckCircle2 } from 'lucide-react';
+import { X, Calendar, Clock, User, Phone, Mail, FileText, Send, CheckCircle2, ChevronDown } from 'lucide-react';
 import api from '../../api/api';
 
 const ConsultationModal = ({ isOpen, onClose }) => {
@@ -7,9 +7,10 @@ const ConsultationModal = ({ isOpen, onClose }) => {
         name: '',
         phone: '',
         email: '',
+        service: '',
         concern: '',
         preferredDate: '',
-        preferredTime: 'Morning (10 AM - 1 PM)'
+        preferredTime: ''
     });
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -21,11 +22,9 @@ const ConsultationModal = ({ isOpen, onClose }) => {
         e.preventDefault();
         setLoading(true);
         setError('');
-        console.log('Submitting form data:', formData); // Added console log
 
         try {
             const response = await api.post('/appointments', formData);
-            console.log('Appointment submission successful:', response.data); // Added console log
             setSuccess(true);
             setLoading(false);
             // Reset form after 3 seconds and close
@@ -35,14 +34,14 @@ const ConsultationModal = ({ isOpen, onClose }) => {
                     name: '',
                     phone: '',
                     email: '',
+                    service: '',
                     concern: '',
                     preferredDate: '',
-                    preferredTime: 'Morning (10 AM - 1 PM)'
+                    preferredTime: ''
                 });
                 onClose();
             }, 3000);
         } catch (err) {
-            console.error('APPOINTMENT SUBMISSION ERROR:', err);
             setError(err.response?.data?.message || 'Something went wrong. Please try again.');
             setLoading(false);
         }
@@ -56,18 +55,18 @@ const ConsultationModal = ({ isOpen, onClose }) => {
         <div className="fixed inset-0 z-[100] flex items-center justify-center px-4">
             {/* Backdrop */}
             <div
-                className="absolute inset-0 bg-[#0d2e1b]/60 backdrop-blur-sm transition-opacity"
+                className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
                 onClick={onClose}
             ></div>
 
             {/* Modal Content */}
-            <div className="relative bg-white w-full max-w-2xl rounded-[2.5rem] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
+            <div className="relative bg-[#fcfcfc] w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
                 {/* Close Button */}
                 <button
                     onClick={onClose}
-                    className="absolute top-6 right-6 text-gray-400 hover:text-ayur-green transition-colors z-20"
+                    className="absolute top-6 right-6 text-gray-400 hover:text-gray-600 transition-colors z-20"
                 >
-                    <X size={28} />
+                    <X size={24} />
                 </button>
 
                 {success ? (
@@ -81,132 +80,158 @@ const ConsultationModal = ({ isOpen, onClose }) => {
                         </p>
                     </div>
                 ) : (
-                    <div className="p-8 lg:p-12">
-                        <h2 className="text-2xl font-serif font-bold text-ayur-green mb-2 text-center md:text-left">Expert Consultation</h2>
-                        <p className="text-gray-500 text-sm mb-8">Fill in the details below to book your appointment.</p>
+                    <div className="p-6 md:p-10">
+                        <form onSubmit={handleSubmit} className="space-y-6">
+                            {/* Personal Information Section */}
+                            <div>
+                                <h2 className="text-2xl font-bold text-[#419463] mb-2">Personal Information</h2>
+                                <div className="h-px bg-gray-200 w-full mb-6"></div>
 
-                        {error && (
-                            <div className="mb-6 p-3 bg-red-50 text-red-500 text-xs font-bold rounded-xl border border-red-100 italic">
-                                {error}
-                            </div>
-                        )}
-
-                        <form onSubmit={handleSubmit} className="space-y-5">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                <div className="relative">
-                                    <label className="text-[10px] uppercase font-black tracking-widest text-ayur-green/50 mb-1.5 block ml-1">Full Name</label>
-                                    <div className="relative group">
+                                <div className="space-y-4">
+                                    <div className="space-y-1.5">
+                                        <label className="text-sm font-semibold text-gray-700">Full Name *</label>
                                         <input
                                             required
                                             type="text"
                                             name="name"
                                             value={formData.name}
                                             onChange={handleChange}
-                                            className="w-full bg-gray-50 border-2 border-transparent focus:border-ayur-gold/30 focus:bg-white rounded-2xl py-3 pl-11 pr-4 text-sm transition-all focus:outline-none placeholder:text-gray-300"
-                                            placeholder="Aman Sharma"
+                                            className="w-full bg-white border border-gray-300 rounded-lg py-2.5 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#419463]/20 focus:border-[#419463] transition-all placeholder:text-gray-400"
+                                            placeholder="Enter your full name"
                                         />
-                                        <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-ayur-gold transition-colors" size={18} />
+                                    </div>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div className="space-y-1.5">
+                                            <label className="text-sm font-semibold text-gray-700">Email Address *</label>
+                                            <input
+                                                required
+                                                type="email"
+                                                name="email"
+                                                value={formData.email}
+                                                onChange={handleChange}
+                                                className="w-full bg-white border border-gray-300 rounded-lg py-2.5 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#419463]/20 focus:border-[#419463] transition-all placeholder:text-gray-400"
+                                                placeholder="your@email.com"
+                                            />
+                                        </div>
+                                        <div className="space-y-1.5">
+                                            <label className="text-sm font-semibold text-gray-700">Phone Number *</label>
+                                            <input
+                                                required
+                                                type="tel"
+                                                name="phone"
+                                                value={formData.phone}
+                                                onChange={handleChange}
+                                                className="w-full bg-white border border-gray-300 rounded-lg py-2.5 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#419463]/20 focus:border-[#419463] transition-all placeholder:text-gray-400"
+                                                placeholder="+91 1234567890"
+                                            />
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="relative">
-                                    <label className="text-[10px] uppercase font-black tracking-widest text-ayur-green/50 mb-1.5 block ml-1">Phone Number</label>
-                                    <div className="relative group">
-                                        <input
-                                            required
-                                            type="tel"
-                                            name="phone"
-                                            value={formData.phone}
+                            </div>
+
+                            {/* Appointment Details Section */}
+                            <div>
+                                <h2 className="text-2xl font-bold text-[#419463] mb-2">Appointment Details</h2>
+                                <div className="h-px bg-gray-200 w-full mb-6"></div>
+
+                                <div className="space-y-4">
+                                    <div className="space-y-1.5">
+                                        <label className="text-sm font-semibold text-gray-700">Service Required *</label>
+                                        <div className="relative">
+                                            <select
+                                                required
+                                                name="service"
+                                                value={formData.service}
+                                                onChange={handleChange}
+                                                className="w-full bg-white border border-gray-300 rounded-lg py-2.5 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#419463]/20 focus:border-[#419463] transition-all appearance-none cursor-pointer"
+                                            >
+                                                <option value="" disabled>Select a service</option>
+                                                <option value="General Consultation">General Consultation</option>
+                                                <option value="Ayurvedic Treatment">Ayurvedic Treatment</option>
+                                                <option value="Diet & Nutrition">Diet & Nutrition</option>
+                                                <option value="Pulse Diagnosis">Pulse Diagnosis (Nadi Pariksha)</option>
+                                                <option value="Lifestyle Coaching">Lifestyle Coaching</option>
+                                            </select>
+                                            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={18} />
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div className="space-y-1.5">
+                                            <label className="text-sm font-semibold text-gray-700">Preferred Date *</label>
+                                            <div className="relative">
+                                                <input
+                                                    required
+                                                    type="date"
+                                                    name="preferredDate"
+                                                    value={formData.preferredDate}
+                                                    onChange={handleChange}
+                                                    className="w-full bg-white border border-gray-300 rounded-lg py-2.5 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#419463]/20 focus:border-[#419463] transition-all cursor-pointer"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="space-y-1.5">
+                                            <label className="text-sm font-semibold text-gray-700">Preferred Time *</label>
+                                            <div className="relative">
+                                                <select
+                                                    required
+                                                    name="preferredTime"
+                                                    value={formData.preferredTime}
+                                                    onChange={handleChange}
+                                                    className="w-full bg-white border border-gray-300 rounded-lg py-2.5 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#419463]/20 focus:border-[#419463] transition-all appearance-none cursor-pointer"
+                                                >
+                                                    <option value="" disabled>Select preferred time</option>
+                                                    <option value="Morning (10:00 AM - 01:00 PM)">Morning (10:00 AM - 01:00 PM)</option>
+                                                    <option value="Afternoon (01:00 PM - 04:00 PM)">Afternoon (01:00 PM - 04:00 PM)</option>
+                                                    <option value="Evening (04:00 PM - 07:00 PM)">Evening (04:00 PM - 07:00 PM)</option>
+                                                </select>
+                                                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={18} />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-1.5">
+                                        <label className="text-sm font-semibold text-gray-700">Special Requests or Notes</label>
+                                        <textarea
+                                            name="concern"
+                                            value={formData.concern}
                                             onChange={handleChange}
-                                            className="w-full bg-gray-50 border-2 border-transparent focus:border-ayur-gold/30 focus:bg-white rounded-2xl py-3 pl-11 pr-4 text-sm transition-all focus:outline-none placeholder:text-gray-300"
-                                            placeholder="88xxx xxxxx"
+                                            rows="4"
+                                            className="w-full bg-white border border-gray-300 rounded-lg py-2.5 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#419463]/20 focus:border-[#419463] transition-all placeholder:text-gray-400 resize-none"
+                                            placeholder="Any special requirements, symptoms, or notes you'd like to share..."
                                         />
-                                        <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-ayur-gold transition-colors" size={18} />
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="relative">
-                                <label className="text-[10px] uppercase font-black tracking-widest text-ayur-green/50 mb-1.5 block ml-1">Email Address (Optional)</label>
-                                <div className="relative group">
-                                    <input
-                                        type="email"
-                                        name="email"
-                                        value={formData.email}
-                                        onChange={handleChange}
-                                        className="w-full bg-gray-50 border-2 border-transparent focus:border-ayur-gold/30 focus:bg-white rounded-2xl py-3 pl-11 pr-4 text-sm transition-all focus:outline-none placeholder:text-gray-300"
-                                        placeholder="youremail@example.com"
-                                    />
-                                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-ayur-gold transition-colors" size={18} />
+                            {error && (
+                                <div className="p-3 bg-red-50 text-red-500 text-xs font-semibold rounded-lg border border-red-100 italic">
+                                    {error}
                                 </div>
-                            </div>
+                            )}
 
-                            <div className="relative">
-                                <label className="text-[10px] uppercase font-black tracking-widest text-ayur-green/50 mb-1.5 block ml-1">Describe Your Concern</label>
-                                <div className="relative group">
-                                    <textarea
-                                        required
-                                        name="concern"
-                                        value={formData.concern}
-                                        onChange={handleChange}
-                                        rows="3"
-                                        className="w-full bg-gray-50 border-2 border-transparent focus:border-ayur-gold/30 focus:bg-white rounded-2xl py-3 pl-11 pr-4 text-sm transition-all focus:outline-none placeholder:text-gray-300 resize-none"
-                                        placeholder="Write briefly about your health issue..."
-                                    />
-                                    <FileText className="absolute left-4 top-4 text-gray-300 group-focus-within:text-ayur-gold transition-colors" size={18} />
-                                </div>
+                            <div className="pt-2">
+                                <button
+                                    type="submit"
+                                    disabled={loading}
+                                    className="w-full bg-[#419463] hover:bg-[#357a52] text-white font-bold py-3.5 rounded-lg shadow-lg shadow-green-500/20 transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2"
+                                >
+                                    {loading ? (
+                                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                    ) : (
+                                        <>
+                                            <span>Book Appointment</span>
+                                            <Send size={18} />
+                                        </>
+                                    )}
+                                </button>
                             </div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                <div className="relative">
-                                    <label className="text-[10px] uppercase font-black tracking-widest text-ayur-green/50 mb-1.5 block ml-1">Preferred Date</label>
-                                    <div className="relative group">
-                                        <input
-                                            type="date"
-                                            name="preferredDate"
-                                            value={formData.preferredDate}
-                                            onChange={handleChange}
-                                            className="w-full bg-gray-50 border-2 border-transparent focus:border-ayur-gold/30 focus:bg-white rounded-2xl py-3 pl-11 pr-4 text-sm transition-all focus:outline-none"
-                                        />
-                                        <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-ayur-gold transition-colors" size={18} />
-                                    </div>
-                                </div>
-                                <div className="relative">
-                                    <label className="text-[10px] uppercase font-black tracking-widest text-ayur-green/50 mb-1.5 block ml-1">Preferred Time</label>
-                                    <div className="relative group">
-                                        <select
-                                            name="preferredTime"
-                                            value={formData.preferredTime}
-                                            onChange={handleChange}
-                                            className="w-full bg-gray-50 border-2 border-transparent focus:border-ayur-gold/30 focus:bg-white rounded-2xl py-3 pl-11 pr-4 text-sm transition-all focus:outline-none appearance-none"
-                                        >
-                                            <option>Morning (10 AM - 1 PM)</option>
-                                            <option>Afternoon (1 PM - 4 PM)</option>
-                                            <option>Evening (4 PM - 7 PM)</option>
-                                        </select>
-                                        <Clock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-ayur-gold transition-colors" size={18} />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <button
-                                type="submit"
-                                disabled={loading}
-                                className="w-full bg-[#0d2e1b] hover:bg-ayur-gold text-white font-black uppercase text-xs tracking-[0.3em] py-4 rounded-2xl shadow-xl shadow-ayur-green/20 transition-all active:scale-95 flex items-center justify-center gap-3 disabled:opacity-50"
-                            >
-                                {loading ? (
-                                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                                ) : (
-                                    <>
-                                        <span>Request Appointment</span>
-                                        <Send size={16} />
-                                    </>
-                                )}
-                            </button>
                         </form>
                     </div>
                 )}
             </div>
-        </div >
+        </div>
     );
 };
 

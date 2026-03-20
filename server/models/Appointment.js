@@ -13,12 +13,17 @@ const appointmentSchema = new mongoose.Schema({
     },
     email: {
         type: String,
+        required: [true, 'Please provide your email address'],
         trim: true,
         lowercase: true
     },
+    service: {
+        type: String,
+        required: [true, 'Please provide the service required'],
+        trim: true
+    },
     concern: {
         type: String,
-        required: [true, 'Please provide your health concern'],
         trim: true
     },
     preferredDate: {

@@ -6,6 +6,7 @@
  */
 
 const asyncHandler = require('express-async-handler');
+const mongoose = require('mongoose');
 const Order = require('../models/Order');
 const { createFullShipment, trackShipment } = require('../services/shiprocketService');
 
@@ -87,6 +88,12 @@ const createShipment = asyncHandler(async (req, res) => {
  */
 const trackOrder = asyncHandler(async (req, res) => {
     const { orderId } = req.params;
+
+    // Validate ObjectId format early to avoid Mongoose CastError
+    if (!mongoose.Types.ObjectId.isValid(orderId)) {
+        res.status(400);
+        throw new Error(`Invalid order ID format: ${orderId}`);
+    }
 
     // 1. Fetch order from DB to get AWB
     const order = await Order.findById(orderId).select(

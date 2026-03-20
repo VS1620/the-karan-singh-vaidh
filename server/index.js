@@ -31,8 +31,14 @@ const allowedOrigins = [
     'http://localhost:5174',
     'http://localhost:5175',
     'http://localhost:3000',
+    // cPanel live domain (with and without port)
     'https://thekaransinghvaidh.com',
     'https://www.thekaransinghvaidh.com',
+    'https://thekaransinghvaidh.com:5000',
+    'https://www.thekaransinghvaidh.com:5000',
+    // Subdomain backend option
+    'https://api.thekaransinghvaidh.com',
+    // Old Render deployment
     'https://the-karan-singh-vaidh.onrender.com'
 ];
 
@@ -59,7 +65,7 @@ app.use(
 );
 app.use(morgan('dev'));
 
-// Ensure uploads directory exists first
+// Ensure uploads directory exists
 const fs = require('fs');
 const uploadsPath = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsPath)) {
@@ -67,18 +73,36 @@ if (!fs.existsSync(uploadsPath)) {
     console.log('✅ Created uploads directory');
 }
 
-// Static folder for uploads with CORS headers
-app.use('/uploads', (req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET');
-    res.header('Cross-Origin-Resource-Policy', 'cross-origin');
-    next();
-}, express.static(uploadsPath, {
-    maxAge: '1d',
-    setHeaders: (res, filePath) => {
-        res.set('Cache-Control', 'public, max-age=86400');
+// ── Serve uploaded images ─────────────────────────────────────────────────────
+// Accessible at: https://the-karan-singh-vaidh.onrender.com/uploads/<filename>
+app.use('/uploads',
+    // Set permissive CORS so any frontend origin can load images
+    (req, res, next) => {
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
+        res.header('Access-Control-Allow-Headers', 'Origin, Content-Type');
+        res.header('Cross-Origin-Resource-Policy', 'cross-origin');
+        res.header('Vary', 'Origin');
+        if (req.method === 'OPTIONS') return res.sendStatus(200);
+        next();
+    },
+    express.static(uploadsPath, {
+        maxAge: '7d',
+        etag: true,
+        lastModified: true,
+        setHeaders: (res) => {
+            res.set('Cache-Control', 'public, max-age=604800');
+        },
+        fallthrough: false          // trigger error handler on missing file
+    }),
+    // 404 handler for missing images — return JSON, not HTML
+    (err, req, res, next) => {
+        if (err.status === 404 || err.statusCode === 404) {
+            return res.status(404).json({ message: `Image not found: ${req.path}` });
+        }
+        next(err);
     }
-}));
+);
 
 // Routes
 app.use('/api/users', userRoutes);
@@ -91,7 +115,13 @@ app.use('/api/appointments', appointmentRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/otp', otpRoutes);
 app.use('/api/shipment', shipmentRoutes);
-console.log('✅ ALL Server Routes (Users, Products, Orders, OTP, etc.) loaded');
+
+// ── Specific Requested Routes (Aliases) ──────────────────────────────────────
+app.post('/api/create-order', (req, res, next) => { req.url = '/'; next(); }, orderRoutes);
+app.post('/api/verify-payment', (req, res, next) => { req.url = '/verify'; next(); }, paymentRoutes);
+app.post('/api/create-shipment', (req, res, next) => { req.url = '/create'; next(); }, shipmentRoutes);
+
+console.log('✅ ALL Server Routes (Users, Products, Orders, OTP, Shipment, etc.) loaded');
 console.log('🚀 DEPLOYMENT TIMESTAMP: ' + new Date().toLocaleString());
 
 // Confirm route registration
@@ -149,11 +179,7 @@ const connectDB = async () => {
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
     console.log(`🚀 DEPLOYMENT TIMESTAMP: ${new Date().toLocaleString()}`);
-    if (process.env.CLOUDINARY_CLOUD_NAME) {
-        console.log('✅ Cloudinary storage is configured');
-    } else {
-        console.error('❌ Cloudinary configuration missing from .env');
-    }
+    console.log('✅ Local disk storage is configured for uploads');
 
     // Connect to database AFTER server is listening
     connectDB();

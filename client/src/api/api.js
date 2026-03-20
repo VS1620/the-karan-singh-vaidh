@@ -1,80 +1,91 @@
 import axios from "axios";
 
-/**
- * API Base URL
- * - Local: http://localhost:5000
- * - Live: https://the-karan-singh-vaidh.onrender.com
- */
-const BASE_URL = window.location.hostname === 'localhost'
-    ? "http://localhost:5000"
-    : (import.meta.env.VITE_API_URL || window.location.origin);
+// ─────────────────────────────────────────────────────────
+// BASE URL
+// Local  → http://localhost:5000
+// Live   → value of VITE_API_URL in .env.production
+//          e.g. https://the-karan-singh-vaidh.onrender.com
+// ─────────────────────────────────────────────────────────
+const BASE_URL =
+    window.location.hostname === "localhost"
+        ? "http://localhost:5000"
+        : import.meta.env.VITE_API_URL || window.location.origin;
 
-/**
- * Get absolute URL for assets (images/uploads)
- */
-export const getAssetUrl = (path) => {
-    if (!path) return "";
-    if (path.startsWith('http')) return path; // Return as-is for Cloudinary, Google Drive, etc.
+// Remove any trailing slash so URLs don't get double-slashes
+const API_ORIGIN = BASE_URL.replace(/\/$/, "");
 
-    // Remove leading slash for consistency
-    const cleanPath = path.startsWith('/') ? path.substring(1) : path;
+// ─────────────────────────────────────────────────────────
+// getAssetUrl  — converts any stored image path to a full URL
+//
+// Handles all cases:
+//  • Already absolute  (http/https) → return as-is
+//  • Relative path     (uploads/x)  → prepend API_ORIGIN
+//  • Leading slash     (/uploads/x) → prepend API_ORIGIN
+//  • Empty / null                   → return fallback
+// ─────────────────────────────────────────────────────────
+const FALLBACK_IMAGE = "/logo.png"; // shown when image is missing
 
-    // Use the already calculated BASE_URL for consistency
-    return `${BASE_URL}/${cleanPath}`;
+export const getAssetUrl = (imagePath) => {
+    if (!imagePath || typeof imagePath !== "string") return FALLBACK_IMAGE;
+
+    const trimmed = imagePath.trim();
+
+    // Already a full URL (Cloudinary, Google Drive, etc.)
+    if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
+        return trimmed;
+    }
+
+    // Local path — strip leading slash and join with backend origin
+    const clean = trimmed.startsWith("/") ? trimmed.slice(1) : trimmed;
+    return `${API_ORIGIN}/${clean}`;
 };
 
-/**
- * Axios instance
- */
+// ─────────────────────────────────────────────────────────
+// Axios instance
+// ─────────────────────────────────────────────────────────
 const api = axios.create({
-    baseURL: `${BASE_URL}/api`,
-    timeout: 30000, // Increased to 30s for Render free tier cold start
-    headers: {
-        // CONTENT-TYPE IS AUTO-HANDLED BY AXIOS
-    },
+    baseURL: `${API_ORIGIN}/api`,
+    timeout: 30000,
 });
 
-/**
- * REQUEST INTERCEPTOR
- */
+// REQUEST INTERCEPTOR — attach JWT token
 api.interceptors.request.use(
     (config) => {
-        const userInfo = localStorage.getItem("userInfo");
-
-        if (userInfo) {
-            try {
-                const parsedUser = JSON.parse(userInfo);
-                if (parsedUser?.token) {
-                    config.headers.Authorization = `Bearer ${parsedUser.token}`;
+        try {
+            const userInfo = localStorage.getItem("userInfo");
+            if (userInfo) {
+                const parsed = JSON.parse(userInfo);
+                if (parsed?.token) {
+                    config.headers.Authorization = `Bearer ${parsed.token}`;
                 }
-            } catch (e) {
-                localStorage.removeItem("userInfo");
             }
+        } catch {
+            localStorage.removeItem("userInfo");
         }
-
         return config;
     },
     (error) => Promise.reject(error)
 );
 
-/**
- * RESPONSE INTERCEPTOR
- */
+// RESPONSE INTERCEPTOR — handle 401
 api.interceptors.response.use(
     (response) => response,
     (error) => {
-        // Handle timeout/network errors specifically
-        if (error.code === 'ECONNABORTED' || !error.response) {
-            console.error("Network error or timeout - possible Render cold start");
+        if (error.code === "ECONNABORTED" || !error.response) {
+            console.error("Network error / timeout — Render may be waking up");
         }
 
         if (error.response?.status === 401) {
-            console.warn("401 Unauthorized – Clearing user info");
+            console.warn("401 Unauthorized — clearing local session");
             localStorage.removeItem("userInfo");
 
-            // Only redirect if not already on login page
-            if (!window.location.pathname.includes("/login") && !window.location.pathname.includes("/admin/login")) {
-                window.location.href = window.location.pathname.includes("/admin") ? "/admin/login" : "/login";
+            const isAdmin = window.location.pathname.includes("/admin");
+            const isLoginPage =
+                window.location.pathname.includes("/login") ||
+                window.location.pathname.includes("/admin/login");
+
+            if (!isLoginPage) {
+                window.location.href = isAdmin ? "/admin/login" : "/login";
             }
         }
 

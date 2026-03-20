@@ -32,7 +32,7 @@ const reasons = [
         bgColor: "bg-amber-50"
     },
     {
-        stat: "25 Years",
+        stat: "23 Years",
         label: "of Experience",
         desc: "Over two decades of expertise in Ayurvedic medicine.",
         icon: yearsExperienceIcon,
@@ -104,18 +104,18 @@ const WhyUs = () => {
 
                             <div className="space-y-3 text-sm md:text-base">
                                 <p>
-                                    <span className="font-bold text-green-300">Specialization:</span> <span className="font-medium">Ayurvedic Expert & Holistic Healer</span>
+                                    <span className="font-bold text-white">Specialization:</span> <span className="font-medium">Ayurvedic Expert & Holistic Healer</span>
                                 </p>
                                 <p>
-                                    <span className="font-bold text-green-300">Total Experience:</span> <span className="font-medium">25+ Years</span>
+                                    <span className="font-bold text-white">Total Experience:</span> <span className="font-medium">23+ Years</span>
                                 </p>
                                 <p>
                                     {/* <span className="font-bold text-green-300">Consultation Language Known:</span> <span className="font-medium">Hindi, English, Punjabi</span> */}
                                 </p>
                             </div>
 
-                            <p className="text-gray-200 text-sm md:text-base leading-relaxed border-t border-green-700/50 pt-6 mt-4">
-                                Karan Singh Vaidh is a renowned Ayurvedic vaidh with over 25 years of experience. He has been dedicated to restoring balance in modern lives through authentic Ayurveda. His clinical expertise is known widely for treating various ailments, ensuring lifelong wellness for every patient.
+                            <p className="text-gray-200 text-lg md:text-xl leading-relaxed border-t border-green-700/50 pt-8 mt-10">
+                                Karan Singh Vaidh is a renowned Ayurvedic vaidh with over 23 years of experience. He has been dedicated to restoring balance in modern lives through authentic Ayurveda. His clinical expertise is known widely for treating various ailments, ensuring lifelong wellness for every patient.
                             </p>
 
                             <div className="flex flex-wrap gap-4 mt-8">
