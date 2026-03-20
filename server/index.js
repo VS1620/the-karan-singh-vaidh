@@ -128,6 +128,21 @@ console.log('🚀 DEPLOYMENT TIMESTAMP: ' + new Date().toLocaleString());
 console.log('✅ Server routes initialized successfully');
 
 // Routes
+app.get('/api/diag', (req, res) => {
+    try {
+        const fs = require('fs');
+        const path = require('path');
+        const uploadDir = path.join(__dirname, 'uploads');
+        res.json({
+            dirname: __dirname,
+            uploadDirExists: fs.existsSync(uploadDir),
+            files: fs.existsSync(uploadDir) ? fs.readdirSync(uploadDir) : []
+        });
+    } catch(e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
 app.get('/', (req, res) => {
     res.json({ message: 'The Karan Singh  Vaidh API is running [v1.2.3]...' });
 });
