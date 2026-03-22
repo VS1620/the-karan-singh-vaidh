@@ -13,7 +13,7 @@ const ProductCard = ({ product }) => {
     // Use ID for now - slugs will be used once all products have them
     const id = product.slug || product._id || product.id;
     const name = product.name;
-    const image = getAssetUrl(product.image);
+    const image = getAssetUrl(product.image, 400);
     const rating = product.rating || 4.8;
     const reviews = product.numReviews || product.reviews || 2500;
     const tags = product.tags || ["Natural", "Wellness"];

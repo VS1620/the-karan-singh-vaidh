@@ -134,9 +134,10 @@ const ProductDetails = () => {
                                     className={`w-20 h-20 rounded-lg border-2 overflow-hidden cursor-pointer transition-all ${selectedImage === img ? 'border-ayur-gold' : 'border-gray-200 hover:border-gray-300'}`}
                                 >
                                     <img
-                                        src={getAssetUrl(img)}
+                                        src={getAssetUrl(img, 200)} // Small thumbnail for speed
                                         alt={`Thumbnail ${i}`}
                                         className="w-full h-full object-cover"
+                                        loading="lazy"
                                         onError={(e) => e.target.src = fallbackImage}
                                     />
                                 </div>
@@ -146,7 +147,7 @@ const ProductDetails = () => {
                         {/* Main Image Stage */}
                         <div className="flex-grow md:rounded-2xl overflow-hidden relative group aspect-square lg:aspect-auto lg:h-[600px] flex md:items-center md:justify-center md:bg-gray-50/30">
                             <img
-                                src={imageError || !selectedImage ? (product.image ? getAssetUrl(product.image) : fallbackImage) : getAssetUrl(selectedImage)}
+                                src={imageError || !selectedImage ? (product.image ? getAssetUrl(product.image, 800) : fallbackImage) : getAssetUrl(selectedImage, 800)}
                                 alt={product.name}
                                 className="w-full h-full object-cover md:object-contain p-0 md:p-8 transition-transform duration-500 group-hover:scale-105"
                                 onError={(e) => {

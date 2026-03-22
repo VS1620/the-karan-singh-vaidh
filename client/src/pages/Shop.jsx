@@ -120,7 +120,7 @@ const Shop = () => {
             </div>
 
             {/* Visual Category Section (Mobile Only) */}
-            <div className="lg:hidden bg-white border-b border-gray-100 mb-6 sticky top-0 z-30 pt-4 pb-2 shadow-sm relative overflow-hidden">
+            <div className="lg:hidden bg-white border-b border-gray-100 mb-6 sticky top-16 z-30 pt-4 pb-2 shadow-sm relative overflow-hidden">
                 <div className="w-full px-4">
                     <div className="flex justify-between items-center mb-4 px-2">
                         <h2 className="text-lg font-bold text-gray-900 border-l-4 border-ayur-green pl-3">

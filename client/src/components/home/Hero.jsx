@@ -115,10 +115,10 @@ const Hero = () => {
     ];
 
     return (
-        <section className="relative overflow-hidden w-full h-[600px] md:h-[700px]">
+        <section className="relative overflow-hidden w-full h-[500px] md:h-[700px]">
             <Slider {...settings} className="hero-slider h-full">
                 {slides.filter(slide => !slide.desktopOnly || isDesktop).map((slide) => (
-                    <div key={slide.id} className="relative h-[600px] md:h-[700px] w-full outline-none">
+                    <div key={slide.id} className="relative h-[500px] md:h-[700px] w-full outline-none">
                         {/* Background Image with Overlay */}
                         <div
                             className={`absolute inset-0 bg-center bg-no-repeat transition-transform duration-[5000ms] ${slide.hasOverlay !== false ? "bg-cover hover:scale-105" : ""
@@ -136,7 +136,7 @@ const Hero = () => {
 
                         {/* Content Container - Only render if title exists */}
                         {slide.title && (
-                            <div className="relative z-10 container mx-auto px-6 md:px-12 h-full flex flex-col justify-center max-w-7xl">
+                            <div className="relative z-10 container mx-auto px-4 md:px-12 h-full flex flex-col justify-center max-w-7xl">
                                 <motion.div
                                     initial={{ opacity: 0, y: 30 }}
                                     whileInView={{ opacity: 1, y: 0 }}
@@ -149,30 +149,30 @@ const Hero = () => {
                                     </div>
 
                                     {/* Headline */}
-                                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-serif font-bold text-white mb-6 leading-tight drop-shadow-lg">
+                                    <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-serif font-bold text-white mb-4 md:mb-6 leading-tight drop-shadow-lg">
                                         {slide.title}
                                     </h1>
 
                                     {/* Subtext */}
-                                    <p className="text-lg md:text-xl text-gray-200 mb-10 font-light tracking-wide leading-relaxed border-l-4 border-yellow-500 pl-4">
+                                    <p className="text-sm md:text-xl text-gray-200 mb-6 md:mb-10 font-light tracking-wide leading-relaxed border-l-4 border-yellow-500 pl-4">
                                         {slide.subtitle}
                                     </p>
 
                                     {/* CTA Button */}
-                                    <button
-                                        onClick={(e) => {
-                                            if (slide.cta === "Consult Ayurveda Expert") {
-                                                e.preventDefault();
-                                                setIsModalOpen(true);
-                                            } else {
-                                                window.location.href = slide.link;
-                                            }
-                                        }}
-                                        className="inline-flex items-center gap-3 bg-yellow-500 hover:bg-yellow-400 text-[#0d2e1b] px-10 py-4 rounded-full font-bold text-lg transition-all transform hover:-translate-y-1 hover:shadow-xl group"
-                                    >
-                                        {slide.cta}
-                                        <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />
-                                    </button>
+                                        <button
+                                            onClick={(e) => {
+                                                if (slide.cta === "Consult Ayurveda Expert") {
+                                                    e.preventDefault();
+                                                    setIsModalOpen(true);
+                                                } else {
+                                                    window.location.href = slide.link;
+                                                }
+                                            }}
+                                            className="inline-flex items-center gap-2 md:gap-3 bg-yellow-500 hover:bg-yellow-400 text-[#0d2e1b] px-6 py-3 md:px-10 md:py-4 rounded-full font-bold text-base md:text-lg transition-all transform hover:-translate-y-1 hover:shadow-xl group"
+                                        >
+                                            {slide.cta}
+                                            <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform" />
+                                        </button>
                                 </motion.div>
                             </div>
                         )}

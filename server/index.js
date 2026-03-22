@@ -16,6 +16,7 @@ const dashboardRoutes = require('./routes/dashboardRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const otpRoutes = require('./routes/otpRoutes');
 const shipmentRoutes = require('./routes/shipmentRoutes');
+const imageKitRoutes = require('./routes/imageKitRoutes');
 
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
@@ -115,6 +116,7 @@ app.use('/api/appointments', appointmentRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/otp', otpRoutes);
 app.use('/api/shipment', shipmentRoutes);
+app.use('/api/imagekit', imageKitRoutes);
 
 // ── Specific Requested Routes (Aliases) ──────────────────────────────────────
 app.post('/api/create-order', (req, res, next) => { req.url = '/'; next(); }, orderRoutes);

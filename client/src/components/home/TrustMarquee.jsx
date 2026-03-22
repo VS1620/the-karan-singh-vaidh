@@ -14,7 +14,7 @@ const trustItems = [
 
 const TrustMarquee = () => {
     return (
-        <div className="bg-[#0d2e1b] py-4 overflow-hidden border-y border-yellow-500/20 relative z-20">
+        <div className="bg-[#0d2e1b] py-4 overflow-hidden w-full border-y border-yellow-500/20 relative z-20">
             <div className="flex w-max animate-marquee hover:pause-animation">
                 {/* Original Set */}
                 <div className="flex items-center gap-12 px-6">

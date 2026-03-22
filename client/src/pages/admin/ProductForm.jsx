@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api, { getAssetUrl } from '../../api/api';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Upload, X, Plus } from 'lucide-react';
+import ImageKitUpload from '../../components/common/ImageKitUpload';
 
 const ProductForm = () => {
     const [name, setName] = useState('');
@@ -243,46 +244,47 @@ const ProductForm = () => {
                 </div>
 
                 {/* Images */}
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Main Image</label>
-                    <div className="flex gap-4 items-center">
-                        <input
-                            type="text"
-                            className="flex-1 px-4 py-2 border rounded-md focus:ring-emerald-500 focus:border-emerald-500"
-                            value={image}
-                            onChange={(e) => setImage(e.target.value)}
-                            placeholder="Image URL"
-                        />
-                        <label className="cursor-pointer bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-md flex items-center gap-2 text-gray-700 transition-colors">
-                            <Upload size={18} />
-                            Upload
-                            <input type="file" className="hidden" onChange={(e) => uploadFileHandler(e)} />
-                        </label>
-                    </div>
+                <div className="space-y-4">
+                    <label className="block text-sm font-bold text-gray-700 uppercase tracking-wider">Main Product Image (Cloud Storage)</label>
+                    <ImageKitUpload 
+                        onUploadSuccess={(url) => setImage(url)} 
+                        label="Change Main Image"
+                        folder="/ksv-products/main"
+                    />
+                    {image && (
+                        <div className="relative w-32 h-32 border-2 border-emerald-100 rounded-xl overflow-hidden shadow-lg group">
+                            <img src={getAssetUrl(image)} alt="Preview" className="w-full h-full object-cover transition-transform group-hover:scale-110" />
+                            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <button type="button" onClick={() => setImage('')} className="bg-red-500 text-white rounded-full p-1.5 shadow-xl hover:bg-red-600">
+                                    <X size={16} />
+                                </button>
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 {/* Gallery Images */}
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Gallery Images</label>
-                    <div className="flex flex-wrap gap-4 mb-2">
+                <div className="space-y-4">
+                    <label className="block text-sm font-bold text-gray-700 uppercase tracking-wider">Gallery Images (Optional)</label>
+                    <div className="flex flex-wrap gap-4">
                         {Array.isArray(images) && images.map((img, idx) => (
-                            <div key={idx} className="relative w-20 h-20 border rounded-md overflow-hidden shadow-sm">
-                                <img src={getAssetUrl(img)} alt="" className="w-full h-full object-cover" />
+                            <div key={idx} className="relative w-24 h-24 border-2 border-emerald-50 rounded-lg overflow-hidden shadow-md group">
+                                <img src={getAssetUrl(img)} alt="" className="w-full h-full object-cover transition-transform group-hover:scale-110" />
                                 <button
                                     type="button"
                                     onClick={() => setImages(images.filter((_, i) => i !== idx))}
-                                    className="absolute top-0 right-0 bg-red-500/80 hover:bg-red-600 text-white p-1 rounded-bl-md transition-colors shadow-sm"
+                                    className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-bl-lg transition-colors opacity-0 group-hover:opacity-100 shadow-sm"
                                 >
-                                    <X size={12} />
+                                    <X size={14} />
                                 </button>
                             </div>
                         ))}
                     </div>
-                    <label className="cursor-pointer bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-md inline-flex items-center gap-2 text-gray-700 transition-colors w-fit">
-                        <Upload size={18} />
-                        Upload Multiple
-                        <input type="file" multiple className="hidden" onChange={(e) => uploadFileHandler(e, true)} />
-                    </label>
+                    <ImageKitUpload 
+                        onUploadSuccess={(url) => setImages([...images, url])} 
+                        label="Add Gallery Image"
+                        folder="/ksv-products/gallery"
+                    />
                 </div>
 
                 {/* Description */}
@@ -405,15 +407,11 @@ const ProductForm = () => {
                                                 value={medName}
                                                 onChange={(e) => handleMedicineChange(index, mIndex, 'name', e.target.value)}
                                             />
-                                            <label className="cursor-pointer bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded text-xs text-gray-600 flex items-center gap-1 flex-shrink-0">
-                                                <Upload size={12} />
-                                                <input
-                                                    type="file"
-                                                    accept="image/*"
-                                                    className="hidden"
-                                                    onChange={(e) => e.target.files[0] && uploadMedicineImage(index, mIndex, e.target.files[0])}
-                                                />
-                                            </label>
+                                            <ImageKitUpload 
+                                                onUploadSuccess={(url) => handleMedicineChange(index, mIndex, 'image', url)}
+                                                label={medImage ? "Change" : "Add Img"}
+                                                folder="/ksv-products/medicines"
+                                            />
                                             <button type="button" onClick={() => removeMedicine(index, mIndex)} className="text-red-400 hover:text-red-600 flex-shrink-0">
                                                 <X size={14} />
                                             </button>

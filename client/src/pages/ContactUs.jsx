@@ -64,7 +64,7 @@ const ContactUs = () => {
                             Get In Touch
                         </span>
                     </div>
-                    <h1 className="text-5xl md:text-6xl font-serif font-bold text-ayur-green mb-6">Contact Us</h1>
+                    <h1 className="text-3xl md:text-6xl font-serif font-bold text-ayur-green mb-6">Contact Us</h1>
                     <p className="text-xl text-gray-600 leading-relaxed">
                         Have questions about our Ayurvedic products or need personalized wellness guidance? We're here to help you on your journey to holistic health.
                     </p>

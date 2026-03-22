@@ -44,7 +44,7 @@ const Header = () => {
                     <img
                         src={logo}
                         alt="The Karan Singh  Vaidh"
-                        className="h-11 md:h-14 object-contain transition-all duration-300 hover:scale-105"
+                        className="h-10 md:h-14 max-w-[140px] md:max-w-none object-contain transition-all duration-300 hover:scale-105"
                     />
                 </Link>
 

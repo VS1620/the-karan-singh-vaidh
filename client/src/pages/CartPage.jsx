@@ -111,13 +111,13 @@ const CartPage = () => {
                                 Expert Consultation Available
                             </div>
                             <div className="mb-6">
-                                <span className="block text-4xl md:text-5xl font-serif font-bold text-white mb-2 leading-none">Need help with your</span>
-                                <span className="text-5xl md:text-7xl font-serif font-bold text-ayur-gold relative inline-block leading-none">
+                                <span className="block text-2xl md:text-5xl font-serif font-bold text-white mb-2 leading-none">Need help with your</span>
+                                <span className="text-4xl md:text-7xl font-serif font-bold text-ayur-gold relative inline-block leading-none">
                                     Order?
                                     <div className="absolute bottom-0 left-0 w-full h-1 bg-ayur-gold/30 rounded-full"></div>
                                 </span>
                             </div>
-                            <p className="text-white/80 text-lg font-medium max-w-xl leading-relaxed">
+                            <p className="text-white/80 text-sm md:text-lg font-medium max-w-xl leading-relaxed">
                                 Our wellness experts are just a call away. Get personalized guidance and place your order directly.
                             </p>
                         </div>
