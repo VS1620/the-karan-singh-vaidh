@@ -103,7 +103,7 @@ const ProductDetails = () => {
 
     return (
         <div className="bg-white min-h-screen pt-16 lg:pt-20 pb-20 lg:pb-12 font-sans">
-            <div className="container mx-auto px-0 md:px-4 max-w-7xl">
+            <div className="container mx-auto px-4 md:px-4 max-w-7xl">
                 <div className="flex flex-col lg:flex-row gap-4 lg:gap-10 mb-16">
 
                     {/* LEFT: Gallery Layout (Vertical Strip + Main Image) */}
@@ -193,8 +193,8 @@ const ProductDetails = () => {
                     {/* RIGHT: Product Info & Actions */}
                     <div className="lg:w-[45%] flex flex-col pt-2 px-4 md:px-0">
                         {/* Title & Reviews */}
-                        <h1 className="text-2xl lg:text-4xl font-bold text-gray-900 mb-2 leading-tight">{product.name}</h1>
-                        <p className="text-gray-500 text-sm mb-4 leading-relaxed line-clamp-2 md:line-clamp-none">{product.shortDescription}</p>
+                        <h1 className="text-xl lg:text-4xl font-bold text-gray-900 mb-2 leading-tight">{product.name}</h1>
+                        <p className="text-gray-500 text-xs md:text-sm mb-4 leading-relaxed line-clamp-3 md:line-clamp-none">{product.shortDescription}</p>
 
                         {/* Tags */}
                         <div className="flex flex-wrap gap-2 mb-4">
@@ -314,35 +314,62 @@ const ProductDetails = () => {
                                     <div className="w-1 h-3 bg-emerald-500 rounded-full"></div>
                                     Included in this pack:
                                 </h4>
-                                <div className="bg-emerald-50/60 rounded-xl p-4 border border-emerald-100/50">
-                                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                <div className="bg-emerald-50/60 rounded-2xl p-1 border border-emerald-100/50 w-fit max-w-full">
+                                    <div className="flex flex-wrap gap-5">
                                         {currentPack.medicines.map((med, idx) => {
                                             let medData = med;
                                             if (typeof med === 'string' && med.trim().startsWith('{')) {
                                                 try {
                                                     medData = JSON.parse(med);
-                                                } catch (e) {
-                                                    // Keep as string if parsing fails
-                                                }
+                                                } catch (e) {}
                                             }
-                                            const medName = typeof medData === 'string' ? medData : (medData.name || '');
-                                            const medImage = typeof medData === 'object' ? (medData.image || '') : '';
+
+                                            let medName = '';
+                                            let medImage = '';
+
+                                            if (typeof medData === 'string') {
+                                                const val = medData.trim();
+                                                if (val.startsWith('/') || val.startsWith('http')) {
+                                                    medImage = val;
+                                                    medName = '';
+                                                } else {
+                                                    medName = val;
+                                                }
+                                            } else if (medData && typeof medData === 'object') {
+                                                medName = medData.name || '';
+                                                medImage = medData.image || '';
+                                            }
+
+                                            // Use product main image as fallback if medicine has no image
+                                            const displayImage = medImage
+                                                ? getAssetUrl(medImage)
+                                                : (product.image ? getAssetUrl(product.image) : null);
+
                                             return (
-                                                <div key={idx} className="flex flex-col items-center gap-2">
-                                                    {medImage ? (
-                                                        <img
-                                                            src={getAssetUrl(medImage)}
-                                                            alt={medName}
-                                                            className="w-full aspect-square rounded-xl object-cover border border-emerald-100 shadow-sm cursor-zoom-in hover:scale-105 transition-transform duration-200"
-                                                            onClick={() => setLightboxImage(getAssetUrl(medImage))}
-                                                            onError={(e) => { e.target.style.display = 'none'; }}
-                                                        />
-                                                    ) : (
-                                                        <div className="w-full aspect-square rounded-xl bg-emerald-100 flex items-center justify-center">
-                                                            <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
-                                                        </div>
+                                                <div key={idx} className="flex flex-col items-center gap-2 w-[100px] sm:w-[120px] group/med flex-shrink-0">
+                                                    <div className="w-full aspect-square relative rounded-xl overflow-hidden border border-emerald-100 shadow-sm bg-white">
+                                                        {displayImage ? (
+                                                            <img
+                                                                src={displayImage}
+                                                                alt={medName || 'Medicine'}
+                                                                className="w-full h-full object-cover cursor-zoom-in group-hover/med:scale-110 transition-transform duration-500"
+                                                                onClick={() => setLightboxImage(displayImage)}
+                                                                onError={(e) => {
+                                                                    e.target.onerror = null;
+                                                                    e.target.src = '/logo.png';
+                                                                }}
+                                                            />
+                                                        ) : (
+                                                            <div className="w-full h-full bg-emerald-50 flex items-center justify-center">
+                                                                <img src="/logo.png" alt="" className="w-12 h-12 object-contain opacity-40" />
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    {medName && (
+                                                        <span className="text-[10px] font-bold text-gray-700 text-center uppercase tracking-wide leading-tight line-clamp-2 px-1">
+                                                            {medName}
+                                                        </span>
                                                     )}
-                                                    <span className="text-[10px] font-bold text-gray-700 text-center uppercase tracking-wide leading-tight">{medName}</span>
                                                 </div>
                                             );
                                         })}
@@ -453,8 +480,8 @@ const ProductDetails = () => {
                         {/* Tab Content */}
                         <div className="md:w-4/5">
                             <div className="bg-white rounded-2xl p-6 md:p-10 border border-gray-100 min-h-[300px]">
-                                <h3 className="font-serif text-3xl text-gray-900 mb-8 capitalize flex items-center gap-3">
-                                    <span className="w-8 h-1 bg-emerald-600 rounded-full"></span>
+                                <h3 className="font-serif text-2xl md:text-3xl text-gray-900 mb-6 md:mb-8 capitalize flex items-center gap-3">
+                                    <span className="w-6 h-1 bg-emerald-600 rounded-full"></span>
                                     {activeTab}
                                 </h3>
                                 <div className="prose prose-emerald max-w-none text-gray-600 leading-relaxed space-y-4">
@@ -503,10 +530,10 @@ const ProductDetails = () => {
                                     <div className="w-2 h-2 rounded-full bg-ayur-gold animate-pulse"></div>
                                     <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/80">Expert Consultation Available</span>
                                 </div>
-                                <h3 className="text-3xl lg:text-5xl font-serif font-bold mb-4 leading-tight text-white">
+                                <h3 className="text-2xl lg:text-5xl font-serif font-bold mb-4 leading-tight text-white">
                                     Need help with your <span className="text-ayur-gold italic underline decoration-ayur-gold/30 underline-offset-8">Order?</span>
                                 </h3>
-                                <p className="text-ayur-beige text-base lg:text-xl max-w-lg leading-relaxed font-medium">
+                                <p className="text-ayur-beige text-sm lg:text-xl max-w-lg leading-relaxed font-medium">
                                     Our wellness experts are just a call away. Get personalized guidance and place your order directly.
                                 </p>
                             </div>

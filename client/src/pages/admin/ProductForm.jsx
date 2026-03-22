@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api from '../../api/api';
+import api, { getAssetUrl } from '../../api/api';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Upload, X, Plus } from 'lucide-react';
 
@@ -267,7 +267,7 @@ const ProductForm = () => {
                     <div className="flex flex-wrap gap-4 mb-2">
                         {Array.isArray(images) && images.map((img, idx) => (
                             <div key={idx} className="relative w-20 h-20 border rounded-md overflow-hidden shadow-sm">
-                                <img src={img} alt="" className="w-full h-full object-cover" />
+                                <img src={getAssetUrl(img)} alt="" className="w-full h-full object-cover" />
                                 <button
                                     type="button"
                                     onClick={() => setImages(images.filter((_, i) => i !== idx))}
@@ -392,7 +392,7 @@ const ProductForm = () => {
                                         <div key={mIndex} className="flex gap-2 mb-2 items-center">
                                             {/* Small image preview */}
                                             {medImage ? (
-                                                <img src={medImage} alt="" className="w-10 h-10 object-cover rounded border border-gray-200 flex-shrink-0" />
+                                                <img src={getAssetUrl(medImage)} alt="" className="w-10 h-10 object-cover rounded border border-gray-200 flex-shrink-0" />
                                             ) : (
                                                 <div className="w-10 h-10 bg-gray-100 rounded border border-dashed border-gray-300 flex items-center justify-center flex-shrink-0">
                                                     <span className="text-gray-400 text-[8px] text-center leading-tight">img</span>

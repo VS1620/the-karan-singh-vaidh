@@ -6,6 +6,7 @@ import ProductCard from './ProductCard';
 const BestSellers = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [slowLoad, setSlowLoad] = useState(false);
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -20,6 +21,10 @@ const BestSellers = () => {
             }
         };
         fetchProducts();
+
+        // Show slow-load notice if loading takes more than 4 seconds
+        const slowTimer = setTimeout(() => setSlowLoad(true), 4000);
+        return () => clearTimeout(slowTimer);
     }, []);
 
     return (
@@ -31,8 +36,13 @@ const BestSellers = () => {
                 </div>
 
                 {loading ? (
-                    <div className="flex justify-center py-20">
+                    <div className="flex flex-col justify-center items-center py-20 gap-4">
                         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-ayur-green"></div>
+                        {slowLoad && (
+                            <p className="text-sm text-gray-500 text-center max-w-xs animate-pulse">
+                                Server is waking up, please wait a moment...
+                            </p>
+                        )}
                     </div>
                 ) : products.length > 0 ? (
                     <div className="relative overflow-visible">
