@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import ProductCard from '../components/home/ProductCard';
 import api, { getAssetUrl } from '../api/api';
-import { Star, Check, ShoppingCart, Truck, ShieldCheck, Heart, Info, Phone } from 'lucide-react';
+import { Star, Check, ShoppingCart, Truck, ShieldCheck, Heart, Info, Phone, ZoomIn, MousePointerClick } from 'lucide-react';
 import { CartContext } from '../context/CartContext';
 
 const ProductDetails = () => {
@@ -310,13 +310,13 @@ const ProductDetails = () => {
 
                         {/* INCLUDED IN THIS PACK */}
                         {currentPack?.medicines && currentPack.medicines.length > 0 && (
-                            <div className="mb-6 mt-2 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                                <h4 className="text-[11px] font-extrabold text-emerald-800 uppercase tracking-[0.15em] mb-4 flex items-center gap-2 opacity-80">
+                            <div className="mb-6 mt-2 animate-in fade-in slide-in-from-bottom-2 duration-300 flex flex-col items-center w-full">
+                                <h4 className="text-[11px] font-extrabold text-emerald-800 uppercase tracking-[0.15em] mb-4 flex items-center justify-center gap-2 opacity-80 w-full">
                                     <div className="w-1 h-3 bg-emerald-500 rounded-full"></div>
                                     Included in this pack:
                                 </h4>
                                 <div className="bg-emerald-50/60 rounded-2xl p-1 border border-emerald-100/50 w-fit max-w-full">
-                                    <div className="flex flex-wrap gap-5">
+                                    <div className="flex flex-wrap items-center justify-center gap-5">
                                         {currentPack.medicines.map((med, idx) => {
                                             let medData = med;
                                             if (typeof med === 'string' && med.trim().startsWith('{')) {
@@ -374,6 +374,35 @@ const ProductDetails = () => {
                                                 </div>
                                             );
                                         })}
+                                        
+                                        {/* Clickable Text to Enlarge First Image */}
+                                        {currentPack.medicines.length > 0 && (
+                                            <div 
+                                                className="flex items-center justify-center cursor-pointer pl-3 hover:opacity-80 transition-opacity select-none"
+                                                onClick={() => {
+                                                    // Logic to open the first image in lightbox
+                                                    let medData = currentPack.medicines[0];
+                                                    if (typeof medData === 'string' && medData.trim().startsWith('{')) {
+                                                        try { medData = JSON.parse(medData); } catch (e) {}
+                                                    }
+                                                    let medImage = '';
+                                                    if (typeof medData === 'string') {
+                                                        const val = medData.trim();
+                                                        if (val.startsWith('/') || val.startsWith('http')) medImage = val;
+                                                    } else if (medData && typeof medData === 'object') {
+                                                        medImage = medData.image || '';
+                                                    }
+                                                    const dispImg = medImage ? getAssetUrl(medImage) : (product.image ? getAssetUrl(product.image) : null);
+                                                    if (dispImg) setLightboxImage(dispImg);
+                                                }}
+                                            >
+                                                <span className="text-xs font-bold text-emerald-700 underline underline-offset-4 decoration-emerald-600/40 flex items-center gap-1">
+                                                    <ZoomIn size={14} />
+                                                    Click to view image
+                                                </span>
+                                            </div>
+                                        )}
+
                                     </div>
                                 </div>
                             </div>

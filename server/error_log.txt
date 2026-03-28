@@ -10094,3 +10094,30 @@ Error: Invalid email or password
 Error: Invalid email or password
     at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:45:19
     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+[2026-03-28T09:29:12.997Z] 401 - Invalid email or password
+Error: Invalid email or password
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:40:23
+
+[2026-03-28T09:29:23.461Z] 401 - Invalid email or password
+Error: Invalid email or password
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:40:23
+
+[2026-03-28T09:29:28.991Z] 401 - Invalid email or password
+Error: Invalid email or password
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:40:23
+
+[2026-03-28T09:29:36.954Z] 401 - Invalid email or password
+Error: Invalid email or password
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:45:19
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-03-28T09:29:43.245Z] 401 - Invalid email or password
+Error: Invalid email or password
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:45:19
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-03-28T09:29:50.719Z] 401 - Invalid email or password
+Error: Invalid email or password
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:45:19
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)

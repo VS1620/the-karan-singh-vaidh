@@ -5,9 +5,12 @@ const {
     createAppointment,
     getAllAppointments,
     updateAppointmentStatus,
-    deleteAppointment
+    deleteAppointment,
+    createPaymentOrder
 } = require('../controllers/appointmentController');
 const { protect, admin } = require('../middleware/authMiddleware');
+
+router.post('/create-payment', createPaymentOrder);
 
 router.route('/')
     .post(createAppointment)

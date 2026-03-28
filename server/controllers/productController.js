@@ -43,7 +43,8 @@ const getProducts = asyncHandler(async (req, res) => {
 
     let result = Product.find(query)
         .populate('category', 'name')
-        .select('-fullDescription -ingredients -usage -benefits');
+        .select('-fullDescription -ingredients -usage -benefits')
+        .collation({ locale: 'en', strength: 2 }); // Added collation for case-insensitive sorting
 
     // Sorting
     if (sort === 'low') {
@@ -52,7 +53,12 @@ const getProducts = asyncHandler(async (req, res) => {
         result = result.sort({ 'packs.sellingPrice': 1 });
     } else if (sort === 'high') {
         result = result.sort({ 'packs.sellingPrice': -1 });
+    } else if (sort === 'az') {
+        result = result.sort({ name: 1 });
+    } else if (sort === 'za') {
+        result = result.sort({ name: -1 });
     } else {
+        // Default to A-Z if no sort provided, or you can keep newest as default
         result = result.sort({ createdAt: -1 });
     }
 

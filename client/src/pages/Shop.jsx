@@ -23,7 +23,7 @@ const Shop = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState('All');
-    const [sortBy, setSortBy] = useState('newest');
+    const [sortBy, setSortBy] = useState('az');
     const [searchParams, setSearchParams] = useSearchParams();
 
     // Sync selectedCategory with searchParams
@@ -63,7 +63,30 @@ const Shop = () => {
             params.append('sort', sortBy);
 
             const { data } = await api.get(`/products?${params.toString()}`);
-            setProducts(data);
+            
+            // Client-side sorting as a foolproof fallback
+            // This ensures products are correctly sorted even if backend doesn't apply it
+            let sortedData = Array.isArray(data) ? [...data] : [];
+            
+            if (sortBy === 'az') {
+                sortedData.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+            } else if (sortBy === 'za') {
+                sortedData.sort((a, b) => (b.name || '').localeCompare(a.name || ''));
+            } else if (sortBy === 'low') {
+                sortedData.sort((a, b) => {
+                    const priceA = a.packs?.[0]?.sellingPrice || 0;
+                    const priceB = b.packs?.[0]?.sellingPrice || 0;
+                    return priceA - priceB;
+                });
+            } else if (sortBy === 'high') {
+                sortedData.sort((a, b) => {
+                    const priceA = a.packs?.[0]?.sellingPrice || 0;
+                    const priceB = b.packs?.[0]?.sellingPrice || 0;
+                    return priceB - priceA;
+                });
+            }
+
+            setProducts(sortedData);
             setLoading(false);
         } catch (err) {
             setError(err.response?.data?.message || err.message);
@@ -187,6 +210,8 @@ const Shop = () => {
                             value={sortBy}
                             onChange={(e) => setSortBy(e.target.value)}
                         >
+                            <option value="az">Alphabetically, A-Z</option>
+                            <option value="za">Alphabetically, Z-A</option>
                             <option value="newest">Newest First</option>
                             <option value="low">Price: Low to High</option>
                             <option value="high">Price: High to Low</option>

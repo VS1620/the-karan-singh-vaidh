@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { X, Calendar, Clock, User, Phone, Mail, FileText, Send, CheckCircle2, ChevronDown } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, Calendar, Clock, User, Phone, Mail, FileText, Send, CheckCircle2, ChevronDown, Lock } from 'lucide-react';
 import api from '../../api/api';
 
 const ConsultationModal = ({ isOpen, onClose }) => {
@@ -16,6 +16,19 @@ const ConsultationModal = ({ isOpen, onClose }) => {
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState('');
 
+    // Load Razorpay Script
+    useEffect(() => {
+        if (isOpen) {
+            const script = document.createElement('script');
+            script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+            script.async = true;
+            document.body.appendChild(script);
+            return () => {
+                document.body.removeChild(script);
+            };
+        }
+    }, [isOpen]);
+
     if (!isOpen) return null;
 
     const handleSubmit = async (e) => {
@@ -24,25 +37,74 @@ const ConsultationModal = ({ isOpen, onClose }) => {
         setError('');
 
         try {
-            const response = await api.post('/appointments', formData);
-            setSuccess(true);
-            setLoading(false);
-            // Reset form after 3 seconds and close
-            setTimeout(() => {
-                setSuccess(false);
-                setFormData({
-                    name: '',
-                    phone: '',
-                    email: '',
-                    service: '',
-                    concern: '',
-                    preferredDate: '',
-                    preferredTime: ''
-                });
-                onClose();
-            }, 3000);
+            // 1. Create Razorpay Order
+            const { data: order } = await api.post('/appointments/create-payment');
+
+            // 2. Configure Razorpay options
+            const options = {
+                key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_live_SL5SABtfYmhkMp',
+                amount: order.amount,
+                currency: order.currency,
+                name: 'The Karan Singh Vaidh',
+                description: 'Appointment Booking Fee',
+                order_id: order.id,
+                prefill: {
+                    name: formData.name,
+                    email: formData.email,
+                    contact: formData.phone
+                },
+                theme: {
+                    color: '#419463'
+                },
+                handler: async function (response) {
+                    try {
+                        // 3. Verify Payment & Create Appointment
+                        const appointmentPayload = {
+                            ...formData,
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_signature: response.razorpay_signature
+                        };
+
+                        const { data: appointmentData } = await api.post('/appointments', appointmentPayload);
+                        
+                        // Show success state
+                        setSuccess(true);
+                        setLoading(false);
+                        setTimeout(() => {
+                            setSuccess(false);
+                            setFormData({
+                                name: '',
+                                phone: '',
+                                email: '',
+                                service: '',
+                                concern: '',
+                                preferredDate: '',
+                                preferredTime: ''
+                            });
+                            onClose();
+                        }, 3000);
+                    } catch (verifyError) {
+                        console.error('Verification Error:', verifyError);
+                        setError(verifyError.response?.data?.message || 'Payment verification failed. Please try again.');
+                        setLoading(false);
+                    }
+                }
+            };
+
+            // Setup Razorpay event handlers
+            const rzp = new window.Razorpay(options);
+            
+            rzp.on('payment.failed', function (response) {
+                console.error('Payment Failed:', response.error);
+                setError(response.error.description || 'Payment failed. Please try again.');
+                setLoading(false);
+            });
+
+            rzp.open();
         } catch (err) {
-            setError(err.response?.data?.message || 'Something went wrong. Please try again.');
+            console.error('Razorpay Error:', err);
+            setError(err.response?.data?.message || 'Error initiating payment. Please try again.');
             setLoading(false);
         }
     };
@@ -221,8 +283,9 @@ const ConsultationModal = ({ isOpen, onClose }) => {
                                         <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                                     ) : (
                                         <>
-                                            <span>Book Appointment</span>
-                                            <Send size={18} />
+                                            <Lock size={18} />
+                                            <span>Pay ₹600 & Book Appointment</span>
+                                            <Send size={18} className="ml-2" />
                                         </>
                                     )}
                                 </button>

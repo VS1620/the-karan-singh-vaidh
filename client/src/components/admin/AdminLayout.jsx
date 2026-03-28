@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { LayoutDashboard, ShoppingBag, Package, ListOrdered, LogOut, Bell, Search, User, Menu, X, Calendar } from 'lucide-react';
 import { AuthContext } from '../../context/AuthContext';
+import api from '../../api/api';
 
 // Helper component for Shield icon
 function ShieldCheck({ size }) {
@@ -56,6 +57,28 @@ const AdminLayout = () => {
         { id: 'appointments', label: 'Appointments', icon: Calendar, path: '/admin/appointments' },
     ];
 
+    const [stats, setStats] = React.useState({ pendingOrders: 0, pendingAppointments: 0 });
+
+    React.useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                if (userInfo) {
+                    const { data } = await api.get('/dashboard/stats');
+                    setStats({
+                        pendingOrders: data.pendingOrders || 0,
+                        pendingAppointments: data.pendingAppointments || 0
+                    });
+                }
+            } catch (error) {
+                console.error("Failed to fetch notification stats", error);
+            }
+        };
+        fetchStats();
+        // Optional: polling every 30 seconds
+        const interval = setInterval(fetchStats, 30000);
+        return () => clearInterval(interval);
+    }, [userInfo]);
+
     const handleLogout = () => {
         logout();
         navigate('/login');
@@ -94,9 +117,16 @@ const AdminLayout = () => {
                                         : 'text-gray-500 hover:bg-gray-50 hover:text-ayur-green'
                                         }`}
                                 >
-                                    <div className="flex items-center gap-3">
+                                    <div className="flex items-center gap-3 relative">
                                         <item.icon size={20} strokeWidth={isActive ? 2.5 : 2} />
                                         <span>{item.label}</span>
+                                        {/* Notification Dot */}
+                                        {item.id === 'orders' && stats.pendingOrders > 0 && (
+                                            <div className="w-2 h-2 rounded-full bg-ayur-gold absolute -top-1 -right-2 shadow-[0_0_8px_rgba(212,175,55,0.6)] animate-pulse"></div>
+                                        )}
+                                        {item.id === 'appointments' && stats.pendingAppointments > 0 && (
+                                            <div className="w-2 h-2 rounded-full bg-ayur-gold absolute -top-1 -right-2 shadow-[0_0_8px_rgba(212,175,55,0.6)] animate-pulse"></div>
+                                        )}
                                     </div>
                                     {isActive && <div className="w-1.5 h-1.5 bg-ayur-gold rounded-full shadow-sm animate-pulse"></div>}
                                 </Link>

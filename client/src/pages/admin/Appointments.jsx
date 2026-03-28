@@ -3,7 +3,7 @@ import api from '../../api/api';
 import {
     Eye, Trash2, CheckCircle, Clock, XCircle, Search,
     Filter, Download, Phone, Mail, User as UserIcon,
-    AlertCircle, Calendar, MessageSquare, Loader2, X, Send
+    AlertCircle, Calendar, MessageSquare, Loader2, X, Send, Banknote
 } from 'lucide-react';
 
 const Appointments = () => {
@@ -201,6 +201,7 @@ const Appointments = () => {
                                     <th className="px-6 py-5">Concern Essence</th>
                                     <th className="px-6 py-5 text-center">Schedule</th>
                                     <th className="px-6 py-5 text-center">Status</th>
+                                    <th className="px-6 py-5 text-center">Payment</th>
                                     <th className="px-8 py-5 text-right">Actions</th>
                                 </tr>
                             </thead>
@@ -235,6 +236,19 @@ const Appointments = () => {
                                             <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-[10px] font-bold uppercase tracking-widest shadow-sm ${getStatusStyle(app.status)}`}>
                                                 {getStatusIcon(app.status)}
                                                 {app.status}
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-6 text-center">
+                                            <div className={`inline-flex flex-col items-center gap-1 ${app.paymentId ? 'text-green-600' : 'text-orange-600'}`}>
+                                                <div className="flex items-center gap-1 text-[11px] font-bold uppercase">
+                                                    <Banknote size={14} />
+                                                    {app.paymentStatus || 'Pending'}
+                                                </div>
+                                                {app.paymentId && (
+                                                    <span className="text-[9px] text-gray-400 font-mono bg-gray-100 px-2 py-0.5 rounded">
+                                                        {app.paymentId.substring(4, 14)}...
+                                                    </span>
+                                                )}
                                             </div>
                                         </td>
                                         <td className="px-8 py-6 text-right">
@@ -288,10 +302,21 @@ const Appointments = () => {
                                     <p className="font-bold text-gray-800">{selectedAppointment.preferredDate ? new Date(selectedAppointment.preferredDate).toLocaleDateString() : 'ASAP'}</p>
                                 </div>
                                 <div>
-                                    <span className="text-[10px] font-black uppercase tracking-widest text-gray-400 block mb-1">Communication Time</span>
-                                    <p className="font-bold text-gray-800">{selectedAppointment.preferredTime}</p>
-                                </div>
-                            </div>
+                                                    <span className="text-[10px] font-black uppercase tracking-widest text-gray-400 block mb-1">Communication Time</span>
+                                                    <p className="font-bold text-gray-800">{selectedAppointment.preferredTime}</p>
+                                                </div>
+                                                {selectedAppointment.paymentId && (
+                                                <div className="col-span-2 bg-green-50 p-4 rounded-xl border border-green-100 flex items-center gap-3">
+                                                    <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center text-green-600 shrink-0">
+                                                        <Banknote size={20} />
+                                                    </div>
+                                                    <div>
+                                                        <span className="text-[10px] font-black uppercase tracking-widest text-green-600/70 block mb-1">Payment Completed (₹600)</span>
+                                                        <p className="font-mono text-xs font-bold text-green-800">TXN ID: {selectedAppointment.paymentId}</p>
+                                                    </div>
+                                                </div>
+                                                )}
+                                            </div>
 
                             <div>
                                 <span className="text-[10px] font-black uppercase tracking-widest text-gray-400 block mb-1">Manifest Essence (Concern)</span>
