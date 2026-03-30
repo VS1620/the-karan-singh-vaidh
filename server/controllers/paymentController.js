@@ -102,6 +102,10 @@ const verifyPayment = asyncHandler(async (req, res) => {
                     order.courier_name = shiprocketData.courier_name;
                     order.tracking_url = shiprocketData.tracking_url;
                     order.shipment_status = shiprocketData.shipment_status;
+                    
+                    // Set the main order status to Processing
+                    order.status = 'Processing';
+                    
                     await order.save();
 
                     console.log(`[PAYMENT] ✅ Shiprocket shipment created for order ${mongo_order_id} | AWB: ${shiprocketData.awb_code}`);

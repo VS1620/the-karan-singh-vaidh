@@ -85,11 +85,11 @@ const OrderSuccess = () => {
                         </div>
                         <div>
                             <p className="text-yellow-900/60 text-[10px] md:text-xs uppercase font-bold tracking-widest mb-1">Payment Method</p>
-                            <p className="font-bold text-gray-900">{order.paymentMethod === 'COD' ? 'Net Banking' : 'Online'}</p>
+                            <p className="font-bold text-gray-900">{order.paymentMethod === 'COD' ? 'Cash on Delivery' : 'Online Payment'}</p>
                         </div>
                         <div>
                             <p className="text-yellow-900/60 text-[10px] md:text-xs uppercase font-bold tracking-widest mb-1">Transaction ID</p>
-                            <p className="font-bold text-gray-900 italic opacity-80">TRX-{shortOrderId}</p>
+                            <p className="font-bold text-gray-900 italic opacity-80">{order.razorpay_payment_id || `ORD-${shortOrderId}`}</p>
                         </div>
                         <div>
                             <p className="text-yellow-900/60 text-[10px] md:text-xs uppercase font-bold tracking-widest mb-1">Estimated Delivery</p>

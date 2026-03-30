@@ -227,20 +227,24 @@ const createFullShipment = async (order) => {
         const { order_id: shiprocket_order_id, shipment_id } = orderResponse;
 
         // Step 2: Assign AWB (auto courier)
+        // NOTE: We are commenting this out so orders stay in "NEW" tab in Shiprocket dashboard.
+        // If you want auto-shipment, uncomment the block below.
+        /*
         let awbData = null;
         if (shipment_id) {
             awbData = await assignAWB(shipment_id);
         } else {
             console.warn(`[SHIPROCKET] ⚠️ No shipment_id returned from Shiprocket for order ${order._id}`);
         }
+        */
 
         return {
             shiprocket_order_id: shiprocket_order_id?.toString() || null,
             shipment_id: shipment_id?.toString() || null,
-            awb_code: awbData?.awb_code || null,
-            courier_name: awbData?.courier_name || null,
-            tracking_url: awbData?.tracking_url || null,
-            shipment_status: awbData?.awb_code ? 'Pickup Scheduled' : 'Order Created',
+            awb_code: null, // awbData?.awb_code || null,
+            courier_name: null, // awbData?.courier_name || null,
+            tracking_url: null, // awbData?.tracking_url || null,
+            shipment_status: 'Order Created', // awbData?.awb_code ? 'Pickup Scheduled' : 'Order Created',
         };
     } catch (error) {
         console.error('[SHIPROCKET] ❌ createFullShipment failed:', error.message);

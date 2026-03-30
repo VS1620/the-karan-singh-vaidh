@@ -49,6 +49,10 @@ const addOrderItems = asyncHandler(async (req, res) => {
                 createdOrder.courier_name = shipmentData.courier_name;
                 createdOrder.tracking_url = shipmentData.tracking_url;
                 createdOrder.shipment_status = shipmentData.shipment_status;
+                
+                // Set the main order status to Processing so the user sees it is actively handled
+                createdOrder.status = 'Processing';
+                
                 await createdOrder.save();
                 console.log(`[ORDER] ✅ Shiprocket shipment created for COD: ${createdOrder._id}`);
             } else {

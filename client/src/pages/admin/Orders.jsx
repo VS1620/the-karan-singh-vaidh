@@ -63,6 +63,33 @@ const Orders = () => {
         }
     };
 
+    const handleRetryShiprocket = async (id) => {
+        try {
+            setActionLoading(true);
+            const { data } = await api.post('/shipment/create', { order_id: id });
+            if (data.success || data.shiprocket_order_id) {
+                alert('Successfully pushed to Shiprocket!');
+                fetchOrders();
+                if (selectedOrder?._id === id) {
+                    setSelectedOrder({
+                        ...selectedOrder,
+                        shiprocket_order_id: data.shiprocket_order_id,
+                        awb_code: data.awb_code,
+                        courier_name: data.courier_name,
+                        tracking_url: data.tracking_url,
+                        shipment_status: data.shipment_status
+                    });
+                }
+            } else {
+                alert('Shiprocket push failed: ' + (data.message || 'Unknown error'));
+            }
+        } catch (err) {
+            alert('Error pushing to Shiprocket: ' + (err.response?.data?.message || err.message));
+        } finally {
+            setActionLoading(false);
+        }
+    };
+
     const viewOrderDetails = (order) => {
         setSelectedOrder(order);
         setShowModal(true);
@@ -226,12 +253,13 @@ const Orders = () => {
                         <table className="w-full text-left border-collapse">
                             <thead>
                                 <tr className="bg-[#FAF9F6] border-b border-gray-100 text-gray-400 text-[10px] uppercase font-bold tracking-[0.2em]">
-                                    <th className="px-8 py-5">Pulse ID</th>
-                                    <th className="px-6 py-5">User Manifest</th>
-                                    <th className="px-6 py-5 text-center">Date Manifest</th>
-                                    <th className="px-6 py-5 text-right">Magnitude</th>
-                                    <th className="px-6 py-5 text-center">Manifest Status</th>
-                                    <th className="px-8 py-5 text-right">Management</th>
+                                    <th className="px-8 py-5">Order ID</th>
+                                    <th className="px-6 py-5">Customer</th>
+                                    <th className="px-6 py-5 text-center">Date</th>
+                                    <th className="px-6 py-5 text-center">Shiprocket Status</th>
+                                    <th className="px-6 py-5 text-right">Amount</th>
+                                    <th className="px-6 py-5 text-center">Status</th>
+                                    <th className="px-8 py-5 text-right">Actions</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-50">
@@ -260,6 +288,16 @@ const Orders = () => {
                                         </td>
                                         <td className="px-6 py-6 text-center">
                                             <span className="text-xs font-bold text-gray-500">{order.createdAt ? new Date(order.createdAt).toLocaleDateString('en-GB') : '-'}</span>
+                                        </td>
+                                        <td className="px-6 py-6 text-center">
+                                            {order.shiprocket_order_id ? (
+                                                <div className="flex flex-col items-center gap-1">
+                                                    <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded-md uppercase">Synced: {order.shiprocket_order_id}</span>
+                                                    <span className="text-[9px] font-medium text-gray-500">{order.shipment_status || 'Ready to Ship'}</span>
+                                                </div>
+                                            ) : (
+                                                <span className="text-[10px] font-bold text-orange-500 bg-orange-50 border border-orange-100 px-2 py-0.5 rounded-md uppercase">Not Synced</span>
+                                            )}
                                         </td>
                                         <td className="px-6 py-6 text-right">
                                             <span className="text-sm font-bold text-ayur-green font-serif italic">₹{(order.totalPrice || 0).toLocaleString()}</span>
@@ -430,6 +468,45 @@ const Orders = () => {
                                         <div className="mt-6 flex items-center gap-2 text-[10px] font-bold text-ayur-green uppercase tracking-[0.2em] decoration-ayur-gold decoration-2 underline underline-offset-4 cursor-pointer">
                                             View on Geolocation manifest <ArrowRight size={12} />
                                         </div>
+                                    </div>
+                                    
+                                    {/* Shiprocket Logistics Info */}
+                                    <div className="bg-emerald-50 p-6 rounded-3xl border border-emerald-100 shadow-sm relative overflow-hidden">
+                                        <div className="text-[10px] font-bold text-emerald-800 uppercase tracking-widest leading-none mb-4">Shiprocket Link</div>
+                                        {selectedOrder.shiprocket_order_id ? (
+                                            <div className="space-y-3">
+                                                <div className="flex justify-between items-center bg-white p-3 rounded-xl border border-emerald-100">
+                                                    <span className="text-xs font-bold text-gray-500">Order ID</span>
+                                                    <span className="text-sm font-bold text-emerald-900">{selectedOrder.shiprocket_order_id}</span>
+                                                </div>
+                                                <div className="flex justify-between items-center bg-white p-3 rounded-xl border border-emerald-100">
+                                                    <span className="text-xs font-bold text-gray-500">AWB Code</span>
+                                                    <span className="text-sm font-bold text-emerald-900">{selectedOrder.awb_code || 'Pending...'}</span>
+                                                </div>
+                                                <div className="flex justify-between items-center bg-white p-3 rounded-xl border border-emerald-100">
+                                                    <span className="text-xs font-bold text-gray-500">Courier</span>
+                                                    <span className="text-sm font-bold text-emerald-900">{selectedOrder.courier_name || 'Pending...'}</span>
+                                                </div>
+                                                {selectedOrder.tracking_url && (
+                                                    <a href={selectedOrder.tracking_url} target="_blank" rel="noopener noreferrer" className="block w-full text-center py-2 bg-emerald-600 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest shadow-md hover:bg-emerald-700 transition">
+                                                        Track Package
+                                                    </a>
+                                                )}
+                                                <div className="text-center text-xs font-bold text-emerald-800 mt-2">Status: {selectedOrder.shipment_status}</div>
+                                            </div>
+                                        ) : (
+                                            <div className="flex flex-col items-center justify-center text-center space-y-3 bg-white p-4 rounded-xl border border-emerald-100">
+                                                <AlertCircle size={32} className="text-orange-500" />
+                                                <span className="text-xs font-bold text-gray-600 uppercase">Not Synced with Shiprocket</span>
+                                                <button
+                                                    onClick={() => handleRetryShiprocket(selectedOrder._id)}
+                                                    disabled={actionLoading}
+                                                    className="w-full mt-2 py-2 px-4 bg-orange-500 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest shadow-md hover:bg-orange-600 transition disabled:opacity-50"
+                                                >
+                                                    {actionLoading ? 'Syncing...' : 'Push to Shiprocket'}
+                                                </button>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>

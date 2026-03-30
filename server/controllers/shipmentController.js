@@ -64,6 +64,7 @@ const createShipment = asyncHandler(async (req, res) => {
     order.courier_name = shipmentData.courier_name;
     order.tracking_url = shipmentData.tracking_url;
     order.shipment_status = shipmentData.shipment_status;
+    order.status = 'Processing';
 
     await order.save();
 
