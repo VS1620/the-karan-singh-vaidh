@@ -100,11 +100,23 @@ const shiprocketRequest = async (method, path, data = {}, params = {}, retry = t
  */
 const createShiprocketOrder = async (order) => {
     try {
-        const nameParts = (order.shippingAddress.name || 'Customer').split(' ');
+        const nameParts = (order.shippingAddress.name || 'Customer').trim().split(/\s+/);
         const firstName = nameParts[0];
         const lastName = nameParts.slice(1).join(' ') || '.';
 
         const pickupLocation = process.env.SHIPROCKET_PICKUP_LOCATION || 'Primary';
+
+        // Sanitize phone number: strip all non-digits and take last 10
+        let phone = order.shippingAddress.phone.replace(/\D/g, '');
+        if (phone.length > 10) phone = phone.slice(-10);
+
+        // Sanitize address: must be at least 10 characters
+        let address = order.shippingAddress.address || '';
+        if (address.length < 10) {
+            address = `${address}, ${order.shippingAddress.city}, ${order.shippingAddress.state}`.trim();
+        }
+        // If still too short, pad it (Shiprocket requirement)
+        if (address.length < 10) address = address.padEnd(10, '.');
 
         const payload = {
             order_id: order._id.toString(),
@@ -114,19 +126,19 @@ const createShiprocketOrder = async (order) => {
             // Billing & Shipping (same address)
             billing_customer_name: firstName,
             billing_last_name: lastName,
-            billing_address: order.shippingAddress.address,
+            billing_address: address,
             billing_city: order.shippingAddress.city,
-            billing_pincode: parseInt(order.shippingAddress.postalCode, 10),
+            billing_pincode: parseInt(order.shippingAddress.postalCode.toString().replace(/\D/g, ''), 10),
             billing_state: order.shippingAddress.state,
             billing_country: 'India',
             billing_email: order.shippingAddress.email || order.user?.email || 'customer@example.com',
-            billing_phone: order.shippingAddress.phone,
+            billing_phone: phone,
             shipping_is_billing: true,
 
             // Order items
             order_items: order.orderItems.map(item => ({
-                name: `${item.name}${item.pack?.name ? ` - ${item.pack.name}` : ''}`,
-                sku: item.product.toString(),
+                name: `${item.name}${item.pack?.name ? ` - ${item.pack.name}` : ''}`.substring(0, 50),
+                sku: item.product.toString().substring(0, 20),
                 units: item.qty,
                 selling_price: item.price,
                 discount: 0,
@@ -144,20 +156,34 @@ const createShiprocketOrder = async (order) => {
         };
 
         console.log(`[SHIPROCKET] 📦 Creating order [${payload.payment_method}] for MongoDB order: ${order._id}`);
-        console.log(`[SHIPROCKET] Payload: ${JSON.stringify(payload, null, 2)}`);
+        
+        try {
+            const response = await shiprocketRequest('POST', 'orders/create/adhoc', payload);
 
-        const response = await shiprocketRequest('POST', 'orders/create/adhoc', payload);
+            if (!response || !response.order_id) {
+                console.error(`[SHIPROCKET] ❌ order creation failed. Response:`, response);
+                throw new Error(`Shiprocket order creation failed: No order ID returned.`);
+            }
 
-        if (!response || !response.order_id) {
-            console.error(`[SHIPROCKET] ❌ order creation failed. Response:`, response);
-            throw new Error(`Shiprocket order creation failed.`);
+            console.log(`[SHIPROCKET] ✅ order created. SR Order ID: ${response.order_id}, Shipment ID: ${response.shipment_id}`);
+            return response;
+        } catch (error) {
+            // Special handling for duplicate order ID error
+            const errorData = error.response?.data;
+            if (errorData?.errors?.order_id?.[0]?.includes('already been taken')) {
+                console.warn(`[SHIPROCKET] ⚠️ Order ID ${order._id} already exists in Shiprocket. Attempting to fetch details...`);
+                // If it already exists, we could try to list orders and find it, but for now we'll just throw a clear error
+                // that shipment already exists or needs manual check.
+                throw new Error('This order has already been pushed to Shiprocket. Check your Shiprocket dashboard.');
+            }
+            throw error;
         }
-
-        console.log(`[SHIPROCKET] ✅ order created. SR Order ID: ${response.order_id}, Shipment ID: ${response.shipment_id}`);
-        return response;
     } catch (error) {
-        console.error(`[SHIPROCKET] ❌ Error in createShiprocketOrder:`, error.response?.data || error.message);
-        throw error;
+        const errorMsg = error.response?.data?.message || 
+                         (error.response?.data?.errors ? JSON.stringify(error.response.data.errors) : null) || 
+                         error.message;
+        console.error(`[SHIPROCKET] ❌ Error in createShiprocketOrder:`, errorMsg);
+        throw new Error(errorMsg);
     }
 };
 
@@ -216,7 +242,7 @@ const trackShipment = async (awbCode) => {
  * 2. Assign AWB (auto courier)
  *
  * Returns all shipment fields needed to store in DB.
- * Does NOT throw — returns null on failure so the order can still be saved.
+ * Returns { error: string } on failure instead of null.
  *
  * @param {Object} order - Full Mongoose Order document
  */
@@ -227,28 +253,25 @@ const createFullShipment = async (order) => {
         const { order_id: shiprocket_order_id, shipment_id } = orderResponse;
 
         // Step 2: Assign AWB (auto courier)
-        // NOTE: We are commenting this out so orders stay in "NEW" tab in Shiprocket dashboard.
-        // If you want auto-shipment, uncomment the block below.
+        // NOTE: Keeping this commented out as per previous design to keep orders in "NEW" tab.
         /*
         let awbData = null;
         if (shipment_id) {
             awbData = await assignAWB(shipment_id);
-        } else {
-            console.warn(`[SHIPROCKET] ⚠️ No shipment_id returned from Shiprocket for order ${order._id}`);
         }
         */
 
         return {
             shiprocket_order_id: shiprocket_order_id?.toString() || null,
             shipment_id: shipment_id?.toString() || null,
-            awb_code: null, // awbData?.awb_code || null,
-            courier_name: null, // awbData?.courier_name || null,
-            tracking_url: null, // awbData?.tracking_url || null,
-            shipment_status: 'Order Created', // awbData?.awb_code ? 'Pickup Scheduled' : 'Order Created',
+            awb_code: null, 
+            courier_name: null,
+            tracking_url: null,
+            shipment_status: 'Order Created',
         };
     } catch (error) {
         console.error('[SHIPROCKET] ❌ createFullShipment failed:', error.message);
-        return null;
+        return { error: error.message };
     }
 };
 

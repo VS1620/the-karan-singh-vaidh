@@ -3,11 +3,31 @@ import axios from "axios";
 // ─────────────────────────────────────────────────────────────────────────────
 // BASE URL Configuration
 // ─────────────────────────────────────────────────────────────────────────────
-const BASE_URL = window.location.hostname === "localhost"
-    ? "http://localhost:5000"
-    : (import.meta.env.VITE_API_URL || window.location.origin);
+// ─────────────────────────────────────────────────────────────────────────────
+// BASE URL Configuration
+// ─────────────────────────────────────────────────────────────────────────────
+const getBaseURL = () => {
+    // Priority 1: Environment variable (must be a valid URL, not just a slash)
+    const envUrl = import.meta.env.VITE_API_URL;
+    if (envUrl && envUrl !== "/" && envUrl !== "") return envUrl;
+    
+    const { hostname, origin } = window.location;
+    
+    // Priority 2: Check for local development
+    const isLocal = hostname === "localhost" || 
+                    hostname === "127.0.0.1" || 
+                    hostname.startsWith("192.168.") || 
+                    hostname.startsWith("10.") || 
+                    hostname.endsWith(".local");
+                    
+    if (isLocal) return "http://localhost:5000";
+    
+    // Priority 3: Fallback to current origin
+    return origin || "http://localhost:5000";
+};
 
-const API_ORIGIN = BASE_URL.replace(/\/$/, "");
+const BASE_URL = getBaseURL();
+const API_ORIGIN = (BASE_URL && BASE_URL !== "/") ? BASE_URL.replace(/\/$/, "") : "http://localhost:5000";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // getAssetUrl  — FASTEST IMAGE LOADING LOGIC
@@ -21,24 +41,28 @@ export const getAssetUrl = (imagePath, width = 600) => {
 
     // 1. ImageKit Magic (Auto-transorm for 10x Speed)
     if (trimmed.includes("ik.imagekit.io")) {
-        // Automatically adds f-auto (WebP), q-80 (Compression), and responsive width
-        // Isse website ki speed bohot fast ho jayegi!
         return `${trimmed}?tr=w-${width},q-80,f-auto`;
     }
 
-    // 2. Cloudinary / Other Absolute URLs
-    if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
+    // 2. Already Absolute URLs
+    if (trimmed.startsWith("http")) {
         return trimmed;
     }
 
-    // 3. Purani Local Images (Render/GoDaddy)
-    let path = trimmed.startsWith("/") ? trimmed.slice(1) : trimmed;
-    if (!path.startsWith("uploads/") && !path.startsWith("static/") && !path.includes("logo.png")) {
+    // 3. Local Path Resolution
+    let path = trimmed;
+    // Remove leading slash for consistency
+    if (path.startsWith("/")) path = path.slice(1);
+    
+    // Ensure it starts with uploads/ if it's a local filename
+    if (!path.startsWith("uploads/") && !path.startsWith("static/")) {
+        // If it's just a filename (no slashes) or looks like a typical upload filename
         if (!path.includes("/") || path.includes("image-") || path.includes("images-")) {
             path = `uploads/${path}`;
         }
     }
 
+    // Return full absolute URL to avoid relative path issues on different ports
     return `${API_ORIGIN}/${path}`;
 };
 

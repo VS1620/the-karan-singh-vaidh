@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { User, Package, LogOut, ChevronRight, ShieldCheck, Activity, Calendar, ArrowUpRight, Zap, Loader2 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import api from '../api/api';
+import api, { getAssetUrl } from '../api/api';
 import { AuthContext } from '../context/AuthContext';
 
 const MyAccount = () => {
@@ -170,7 +170,7 @@ const MyAccount = () => {
                                                         <div className="flex items-center gap-4">
                                                             <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center text-ayur-green border border-gray-100 overflow-hidden">
                                                                 {order.orderItems[0]?.image ? (
-                                                                    <img src={order.orderItems[0].image} alt="" className="w-full h-full object-cover" />
+                                                                    <img src={getAssetUrl(order.orderItems[0].image)} alt="" className="w-full h-full object-cover" />
                                                                 ) : (
                                                                     <Package size={24} />
                                                                 )}
@@ -288,7 +288,7 @@ const MyAccount = () => {
                                                     {order.orderItems.map((item, idx) => (
                                                         <div key={idx} className="flex items-center gap-4">
                                                             <div className="w-16 h-16 bg-white rounded-2xl border border-gray-100 overflow-hidden flex-shrink-0">
-                                                                <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                                                                <img src={getAssetUrl(item.image)} alt={item.name} className="w-full h-full object-cover" />
                                                             </div>
                                                             <div className="flex-1">
                                                                 <h5 className="font-bold text-gray-900 leading-tight mb-1">{item.name}</h5>

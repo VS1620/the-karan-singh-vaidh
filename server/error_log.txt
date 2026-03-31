@@ -10121,3 +10121,75 @@ Error: Invalid email or password
 Error: Invalid email or password
     at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:45:19
     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-03-28T11:00:42.389Z] 404 - Not Found - /api/auth/seed
+Error: Not Found - /api/auth/seed
+    at notFound (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\middleware\errorMiddleware.js:2:19)
+    at Layer.handleRequest (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:342:13)
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:297:9
+    at processParams (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:582:12)
+    at next (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:291:5)
+    at logger (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\morgan\index.js:144:5)
+    at Layer.handleRequest (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:342:13)
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:297:9
+
+[2026-03-30T13:44:06.218Z] 401 - Invalid email or password
+Error: Invalid email or password
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:40:23
+
+[2026-03-30T13:44:13.861Z] 401 - Invalid email or password
+Error: Invalid email or password
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:45:19
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-03-30T13:44:16.891Z] 401 - Invalid email or password
+Error: Invalid email or password
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:45:19
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-03-30T13:44:20.607Z] 401 - Invalid email or password
+Error: Invalid email or password
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:45:19
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-03-30T13:45:15.815Z] 401 - Invalid email or password
+Error: Invalid email or password
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:45:19
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-03-30T14:01:13.961Z] 401 - Invalid email or password
+Error: Invalid email or password
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:40:23
+
+[2026-03-30T14:01:19.548Z] 401 - Invalid email or password
+Error: Invalid email or password
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:40:23
+
+[2026-03-30T14:42:38.214Z] 401 - Not authorized, no token
+Error: Not authorized, no token
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\middleware\authMiddleware.js:33:15
+    at asyncUtilWrap (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\express-async-handler\index.js:3:20)
+    at Layer.handleRequest (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\lib\layer.js:152:17)
+    at next (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\lib\route.js:117:3)
+    at handle (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\lib\layer.js:152:17)
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:295:15
+    at processParams (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:582:12)
+    at next (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:291:5)
+
+[2026-03-30T15:39:12.971Z] 404 - Order not found
+Error: Order not found
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\orderController.js:161:15
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-03-31T14:48:22.735Z] 401 - Invalid email or password
+Error: Invalid email or password
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:40:23
+
+[2026-03-31T14:48:25.635Z] 401 - Invalid email or password
+Error: Invalid email or password
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:45:19
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)

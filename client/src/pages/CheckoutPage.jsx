@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../api/api';
+import api, { getAssetUrl } from '../api/api';
 import { CartContext } from '../context/CartContext';
 import { AuthContext } from '../context/AuthContext';
 import { ArrowRight, Lock, Loader2, CreditCard, Banknote } from 'lucide-react';
@@ -241,7 +241,7 @@ const CheckoutPage = () => {
                                 {cartItems.map((item, i) => (
                                     <div key={i} className="flex gap-3 text-sm">
                                         <div className="relative w-12 h-12 flex-shrink-0">
-                                            <img src={item.image} alt="" className="w-full h-full object-cover rounded" />
+                                            <img src={getAssetUrl(item.image)} alt="" className="w-full h-full object-cover rounded" />
                                             <span className="absolute -top-2 -right-2 bg-gray-500 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full">{item.qty}</span>
                                         </div>
                                         <div className="flex-1">

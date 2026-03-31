@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const compression = require('compression');
 require('dotenv').config();
 
 const userRoutes = require('./routes/userRoutes');
@@ -21,6 +22,7 @@ const imageKitRoutes = require('./routes/imageKitRoutes');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
 const app = express();
+app.use(compression());
 const PORT = process.env.PORT || 5000;
 
 // Middleware
@@ -88,13 +90,13 @@ app.use('/uploads',
         next();
     },
     express.static(uploadsPath, {
-        maxAge: '7d',
+        maxAge: '1y',
         etag: true,
         lastModified: true,
         setHeaders: (res) => {
-            res.set('Cache-Control', 'public, max-age=604800');
+            res.set('Cache-Control', 'public, max-age=31536000, immutable');
         },
-        fallthrough: false          // trigger error handler on missing file
+        fallthrough: false
     }),
     // 404 handler for missing images — return JSON, not HTML
     (err, req, res, next) => {
@@ -200,4 +202,18 @@ app.listen(PORT, () => {
 
     // Connect to database AFTER server is listening
     connectDB();
+
+    // Keep Alive Logic for Render Free Tier (ping every 14 minutes)
+    const url = process.env.RENDER_EXTERNAL_URL || 'https://the-karan-singh-vaidh.onrender.com';
+    if (url) {
+        setInterval(() => {
+            const https = require('https');
+            https.get(url, (res) => {
+                console.log(`[Keep-Alive] Self-ping to ${url} status: ${res.statusCode}`);
+            }).on('error', (err) => {
+                console.error(`[Keep-Alive] Self-ping error: ${err.message}`);
+            });
+        }, 840000); // 14 minutes
+        console.log(`✅ Keep-alive mechanism started for: ${url}`);
+    }
 });

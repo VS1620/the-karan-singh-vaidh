@@ -95,7 +95,7 @@ const verifyPayment = asyncHandler(async (req, res) => {
                 console.log(`[PAYMENT] 📦 Creating Shiprocket shipment for prepaid order: ${mongo_order_id}`);
                 shiprocketData = await createFullShipment(order);
 
-                if (shiprocketData) {
+                if (shiprocketData && !shiprocketData.error) {
                     order.shiprocket_order_id = shiprocketData.shiprocket_order_id;
                     order.shipment_id = shiprocketData.shipment_id;
                     order.awb_code = shiprocketData.awb_code;
@@ -110,8 +110,9 @@ const verifyPayment = asyncHandler(async (req, res) => {
 
                     console.log(`[PAYMENT] ✅ Shiprocket shipment created for order ${mongo_order_id} | AWB: ${shiprocketData.awb_code}`);
                 } else {
-                    console.error(`[PAYMENT] ❌ Shiprocket auto-create returned null for order ${mongo_order_id}`);
-                    order.shipment_status = 'Shipment Failed - Manual Action Required';
+                    const errorMsg = shiprocketData?.error || 'Unknown Shiprocket error';
+                    console.error(`[PAYMENT] ❌ Shiprocket auto-create failed for order ${mongo_order_id} | Error: ${errorMsg}`);
+                    order.shipment_status = `Shipment Failed: ${errorMsg.substring(0, 50)}`;
                     await order.save();
                 }
             } else {

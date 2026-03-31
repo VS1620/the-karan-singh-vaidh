@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import api from '../../api/api';
+import api, { getAssetUrl } from '../../api/api';
 import {
     Eye, Trash2, CheckCircle, Clock, Truck, XCircle, Search,
     Filter, Download, MapPin, Phone, Mail, Package, User as UserIcon,
@@ -93,6 +93,23 @@ const Orders = () => {
     const viewOrderDetails = (order) => {
         setSelectedOrder(order);
         setShowModal(true);
+    };
+
+    const getStatusColor = (status) => {
+        if (!status) return 'bg-gray-50 text-gray-600 border-gray-100';
+        
+        // Handle Shiprocket-specific statuses
+        if (status.includes('Failed')) return 'bg-red-50 text-red-600 border-red-100';
+        if (status === 'Order Created') return 'bg-emerald-50 text-emerald-600 border-emerald-100';
+        if (status === 'Synced' || status === 'Shipped') return 'bg-green-50 text-green-600 border-green-100';
+
+        switch (status) {
+            case 'Completed': return 'bg-green-50 text-green-600 border-green-100';
+            case 'Processing': return 'bg-blue-50 text-blue-600 border-blue-100';
+            case 'Pending': return 'bg-orange-50 text-orange-600 border-orange-100';
+            case 'Cancelled': return 'bg-red-50 text-red-600 border-red-100';
+            default: return 'bg-gray-50 text-gray-600 border-gray-100';
+        }
     };
 
     const getStatusStyle = (status) => {
@@ -522,7 +539,7 @@ const Orders = () => {
                                     {(selectedOrder.orderItems || []).map((item, i) => (
                                         <div key={i} className="flex gap-4 p-4 bg-white rounded-3xl border border-gray-50 group hover:shadow-md transition-shadow">
                                             <div className="w-20 h-20 bg-gray-50 rounded-2xl flex items-center justify-center overflow-hidden border border-gray-100">
-                                                <img src={item.image} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                                                <img src={getAssetUrl(item.image)} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                                             </div>
                                             <div className="flex-1 flex flex-col justify-center">
                                                 <div className="text-[10px] font-bold text-ayur-gold uppercase tracking-[0.2em] mb-1">{item.pack?.name || 'Standard'}</div>

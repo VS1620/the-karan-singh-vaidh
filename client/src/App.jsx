@@ -1,41 +1,51 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainLayout from './components/layout/MainLayout';
 import ScrollToTop from './components/layout/ScrollToTop';
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
+import { Loader2 } from 'lucide-react';
 
-// Pages
-import Home from './pages/Home';
-import Shop from './pages/Shop';
-import ProductDetails from './pages/ProductDetails';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import MyAccount from './pages/MyAccount';
-import CartPage from './pages/CartPage';
-import CheckoutPage from './pages/CheckoutPage';
-import AboutUs from './pages/AboutUs';
-import ContactUs from './pages/ContactUs';
-import OrderSuccess from './pages/OrderSuccess';
+// Common Components for initial load
+import Home from './pages/Home'; // Home stays for faster LCP
+
+// Lazy Pages
+const Shop = lazy(() => import('./pages/Shop'));
+const ProductDetails = lazy(() => import('./pages/ProductDetails'));
+const Login = lazy(() => import('./pages/Login'));
+const Register = lazy(() => import('./pages/Register'));
+const MyAccount = lazy(() => import('./pages/MyAccount'));
+const CartPage = lazy(() => import('./pages/CartPage'));
+const CheckoutPage = lazy(() => import('./pages/CheckoutPage'));
+const AboutUs = lazy(() => import('./pages/AboutUs'));
+const ContactUs = lazy(() => import('./pages/ContactUs'));
+const OrderSuccess = lazy(() => import('./pages/OrderSuccess'));
+const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
 
 // Policy Pages
-import PrivacyPolicy from './pages/PrivacyPolicy';
-import TermsAndConditions from './pages/TermsAndConditions';
-import ShippingPolicy from './pages/ShippingPolicy';
-import RefundCancellation from './pages/RefundCancellation';
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
+const TermsAndConditions = lazy(() => import('./pages/TermsAndConditions'));
+const ShippingPolicy = lazy(() => import('./pages/ShippingPolicy'));
+const RefundCancellation = lazy(() => import('./pages/RefundCancellation'));
 
 // Admin Pages
-import AdminLogin from './pages/admin/AdminLogin';
-import Dashboard from './pages/admin/Dashboard';
-import Products from './pages/admin/Products';
-import ProductForm from './pages/admin/ProductForm';
-import Categories from './pages/admin/Categories';
-import Orders from './pages/admin/Orders';
-import Appointments from './pages/admin/Appointments';
+const AdminLogin = lazy(() => import('./pages/admin/AdminLogin'));
+const Dashboard = lazy(() => import('./pages/admin/Dashboard'));
+const Products = lazy(() => import('./pages/admin/Products'));
+const ProductForm = lazy(() => import('./pages/admin/ProductForm'));
+const Categories = lazy(() => import('./pages/admin/Categories'));
+const Orders = lazy(() => import('./pages/admin/Orders'));
+const Appointments = lazy(() => import('./pages/admin/Appointments'));
 
-// Admin Components
-import AdminRoute from './components/admin/AdminRoute';
-import AdminLayout from './components/admin/AdminLayout';
+const AdminRoute = lazy(() => import('./components/admin/AdminRoute'));
+const AdminLayout = lazy(() => import('./components/admin/AdminLayout'));
+
+const LoadingFallback = () => (
+  <div className="min-h-[60vh] flex flex-col items-center justify-center">
+    <Loader2 size={40} className="text-[#0d2e1b] animate-spin mb-4" />
+    <p className="text-gray-400 font-medium">Loading...</p>
+  </div>
+);
 
 function App() {
   return (
@@ -44,39 +54,42 @@ function App() {
         <Router>
           <ScrollToTop />
           <MainLayout>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/shop" element={<Shop />} />
-              <Route path="/product/:id" element={<ProductDetails />} />
-              <Route path="/cart" element={<CartPage />} />
-              <Route path="/checkout" element={<CheckoutPage />} />
-              <Route path="/order-success/:id" element={<OrderSuccess />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/account" element={<MyAccount />} />
-              <Route path="/about" element={<AboutUs />} />
-              <Route path="/contact" element={<ContactUs />} />
+            <Suspense fallback={<LoadingFallback />}>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/shop" element={<Shop />} />
+                <Route path="/product/:id" element={<ProductDetails />} />
+                <Route path="/cart" element={<CartPage />} />
+                <Route path="/checkout" element={<CheckoutPage />} />
+                <Route path="/order-success/:id" element={<OrderSuccess />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/account" element={<MyAccount />} />
+                <Route path="/about" element={<AboutUs />} />
+                <Route path="/contact" element={<ContactUs />} />
 
-              {/* Policy Pages */}
-              <Route path="/privacy" element={<PrivacyPolicy />} />
-              <Route path="/terms" element={<TermsAndConditions />} />
-              <Route path="/shipping" element={<ShippingPolicy />} />
-              <Route path="/cancellation" element={<RefundCancellation />} />
+                {/* Policy Pages */}
+                <Route path="/privacy" element={<PrivacyPolicy />} />
+                <Route path="/terms" element={<TermsAndConditions />} />
+                <Route path="/shipping" element={<ShippingPolicy />} />
+                <Route path="/cancellation" element={<RefundCancellation />} />
 
-              {/* Admin Routes */}
-              <Route path="/admin/login" element={<AdminLogin />} />
-              <Route path="/admin" element={<AdminRoute />}>
-                <Route element={<AdminLayout />}>
-                  <Route path="dashboard" element={<Dashboard />} />
-                  <Route path="products" element={<Products />} />
-                  <Route path="product/new" element={<ProductForm />} />
-                  <Route path="product/:id/edit" element={<ProductForm />} />
-                  <Route path="categories" element={<Categories />} />
-                  <Route path="orders" element={<Orders />} />
-                  <Route path="appointments" element={<Appointments />} />
+                {/* Admin Routes */}
+                <Route path="/admin/login" element={<AdminLogin />} />
+                <Route path="/admin" element={<AdminRoute />}>
+                  <Route element={<AdminLayout />}>
+                    <Route path="dashboard" element={<Dashboard />} />
+                    <Route path="products" element={<Products />} />
+                    <Route path="product/new" element={<ProductForm />} />
+                    <Route path="product/:id/edit" element={<ProductForm />} />
+                    <Route path="categories" element={<Categories />} />
+                    <Route path="orders" element={<Orders />} />
+                    <Route path="appointments" element={<Appointments />} />
+                  </Route>
                 </Route>
-              </Route>
-            </Routes>
+              </Routes>
+            </Suspense>
           </MainLayout>
         </Router>
       </CartProvider>

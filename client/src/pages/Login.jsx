@@ -80,9 +80,9 @@ const Login = () => {
 
                     <div className="flex items-center justify-between">
                         <div className="text-sm">
-                            <a href="#" className="font-medium text-ayur-olive hover:text-ayur-green">
+                            <Link to="/forgot-password" size={16} className="font-medium text-ayur-olive hover:text-ayur-green">
                                 Forgot your password?
-                            </a>
+                            </Link>
                         </div>
                     </div>
 

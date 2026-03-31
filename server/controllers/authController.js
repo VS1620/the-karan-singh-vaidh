@@ -86,4 +86,30 @@ const registerUser = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports = { authUser, registerUser };
+const resetPassword = asyncHandler(async (req, res) => {
+    const { phone, newPassword } = req.body;
+
+    if (!phone || !newPassword) {
+        res.status(400);
+        throw new Error('Please provide phone and new password');
+    }
+
+    const user = await User.findOne({ phone });
+
+    if (!user) {
+        res.status(404);
+        throw new Error('No user found with this phone number');
+    }
+
+    // Since OTP is already verified on frontend before calling this,
+    // we strictly update the password here.
+    user.password = newPassword;
+    await user.save();
+
+    res.status(200).json({
+        success: true,
+        message: 'Password reset successful. Please login with your new password.',
+    });
+});
+
+module.exports = { authUser, registerUser, resetPassword };

@@ -42,7 +42,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
             // Re-fetch order to ensure relations are populated if needed (though createFullShipment handles the document)
             const shipmentData = await createFullShipment(createdOrder);
 
-            if (shipmentData) {
+            if (shipmentData && !shipmentData.error) {
                 createdOrder.shiprocket_order_id = shipmentData.shiprocket_order_id;
                 createdOrder.shipment_id = shipmentData.shipment_id;
                 createdOrder.awb_code = shipmentData.awb_code;
@@ -56,9 +56,10 @@ const addOrderItems = asyncHandler(async (req, res) => {
                 await createdOrder.save();
                 console.log(`[ORDER] ✅ Shiprocket shipment created for COD: ${createdOrder._id}`);
             } else {
-                console.error(`[ORDER] ❌ Shiprocket shipment failed for COD: ${createdOrder._id}`);
+                const errorMsg = shipmentData?.error || 'Unknown Shiprocket error';
+                console.error(`[ORDER] ❌ Shiprocket shipment failed for COD: ${createdOrder._id} | Error: ${errorMsg}`);
                 // We don't mark it as "Failed" in DB yet, maybe "Pending Shipment" or just leave it for manual retry
-                createdOrder.shipment_status = 'Shipment Failed - Manual Action Required';
+                createdOrder.shipment_status = `Shipment Failed: ${errorMsg.substring(0, 50)}`;
                 await createdOrder.save();
             }
         }

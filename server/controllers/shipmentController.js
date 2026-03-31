@@ -47,12 +47,18 @@ const createShipment = asyncHandler(async (req, res) => {
     // 3. Call Shiprocket — create order + assign AWB
     const shipmentData = await createFullShipment(order);
 
-    if (!shipmentData) {
-        // Shiprocket failed — don't block the user, return a soft error
-        console.error(`❌ Shiprocket shipment failed for order ${order_id}`);
+    if (!shipmentData || shipmentData.error) {
+        // Shiprocket failed — don't block the user, return a soft error with details if available
+        const errorMsg = shipmentData?.error || 'Shiprocket order creation failed.';
+        console.error(`❌ Shiprocket shipment failed for order ${order_id}: ${errorMsg}`);
+        
+        // Update the order in DB so the admin sees the failure reason
+        order.shipment_status = `Shipment Failed: ${errorMsg.substring(0, 50)}`;
+        await order.save();
+
         return res.status(200).json({
             success: false,
-            message: 'Order confirmed. Shipment creation failed — our team will process it manually.',
+            message: `Shiprocket push failed: ${errorMsg}`,
         });
     }
 

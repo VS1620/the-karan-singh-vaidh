@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Trash2, ShoppingBag, ArrowRight, Phone } from 'lucide-react';
 import { CartContext } from '../context/CartContext';
+import { getAssetUrl } from '../api/api';
 
 const CartPage = () => {
     const { cartItems, removeFromCart, updateQty, getCartTotal } = useContext(CartContext);
@@ -32,7 +33,7 @@ const CartPage = () => {
                     <div className="flex-1 space-y-4">
                         {cartItems.map((item, index) => (
                             <div key={index} className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex gap-4 items-center">
-                                <img src={item.image} alt={item.name} className="w-20 h-20 object-cover rounded-md" />
+                                <img src={getAssetUrl(item.image)} alt={item.name} className="w-20 h-20 object-cover rounded-md" />
 
                                 <div className="flex-1">
                                     <h3 className="font-bold text-gray-900">{item.name}</h3>
