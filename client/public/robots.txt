@@ -1,15 +1,23 @@
-# Robots.txt for The Karan Singh Vaidh - Ancient Ayurvedas
-# https://thekaransinghvaidh.com
+# robots.txt for thekaransinghvaidh.com
+# Optimized by Senior SEO Expert
 
 User-agent: *
 Allow: /
+# Disallow Admin and Internal Auth
+Disallow: /admin
 Disallow: /admin/
+# Disallow Thin or Transactional Pages
 Disallow: /checkout
-Disallow: /account
 Disallow: /cart
+Disallow: /account
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /order-success
+# Disallow API and Background Tasks
+Disallow: /api/
+# Prevent duplicate indexing of internal search results
+Disallow: /?*
 
-# Sitemap
 Sitemap: https://thekaransinghvaidh.com/sitemap.xml
-
-# Crawl delay (optional, helps prevent server overload)
 Crawl-delay: 1

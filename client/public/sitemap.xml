@@ -1,219 +1,255 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://thekaransinghvaidh.com/</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
-    <lastmod>2026-02-11</lastmod>
+    <lastmod>2026-03-31</lastmod>
   </url>
   <url>
     <loc>https://thekaransinghvaidh.com/shop</loc>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
-    <lastmod>2026-02-11</lastmod>
+    <lastmod>2026-03-31</lastmod>
   </url>
   <url>
     <loc>https://thekaransinghvaidh.com/about</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-    <lastmod>2026-02-11</lastmod>
+    <lastmod>2026-03-31</lastmod>
   </url>
   <url>
     <loc>https://thekaransinghvaidh.com/contact</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-    <lastmod>2026-02-11</lastmod>
-  </url>
-  <url>
-    <loc>https://thekaransinghvaidh.com/cart</loc>
-    <changefreq>always</changefreq>
-    <priority>0.5</priority>
-    <lastmod>2026-02-11</lastmod>
-  </url>
-  <url>
-    <loc>https://thekaransinghvaidh.com/login</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-    <lastmod>2026-02-11</lastmod>
-  </url>
-  <url>
-    <loc>https://thekaransinghvaidh.com/register</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-    <lastmod>2026-02-11</lastmod>
+    <lastmod>2026-03-31</lastmod>
   </url>
   <url>
     <loc>https://thekaransinghvaidh.com/privacy</loc>
     <changefreq>yearly</changefreq>
-    <priority>0.6</priority>
-    <lastmod>2026-02-11</lastmod>
+    <priority>0.5</priority>
+    <lastmod>2026-03-31</lastmod>
   </url>
   <url>
     <loc>https://thekaransinghvaidh.com/terms</loc>
     <changefreq>yearly</changefreq>
-    <priority>0.6</priority>
-    <lastmod>2026-02-11</lastmod>
+    <priority>0.5</priority>
+    <lastmod>2026-03-31</lastmod>
   </url>
   <url>
     <loc>https://thekaransinghvaidh.com/shipping</loc>
     <changefreq>yearly</changefreq>
-    <priority>0.6</priority>
-    <lastmod>2026-02-11</lastmod>
+    <priority>0.5</priority>
+    <lastmod>2026-03-31</lastmod>
   </url>
   <url>
     <loc>https://thekaransinghvaidh.com/cancellation</loc>
     <changefreq>yearly</changefreq>
-    <priority>0.6</priority>
-    <lastmod>2026-02-11</lastmod>
+    <priority>0.5</priority>
+    <lastmod>2026-03-31</lastmod>
+  </url>
+  <url>
+    <loc>https://thekaransinghvaidh.com/shop?category=asthma</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2026-02-08</lastmod>
+  </url>
+  <url>
+    <loc>https://thekaransinghvaidh.com/shop?category=gall-bladder</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2026-02-08</lastmod>
+  </url>
+  <url>
+    <loc>https://thekaransinghvaidh.com/shop?category=piles</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2026-02-08</lastmod>
+  </url>
+  <url>
+    <loc>https://thekaransinghvaidh.com/shop?category=gastric</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2026-02-08</lastmod>
+  </url>
+  <url>
+    <loc>https://thekaransinghvaidh.com/shop?category=diabetes</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2026-02-08</lastmod>
+  </url>
+  <url>
+    <loc>https://thekaransinghvaidh.com/shop?category=tuberculosis-tb</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2026-02-08</lastmod>
+  </url>
+  <url>
+    <loc>https://thekaransinghvaidh.com/shop?category=migraine</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2026-02-08</lastmod>
+  </url>
+  <url>
+    <loc>https://thekaransinghvaidh.com/shop?category=thyroid</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2026-02-08</lastmod>
+  </url>
+  <url>
+    <loc>https://thekaransinghvaidh.com/shop?category=kidney-stone</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2026-02-08</lastmod>
+  </url>
+  <url>
+    <loc>https://thekaransinghvaidh.com/shop?category=all-products</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2026-02-08</lastmod>
   </url>
   <url>
     <loc>https://thekaransinghvaidh.com/product/asthma</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-02-07</lastmod>
-  </url>
-  <url>
-    <loc>https://thekaransinghvaidh.com/product/breast-nodes</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-02-07</lastmod>
-  </url>
-  <url>
-    <loc>https://thekaransinghvaidh.com/product/breast-nodes-1</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-02-07</lastmod>
+    <priority>0.8</priority>
+    <lastmod>2026-03-22</lastmod>
   </url>
   <url>
     <loc>https://thekaransinghvaidh.com/product/constipation</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-02-07</lastmod>
+    <priority>0.8</priority>
+    <lastmod>2026-03-26</lastmod>
   </url>
   <url>
     <loc>https://thekaransinghvaidh.com/product/cyst</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-02-07</lastmod>
+    <priority>0.8</priority>
+    <lastmod>2026-03-22</lastmod>
   </url>
   <url>
     <loc>https://thekaransinghvaidh.com/product/diabetes</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-02-07</lastmod>
+    <priority>0.8</priority>
+    <lastmod>2026-03-22</lastmod>
   </url>
   <url>
     <loc>https://thekaransinghvaidh.com/product/erectile-dysfunction</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-02-07</lastmod>
+    <priority>0.8</priority>
+    <lastmod>2026-03-20</lastmod>
   </url>
   <url>
     <loc>https://thekaransinghvaidh.com/product/fatty-liver</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-02-07</lastmod>
+    <priority>0.8</priority>
+    <lastmod>2026-03-26</lastmod>
   </url>
   <url>
     <loc>https://thekaransinghvaidh.com/product/fibroid</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-02-07</lastmod>
+    <priority>0.8</priority>
+    <lastmod>2026-03-27</lastmod>
   </url>
   <url>
     <loc>https://thekaransinghvaidh.com/product/gall-bladder</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-02-08</lastmod>
+    <priority>0.8</priority>
+    <lastmod>2026-03-26</lastmod>
   </url>
   <url>
     <loc>https://thekaransinghvaidh.com/product/gastritis-digestion</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-02-08</lastmod>
+    <priority>0.8</priority>
+    <lastmod>2026-03-22</lastmod>
   </url>
   <url>
     <loc>https://thekaransinghvaidh.com/product/hypertension-high-blood-pressure</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-02-07</lastmod>
+    <priority>0.8</priority>
+    <lastmod>2026-03-22</lastmod>
   </url>
   <url>
     <loc>https://thekaransinghvaidh.com/product/jaundice</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-02-07</lastmod>
+    <priority>0.8</priority>
+    <lastmod>2026-03-22</lastmod>
   </url>
   <url>
     <loc>https://thekaransinghvaidh.com/product/kidney-stone</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-02-07</lastmod>
+    <priority>0.8</priority>
+    <lastmod>2026-03-22</lastmod>
   </url>
   <url>
     <loc>https://thekaransinghvaidh.com/product/loose-motion</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-02-07</lastmod>
+    <priority>0.8</priority>
+    <lastmod>2026-03-22</lastmod>
   </url>
   <url>
     <loc>https://thekaransinghvaidh.com/product/migraine</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-02-07</lastmod>
+    <priority>0.8</priority>
+    <lastmod>2026-03-22</lastmod>
   </url>
   <url>
     <loc>https://thekaransinghvaidh.com/product/ortho-arthritis-joint-pain</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-02-07</lastmod>
+    <priority>0.8</priority>
+    <lastmod>2026-03-20</lastmod>
   </url>
   <url>
     <loc>https://thekaransinghvaidh.com/product/over-weight</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-02-07</lastmod>
+    <priority>0.8</priority>
+    <lastmod>2026-03-22</lastmod>
   </url>
   <url>
     <loc>https://thekaransinghvaidh.com/product/piles</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-02-07</lastmod>
+    <priority>0.8</priority>
+    <lastmod>2026-03-22</lastmod>
   </url>
   <url>
     <loc>https://thekaransinghvaidh.com/product/polyps</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-02-07</lastmod>
+    <priority>0.8</priority>
+    <lastmod>2026-03-28</lastmod>
   </url>
   <url>
     <loc>https://thekaransinghvaidh.com/product/prostate</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-02-07</lastmod>
+    <priority>0.8</priority>
+    <lastmod>2026-03-26</lastmod>
   </url>
   <url>
     <loc>https://thekaransinghvaidh.com/product/psoriasis-and-skin-allergy</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-02-08</lastmod>
+    <priority>0.8</priority>
+    <lastmod>2026-03-22</lastmod>
   </url>
   <url>
     <loc>https://thekaransinghvaidh.com/product/sinus</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-02-07</lastmod>
+    <priority>0.8</priority>
+    <lastmod>2026-03-22</lastmod>
   </url>
   <url>
     <loc>https://thekaransinghvaidh.com/product/tbtuberculosis</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-02-07</lastmod>
+    <priority>0.8</priority>
+    <lastmod>2026-03-22</lastmod>
   </url>
   <url>
     <loc>https://thekaransinghvaidh.com/product/thyroid</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <lastmod>2026-02-07</lastmod>
+    <priority>0.8</priority>
+    <lastmod>2026-03-22</lastmod>
+  </url>
+  <url>
+    <loc>https://thekaransinghvaidh.com/product/cirrhosis-hepatitis</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2026-03-22</lastmod>
   </url>
 </urlset>
