@@ -8,10 +8,11 @@ const Authenticity = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const checkItems = [
-        "30-Minute 1-on-1 Consultation With Karan Singh Vaidh",
-        "Specialized in Kidney & Gallbladder Stones",
+        "1-on-1 Consultation With Karan Singh Vaidh",
+        "Specialized in kidney & Gallbladder stone and more than 100+ chronic deases",
         "Over 23+ Years of Expert Experience",
-        "Deep Rooted Ayurvedic Wisdom"
+        "Deep Rooted Ayurvedic Wisdom",
+        "Duration: 15 Min (₹699) | 30 Min (₹999) | 45 Min (₹1399)"
     ];
 
     return (

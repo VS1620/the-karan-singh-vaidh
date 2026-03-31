@@ -16,7 +16,7 @@ const createAppointment = asyncHandler(async (req, res) => {
     console.log('Request Body:', req.body);
 
     const { 
-        name, phone, email, service, concern, preferredDate, preferredTime,
+        name, phone, email, service, concern, preferredDate, preferredTime, duration,
         razorpay_order_id, razorpay_payment_id, razorpay_signature 
     } = req.body;
 
@@ -46,6 +46,7 @@ const createAppointment = asyncHandler(async (req, res) => {
         concern,
         preferredDate: preferredDate || null,
         preferredTime,
+        duration: duration || '15 Min',
         status: 'Pending',
         paymentStatus: 'Completed',
         paymentId: razorpay_payment_id
@@ -64,12 +65,15 @@ const createAppointment = asyncHandler(async (req, res) => {
     });
 });
 
-// @desc    Create Razorpay order for appointment (600 INR)
+// @desc    Create Razorpay order for appointment (Dynamic Price)
 // @route   POST /api/appointments/create-payment
 // @access  Public
 const createPaymentOrder = asyncHandler(async (req, res) => {
+    const { amount } = req.body;
+    const finalAmount = (amount || 699) * 100; // INR in paise
+
     const options = {
-        amount: 600 * 100, // 600 INR in paise
+        amount: finalAmount,
         currency: 'INR',
         receipt: `appt_rcpt_${Date.now()}`,
     };

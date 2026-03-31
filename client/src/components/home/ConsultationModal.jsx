@@ -10,7 +10,8 @@ const ConsultationModal = ({ isOpen, onClose }) => {
         service: '',
         concern: '',
         preferredDate: '',
-        preferredTime: ''
+        preferredTime: '',
+        duration: '15 Min'
     });
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -37,8 +38,16 @@ const ConsultationModal = ({ isOpen, onClose }) => {
         setError('');
 
         try {
+            // Calculate amount based on duration
+            const amounts = {
+                '15 Min': 699,
+                '30 Min': 999,
+                '45 Min': 1399
+            };
+            const selectedAmount = amounts[formData.duration] || 699;
+
             // 1. Create Razorpay Order
-            const { data: order } = await api.post('/appointments/create-payment');
+            const { data: order } = await api.post('/appointments/create-payment', { amount: selectedAmount });
 
             // 2. Configure Razorpay options
             const options = {
@@ -244,12 +253,28 @@ const ConsultationModal = ({ isOpen, onClose }) => {
                                                     className="w-full bg-white border border-gray-300 rounded-lg py-2.5 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#419463]/20 focus:border-[#419463] transition-all appearance-none cursor-pointer"
                                                 >
                                                     <option value="" disabled>Select preferred time</option>
-                                                    <option value="Morning (10:00 AM - 01:00 PM)">Morning (10:00 AM - 01:00 PM)</option>
-                                                    <option value="Afternoon (01:00 PM - 04:00 PM)">Afternoon (01:00 PM - 04:00 PM)</option>
-                                                    <option value="Evening (04:00 PM - 07:00 PM)">Evening (04:00 PM - 07:00 PM)</option>
+                                                    <option value="Between 10:00 AM - 01:00 PM">Between 10:00 AM to 01:00 PM</option>
                                                 </select>
                                                 <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={18} />
                                             </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-1.5">
+                                        <label className="text-sm font-semibold text-gray-700">Consultation Duration *</label>
+                                        <div className="relative">
+                                            <select
+                                                required
+                                                name="duration"
+                                                value={formData.duration}
+                                                onChange={handleChange}
+                                                className="w-full bg-white border border-gray-300 rounded-lg py-2.5 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#419463]/20 focus:border-[#419463] transition-all appearance-none cursor-pointer"
+                                            >
+                                                <option value="15 Min">15 Minutes (₹699)</option>
+                                                <option value="30 Min">30 Minutes (₹999)</option>
+                                                <option value="45 Min">45 Minutes (₹1399)</option>
+                                            </select>
+                                            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={18} />
                                         </div>
                                     </div>
 
@@ -284,7 +309,7 @@ const ConsultationModal = ({ isOpen, onClose }) => {
                                     ) : (
                                         <>
                                             <Lock size={18} />
-                                            <span>Pay ₹600 & Book Appointment</span>
+                                            <span>Pay ₹{formData.duration === '15 Min' ? '699' : formData.duration === '30 Min' ? '999' : '1399'} & Book Appointment</span>
                                             <Send size={18} className="ml-2" />
                                         </>
                                     )}

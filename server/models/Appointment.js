@@ -32,6 +32,11 @@ const appointmentSchema = new mongoose.Schema({
     preferredTime: {
         type: String
     },
+    duration: {
+        type: String,
+        enum: ['15 Min', '30 Min', '45 Min'],
+        default: '15 Min'
+    },
     status: {
         type: String,
         enum: ['Pending', 'Confirmed', 'Completed', 'Cancelled'],

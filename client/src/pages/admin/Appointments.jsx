@@ -230,6 +230,7 @@ const Appointments = () => {
                                             <div className="flex flex-col">
                                                 <span className="text-xs font-bold text-gray-700">{app.preferredDate ? new Date(app.preferredDate).toLocaleDateString() : 'ASAP'}</span>
                                                 <span className="text-[10px] text-gray-400 font-medium">{app.preferredTime}</span>
+                                                {app.duration && <span className="text-[10px] text-emerald-600 font-bold uppercase">{app.duration}</span>}
                                             </div>
                                         </td>
                                         <td className="px-6 py-6 text-center">
@@ -311,7 +312,7 @@ const Appointments = () => {
                                                         <Banknote size={20} />
                                                     </div>
                                                     <div>
-                                                        <span className="text-[10px] font-black uppercase tracking-widest text-green-600/70 block mb-1">Payment Completed (₹600)</span>
+                                                        <span className="text-[10px] font-black uppercase tracking-widest text-green-600/70 block mb-1">Payment Completed (₹699)</span>
                                                         <p className="font-mono text-xs font-bold text-green-800">TXN ID: {selectedAppointment.paymentId}</p>
                                                     </div>
                                                 </div>
