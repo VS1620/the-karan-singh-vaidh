@@ -107,13 +107,18 @@ const createShiprocketOrder = async (order) => {
         const pickupLocation = process.env.SHIPROCKET_PICKUP_LOCATION || 'Primary';
 
         // Sanitize phone number: strip all non-digits and take last 10
-        let phone = order.shippingAddress.phone.replace(/\D/g, '');
+        let phone = (order.shippingAddress.phone || '').replace(/\D/g, '');
         if (phone.length > 10) phone = phone.slice(-10);
+        if (phone.length < 10) phone = '9999999999'; // Fallback to avoid API error if invalid
+
+        // Sanitize pincode
+        let pincode = parseInt((order.shippingAddress.postalCode || '000000').toString().replace(/\D/g, ''), 10);
+        if (isNaN(pincode)) pincode = 0;
 
         // Sanitize address: must be at least 10 characters
         let address = order.shippingAddress.address || '';
         if (address.length < 10) {
-            address = `${address}, ${order.shippingAddress.city}, ${order.shippingAddress.state}`.trim();
+            address = `${address}, ${order.shippingAddress.city || ''}, ${order.shippingAddress.state || ''}`.trim();
         }
         // If still too short, pad it (Shiprocket requirement)
         if (address.length < 10) address = address.padEnd(10, '.');
@@ -127,9 +132,9 @@ const createShiprocketOrder = async (order) => {
             billing_customer_name: firstName,
             billing_last_name: lastName,
             billing_address: address,
-            billing_city: order.shippingAddress.city,
-            billing_pincode: parseInt(order.shippingAddress.postalCode.toString().replace(/\D/g, ''), 10),
-            billing_state: order.shippingAddress.state,
+            billing_city: order.shippingAddress.city || 'NA',
+            billing_pincode: pincode,
+            billing_state: order.shippingAddress.state || 'NA',
             billing_country: 'India',
             billing_email: order.shippingAddress.email || order.user?.email || 'customer@example.com',
             billing_phone: phone,
@@ -138,15 +143,15 @@ const createShiprocketOrder = async (order) => {
             // Order items
             order_items: order.orderItems.map(item => ({
                 name: `${item.name}${item.pack?.name ? ` - ${item.pack.name}` : ''}`.substring(0, 50),
-                sku: item.product.toString().substring(0, 20),
-                units: item.qty,
-                selling_price: item.price,
+                sku: (item.product?._id || item.product || 'SKU-NA').toString().substring(0, 20),
+                units: item.qty || 1,
+                selling_price: item.price || 0,
                 discount: 0,
                 tax: 0,
             })),
 
             payment_method: (order.paymentMethod === 'COD' || order.paymentMethod === 'Cash on Delivery') ? 'COD' : 'Prepaid',
-            sub_total: order.totalPrice,
+            sub_total: order.totalPrice || 0,
 
             // Package dimensions (defaults)
             length: 15,
@@ -161,8 +166,9 @@ const createShiprocketOrder = async (order) => {
             const response = await shiprocketRequest('POST', 'orders/create/adhoc', payload);
 
             if (!response || !response.order_id) {
-                console.error(`[SHIPROCKET] ❌ order creation failed. Response:`, response);
-                throw new Error(`Shiprocket order creation failed: No order ID returned.`);
+                const detailedError = response ? (response.message || JSON.stringify(response)) : 'Empty response';
+                console.error(`[SHIPROCKET] ❌ order creation failed. Response:`, detailedError);
+                throw new Error(`Shiprocket API responded without order_id: ${detailedError}`);
             }
 
             console.log(`[SHIPROCKET] ✅ order created. SR Order ID: ${response.order_id}, Shipment ID: ${response.shipment_id}`);
@@ -171,10 +177,8 @@ const createShiprocketOrder = async (order) => {
             // Special handling for duplicate order ID error
             const errorData = error.response?.data;
             if (errorData?.errors?.order_id?.[0]?.includes('already been taken')) {
-                console.warn(`[SHIPROCKET] ⚠️ Order ID ${order._id} already exists in Shiprocket. Attempting to fetch details...`);
-                // If it already exists, we could try to list orders and find it, but for now we'll just throw a clear error
-                // that shipment already exists or needs manual check.
-                throw new Error('This order has already been pushed to Shiprocket. Check your Shiprocket dashboard.');
+                console.warn(`[SHIPROCKET] ⚠️ Order ID ${order._id} already exists in Shiprocket.`);
+                throw new Error('Order already exists in Shiprocket.');
             }
             throw error;
         }
