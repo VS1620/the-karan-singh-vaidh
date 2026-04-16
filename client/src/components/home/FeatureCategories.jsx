@@ -3,13 +3,13 @@ import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 // Local Image Imports
-import asthmaImg from '../../assets/Asthma.jpeg';
-import diabetesImg from '../../assets/Diabetes.jpeg';
-import gallBladderImg from '../../assets/Gall Bladder.jpeg';
-import gastricImg from '../../assets/Gastric.jpeg';
-import kidneyStoneImg from '../../assets/Kidney Stone.jpeg';
-import migraineImg from '../../assets/Migraine.jpeg';
-import pilesImg from '../../assets/Piles.jpeg';
+import asthmaImg from '../../assets/Asthma.webp';
+import diabetesImg from '../../assets/Diabetes.webp';
+import gallBladderImg from '../../assets/Gall Bladder.webp';
+import gastricImg from '../../assets/Gastric.webp';
+import kidneyStoneImg from '../../assets/Kidney Stone.webp';
+import migraineImg from '../../assets/Migraine.webp';
+import pilesImg from '../../assets/Piles.webp';
 
 const categories = [
     {
@@ -86,8 +86,7 @@ const FeatureCategories = () => {
                         <div key={cat.id} className="group bg-white rounded-[2rem] overflow-hidden hover:shadow-2xl hover:shadow-ayur-green/5 transition-all duration-500 border border-transparent hover:border-ayur-beige/50 flex flex-col h-full">
                             {/* Image Section */}
                             <div className="aspect-[4/3] overflow-hidden relative">
-                                <img
-                                    src={cat.image}
+                                <img loading="lazy" src={cat.image}
                                     alt={cat.name}
                                     className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-1000"
                                 />

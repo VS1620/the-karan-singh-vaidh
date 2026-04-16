@@ -152,7 +152,7 @@ const MyAccount = () => {
                                             <h3 className="text-2xl font-serif text-ayur-green font-bold">Health Journey</h3>
                                             <p className="text-sm text-gray-400 font-medium">Your recent wellness activity at a glance</p>
                                         </div>
-                                        <Link to="/shop" className="bg-ayur-beige/20 text-ayur-green px-6 py-2.5 rounded-full text-xs font-bold hover:bg-ayur-beige/40 transition-all flex items-center gap-2">
+                                        <Link to="/ayurvedic-products" className="bg-ayur-beige/20 text-ayur-green px-6 py-2.5 rounded-full text-xs font-bold hover:bg-ayur-beige/40 transition-all flex items-center gap-2">
                                             Browse Solutions <ArrowUpRight size={14} />
                                         </Link>
                                     </div>
@@ -212,7 +212,7 @@ const MyAccount = () => {
                                                     You haven't placed any orders yet. Discover our time-tested Ayurvedic formulations to start your transformation.
                                                 </p>
                                                 <Link
-                                                    to="/shop"
+                                                    to="/ayurvedic-products"
                                                     className="relative group bg-ayur-green text-white px-12 py-4 rounded-2xl font-bold text-sm lg:text-base hover:bg-ayur-olive transition-all shadow-2xl shadow-ayur-green/20"
                                                 >
                                                     Start Your First Order
@@ -313,7 +313,7 @@ const MyAccount = () => {
                                     <div className="text-center py-20">
                                         <Package size={48} className="text-gray-200 mx-auto mb-4" />
                                         <p className="text-gray-500 font-medium">No orders found.</p>
-                                        <Link to="/shop" className="text-ayur-green font-bold hover:underline mt-2 inline-block">Start Shopping</Link>
+                                        <Link to="/ayurvedic-products" className="text-ayur-green font-bold hover:underline mt-2 inline-block">Start Shopping</Link>
                                     </div>
                                 )}
                             </section>

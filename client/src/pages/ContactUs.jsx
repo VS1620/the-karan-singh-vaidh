@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Mail, Phone, MapPin, Send, Clock, MessageSquare } from 'lucide-react';
 
 const ContactUs = () => {
@@ -31,8 +32,8 @@ const ContactUs = () => {
         {
             icon: Phone,
             title: 'Phone Numbers',
-            details: '82196 58454 | 80911 34027 | 88947 72187',
-            link: 'tel:+918894772187',
+            details: '82196 58454',
+            link: 'tel:+918219658454',
             color: 'text-emerald-600',
             bg: 'bg-emerald-50'
         },
@@ -56,6 +57,11 @@ const ContactUs = () => {
 
     return (
         <div className="bg-[#FCFAFA] min-h-screen pt-24 pb-12">
+            <Helmet>
+                <title>Contact Us | The Karan Singh Vaidh | Ayurvedic Clinic Solan</title>
+                <meta name="description" content="Get in touch with The Karan Singh Vaidh for authentic Ayurvedic consultations and wellness guidance. Visit our clinic in Solan or call +91-8219658454." />
+                <meta name="keywords" content="Contact Ayurveda Solan, Ayurvedic Consultation, Karan Singh Vaidh Contact, Ayurvedic Clinic Himachal" />
+            </Helmet>
             {/* Hero Section */}
             <div className="container mx-auto px-4 mb-16">
                 <div className="max-w-3xl mx-auto text-center">
@@ -206,9 +212,9 @@ const ContactUs = () => {
                                         <MapPin size={20} className="flex-shrink-0 mt-1" />
                                         <span className="font-medium"> Near Apex Hospital, Kotlanala, Solan, Himachal Pradesh – 173212</span>
                                     </div>
-                                    <a href="tel:+918894772187" className="flex items-center gap-3 text-white hover:text-ayur-gold transition-colors">
+                                    <a href="tel:+918219658454" className="flex items-center gap-3 text-white hover:text-ayur-gold transition-colors">
                                         <Phone size={20} />
-                                        <span className="font-semibold">82196 58454 | 80911 34027 | 88947 72187</span>
+                                        <span className="font-semibold">82196 58454</span>
                                     </a>
                                     <a href="mailto:info@thekaransinghvaidh.com" className="flex items-center gap-3 text-white hover:text-ayur-gold transition-colors">
                                         <Mail size={20} />

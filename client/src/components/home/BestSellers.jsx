@@ -68,7 +68,7 @@ const BestSellers = () => {
 
                 {/* Footer Link - Centered */}
                 <div className="max-w-[1400px] mx-auto px-5 md:px-12 text-center mt-4 md:mt-8">
-                    <Link to="/shop" className="inline-flex items-center gap-2 border-b-2 border-ayur-gold/30 text-ayur-green hover:border-ayur-gold hover:text-ayur-gold font-bold transition-all pb-1 uppercase text-xs md:text-sm tracking-[0.2em]">
+                    <Link to="/ayurvedic-products" className="inline-flex items-center gap-2 border-b-2 border-ayur-gold/30 text-ayur-green hover:border-ayur-gold hover:text-ayur-gold font-bold transition-all pb-1 uppercase text-xs md:text-sm tracking-[0.2em]">
                         Explore All Products
                     </Link>
                 </div>

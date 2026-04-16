@@ -7,8 +7,7 @@ const RealStores = () => {
         <section className="relative py-16 md:py-24 overflow-hidden font-sans">
             {/* Background Image & Overlay */}
             <div className="absolute inset-0 z-0">
-                <img
-                    src="https://img.freepik.com/free-photo/flat-lay-natural-medicinal-herbs_23-2148776511.jpg?t=st=1769862254~exp=1769865854~hmac=7e893ae120786cb1fcab58b18c7864b6ba98ed1f24584f6f1cb5d63dbfc2e83b&w=1480"
+                <img loading="lazy" src="https://img.freepik.com/free-photo/flat-lay-natural-medicinal-herbs_23-2148776511.jpg?t=st=1769862254~exp=1769865854~hmac=7e893ae120786cb1fcab58b18c7864b6ba98ed1f24584f6f1cb5d63dbfc2e83b&w=1480"
                     alt="Ayurvedic Herbs Background"
                     className="w-full h-full object-cover scale-105"
                 />
@@ -66,7 +65,7 @@ const RealStores = () => {
 
                         {/* Secondary Button - Send Reports */}
                         <a
-                            href="https://wa.me/918894772187?text=Hi, I want to send my medical reports for consultation."
+                            href="https://wa.me/918219658454?text=Hi, I want to send my medical reports for consultation."
                             target="_blank"
                             rel="noopener noreferrer"
                             className="group relative w-full sm:w-auto overflow-hidden px-8 py-4 md:px-10 md:py-5 rounded-full border-2 border-ayur-gold/50 bg-ayur-gold/10 backdrop-blur-sm text-ayur-gold font-bold text-sm md:text-base tracking-widest uppercase transition-all duration-300 hover:bg-ayur-gold hover:text-[#132e1b] hover:border-ayur-gold hover:shadow-[0_0_40px_rgba(212,175,55,0.4)] hover:scale-[1.02] active:scale-95 text-center"

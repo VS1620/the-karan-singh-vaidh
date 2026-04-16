@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import ProductCard from '../components/home/ProductCard';
 import api, { getAssetUrl } from '../api/api';
@@ -103,7 +104,72 @@ const ProductDetails = () => {
 
     return (
         <div className="bg-white min-h-screen pt-16 lg:pt-20 pb-20 lg:pb-12 font-sans">
+            <Helmet>
+                <title>{`${product.name} | Ayurvedic Treatment & Medicine | The Karan Singh Vaidh`}</title>
+                <meta name="description" content={product.shortDescription || `Buy ${product.name} online. Authentic Ayurvedic remedy by Karan Singh Vaidh. Effective results, 100% natural ingredients.`} />
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        "@context": "https://schema.org/",
+                        "@type": "Product",
+                        "name": product.name,
+                        "image": [getAssetUrl(product.image)],
+                        "description": product.shortDescription,
+                        "sku": product._id,
+                        "brand": {
+                            "@type": "Brand",
+                            "name": "The Karan Singh Vaidh"
+                        },
+                        "offers": {
+                            "@type": "Offer",
+                            "url": window.location.href,
+                            "priceCurrency": "INR",
+                            "price": currentPack?.sellingPrice,
+                            "itemCondition": "https://schema.org/NewCondition",
+                            "availability": "https://schema.org/InStock"
+                        },
+                        "aggregateRating": {
+                            "@type": "AggregateRating",
+                            "ratingValue": "4.9",
+                            "reviewCount": "2500"
+                        }
+                    })}
+                </script>
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "BreadcrumbList",
+                        "itemListElement": [
+                            {
+                                "@type": "ListItem",
+                                "position": 1,
+                                "name": "Home",
+                                "item": "https://thekaransinghvaidh.com/"
+                            },
+                            {
+                                "@type": "ListItem",
+                                "position": 2,
+                                "name": "Products",
+                                "item": "https://thekaransinghvaidh.com/ayurvedic-products"
+                            },
+                            {
+                                "@type": "ListItem",
+                                "position": 3,
+                                "name": product.name,
+                                "item": window.location.href
+                            }
+                        ]
+                    })}
+                </script>
+            </Helmet>
             <div className="container mx-auto px-4 md:px-4 max-w-7xl">
+                {/* SEO Breadcrumb UI */}
+                <nav className="flex items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-widest text-gray-400 mb-6 py-2 overflow-x-auto no-scrollbar whitespace-nowrap">
+                    <Link to="/" className="hover:text-ayur-green transition-colors">Home</Link>
+                    <span className="text-gray-300">/</span>
+                    <Link to="/ayurvedic-products" className="hover:text-ayur-green transition-colors">Products</Link>
+                    <span className="text-gray-300">/</span>
+                    <span className="text-ayur-green truncate max-w-[150px] md:max-w-none">{product.name}</span>
+                </nav>
                 <div className="flex flex-col lg:flex-row gap-4 lg:gap-10 mb-16">
 
                     {/* LEFT: Gallery Layout (Vertical Strip + Main Image) */}
@@ -570,7 +636,7 @@ const ProductDetails = () => {
 
                             <div className="flex-shrink-0">
                                 <a
-                                    href="tel:+918894772187"
+                                    href="tel:+918219658454"
                                     className="relative flex flex-col items-center group"
                                 >
                                     {/* Pulsing Button Effect */}
@@ -585,7 +651,7 @@ const ProductDetails = () => {
                                         <span className="text-white font-bold uppercase text-xs tracking-[0.3em] opacity-40 group-hover:opacity-100 transition-opacity">
                                             Tap to Connect
                                         </span>
-                                        <span className="text-ayur-beige text-[11px] font-bold tracking-widest">+91 88947 72187</span>
+                                        <span className="text-ayur-beige text-[11px] font-bold tracking-widest">+91 82196 58454</span>
                                     </div>
                                 </a>
                             </div>
@@ -602,7 +668,7 @@ const ProductDetails = () => {
                                 <h2 className="text-3xl lg:text-4xl font-serif text-gray-900 mb-2">People also bought this</h2>
                                 <p className="text-gray-500">Discover more natural solutions for your wellness</p>
                             </div>
-                            <Link to="/shop" className="text-emerald-700 font-bold hover:text-emerald-800 transition-colors uppercase text-sm tracking-wider border-b-2 border-emerald-700 pb-1 hidden sm:block">
+                            <Link to="/ayurvedic-products" className="text-emerald-700 font-bold hover:text-emerald-800 transition-colors uppercase text-sm tracking-wider border-b-2 border-emerald-700 pb-1 hidden sm:block">
                                 View Full Collection
                             </Link>
                         </div>

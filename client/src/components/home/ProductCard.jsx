@@ -46,9 +46,8 @@ const ProductCard = ({ product }) => {
 
             {/* Image Container */}
             <Link to={`/product/${id}`} className="relative w-full aspect-[4/5] overflow-hidden bg-white block">
-                <img
-                    src={imageError ? '/logo.png' : image}
-                    alt={name}
+                <img src={imageError ? '/logo.png' : image}
+                    alt={`Ayurvedic Product - ${name} | The Karan Singh Vaidh`}
                     onError={() => setImageError(true)}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 p-4"
                     loading="lazy"

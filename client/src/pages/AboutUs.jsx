@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Heart, Leaf, Users, Award, ShieldCheck, Sparkles, CheckCircle, ArrowRight, Star, Quote, Shield, Zap, Target } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import founderImage from '../assets/karan singh vaidh img.jpeg';
+import founderImage from '../assets/karan singh vaidh img.webp';
 import ConsultationModal from '../components/home/ConsultationModal';
 
 import natureIsGoodSeal from '../assets/nature-is-good-seal.webp';
 import hereForYourHealthSeal from '../assets/here-for-your-health-seal.webp';
 import noShortcutsSeal from '../assets/no-shortcuts-seal.webp';
-import modernAyurLogo from '../assets/modern-ayur-k.png';
-import karanTradAttire from '../assets/Himachali Vaidh in Clinical Setting.png';
-import herbBowl1 from '../assets/WhatsApp Image 2026-03-06 at 9.39.06 PM.jpeg';
-import spiceTray from '../assets/WhatsApp Image 2026-03-06 at 9.40.30 PM.jpeg';
-import cinnamonBowl from '../assets/WhatsApp Image 2026-03-06 at 9.40.56 PM.jpeg';
-import herbTable from '../assets/WhatsApp Image 2026-03-06 at 9.41.02 PM.jpeg';
+import modernAyurLogo from '../assets/modern-ayur-k.webp';
+import karanTradAttire from '../assets/Himachali Vaidh in Clinical Setting.webp';
+import herbBowl1 from '../assets/WhatsApp Image 2026-03-06 at 9.39.06 PM.webp';
+import spiceTray from '../assets/WhatsApp Image 2026-03-06 at 9.40.30 PM.webp';
+import cinnamonBowl from '../assets/WhatsApp Image 2026-03-06 at 9.40.56 PM.webp';
+import herbTable from '../assets/WhatsApp Image 2026-03-06 at 9.41.02 PM.webp';
 
 
 
@@ -101,6 +102,11 @@ const AboutUs = () => {
 
     return (
         <div className="bg-white font-sans overflow-hidden">
+            <Helmet>
+                <title>About Dr. Karan Singh Vaidh | Ayurvedic Expert in Himachal</title>
+                <meta name="description" content="Learn about the legacy of Karan Singh Vaidh, a renowned Ayurvedic expert with 23+ years of experience. Discover our philosophy of modern Ayurvedic nutrition." />
+                <meta name="keywords" content="Karan Singh Vaidh, Ayurvedic Doctor Solan, About Ayurveda, Holistic Healer Solan, Himachal Ayurvedic Clinic" />
+            </Helmet>
             {/* Modern Ayurvedic Nutrition Hero (The New Requested Top Section) */}
             <section className="relative min-h-[90vh] bg-white flex flex-col items-center justify-center pt-20 overflow-hidden">
                 {/* Decorative Elements (Spread across the section) */}

@@ -108,7 +108,7 @@ See `.env.example` for full configuration.
 
 The Karan Singh  Vaidh  
 Email: thekaransinghvaidh@gmail.com  
-Phone: 82196 58454 | 80911 34027 | 88947 72187
+Phone: 82196 58454
 
 ---
 

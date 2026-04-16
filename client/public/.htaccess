@@ -1,6 +1,16 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
+
+  # 301 Redirects for moved pages
+  Redirect 301 /shop /ayurvedic-products
+  Redirect 301 /about /about-ayurvedic-doctor-in-solan
+  
+  # Redirect old treatment URLs (if they were indexed)
+  Redirect 301 /asthma-treatment /ayurvedic-asthma-treatment
+  Redirect 301 /diabetes-treatment /ayurvedic-diabetes-treatment
+  Redirect 301 /piles-treatment /ayurvedic-piles-treatment
+
   RewriteRule ^index\.html$ - [L]
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d

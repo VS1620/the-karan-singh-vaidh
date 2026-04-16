@@ -1,12 +1,13 @@
-# robots.txt for thekaransinghvaidh.com
-# Optimized by Senior SEO Expert
-
 User-agent: *
+
+# Allow all important pages
 Allow: /
-# Disallow Admin and Internal Auth
+
+# Block admin & system pages
 Disallow: /admin
-Disallow: /admin/
-# Disallow Thin or Transactional Pages
+Disallow: /api
+
+# Block transactional pages
 Disallow: /checkout
 Disallow: /cart
 Disallow: /account
@@ -14,10 +15,9 @@ Disallow: /login
 Disallow: /register
 Disallow: /forgot-password
 Disallow: /order-success
-# Disallow API and Background Tasks
-Disallow: /api/
-# Prevent duplicate indexing of internal search results
-Disallow: /?*
 
+# Allow query URLs (IMPORTANT FIX)
+# (Remove /*? blocking)
+
+# Sitemap
 Sitemap: https://thekaransinghvaidh.com/sitemap.xml
-Crawl-delay: 1

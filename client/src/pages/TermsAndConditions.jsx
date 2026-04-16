@@ -220,7 +220,7 @@ const TermsAndConditions = () => {
                         <p>
                             <span className="font-semibold">Phone:</span>{' '}
                             <a href="tel:8219658454" className="hover:underline">
-                                82196 58454 | 80911 34027 | 88947 72187
+                                82196 58454
                             </a>
                         </p>
                     </div>

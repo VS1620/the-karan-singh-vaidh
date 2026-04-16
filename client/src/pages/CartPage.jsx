@@ -16,7 +16,7 @@ const CartPage = () => {
                 <ShoppingBag size={64} className="text-gray-300 mb-4" />
                 <h2 className="text-2xl font-bold text-gray-800 mb-2">Your Cart is Empty</h2>
                 <p className="text-gray-500 mb-6">Looks like you haven't added any packs yet.</p>
-                <Link to="/shop" className="bg-emerald-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-emerald-700 transition">
+                <Link to="/ayurvedic-products" className="bg-emerald-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-emerald-700 transition">
                     Browse Products
                 </Link>
             </div>
@@ -125,7 +125,7 @@ const CartPage = () => {
 
                         <div className="flex flex-col items-center">
                             <a
-                                href="tel:+918894772187"
+                                href="tel:+918219658454"
                                 className="w-28 h-28 md:w-36 md:h-36 bg-[#FDFCFB] rounded-full flex items-center justify-center text-[#2D5A41] shadow-2xl hover:scale-105 transition-all duration-500 relative group/btn"
                             >
                                 <div className="absolute inset-0 bg-white rounded-full transition-transform group-hover/btn:scale-110"></div>
@@ -134,7 +134,7 @@ const CartPage = () => {
                             </a>
                             <div className="mt-8 text-center">
                                 <div className="text-white/60 text-[10px] font-bold uppercase tracking-[0.4em] mb-2">Tap to Connect</div>
-                                <div className="text-2xl font-bold tracking-wider text-white">+91 88947 72187</div>
+                                <div className="text-2xl font-bold tracking-wider text-white">+91 82196 58454</div>
                             </div>
                         </div>
                     </div>

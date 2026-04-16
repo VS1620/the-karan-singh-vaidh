@@ -2,12 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
-import karanSir from '../../assets/karan sir 3.png';
-import happyPatientsIcon from '../../assets/happy_patients_icon.png';
-import customersWorldwideIcon from '../../assets/customers_worldwide_icon.png';
-import citiesCoveredIcon from '../../assets/cities_covered_icon.png';
-import yearsExperienceIcon from '../../assets/years_experience_icon.png';
-import resultGuaranteedIcon from '../../assets/result_guaranteed_icon.png';
+import karanSir from '../../assets/karan sir 3.webp';
+import happyPatientsIcon from '../../assets/happy_patients_icon.webp';
+import customersWorldwideIcon from '../../assets/customers_worldwide_icon.webp';
+import citiesCoveredIcon from '../../assets/cities_covered_icon.webp';
+import yearsExperienceIcon from '../../assets/years_experience_icon.webp';
+import resultGuaranteedIcon from '../../assets/result_guaranteed_icon.webp';
 
 const reasons = [
     {
@@ -79,8 +79,7 @@ const WhyUs = () => {
                 >
                     {/* Left: Doctor Image Section - Light Background */}
                     <div className="w-full md:w-5/12 bg-gray-200 relative flex items-end justify-center md:min-h-full">
-                        <img
-                            src={karanSir}
+                        <img loading="lazy" src={karanSir}
                             alt="Dr. Karan Singh Vaidh"
                             className="w-full h-auto md:h-full object-cover relative z-10"
                         />
@@ -90,8 +89,7 @@ const WhyUs = () => {
                     <div className="w-full md:w-7/12 bg-gradient-to-br from-emerald-700 to-teal-700 text-white p-8 md:p-14 flex flex-col justify-center relative text-left overflow-hidden">
                         {/* Palm Image Decoration */}
                         <div className="absolute top-0 right-0 w-full h-full pointer-events-none opacity-30 mix-blend-multiply">
-                            <img
-                                src="https://img.freepik.com/free-psd/tropical-palm-fronds-lush-green-paradise_632498-25032.jpg?t=st=1770031966~exp=1770035566~hmac=3bb2da029bc828c0931494c97447e07cf06fefa7ea13db71de64e89be01875f7&w=1480"
+                            <img loading="lazy" src="https://img.freepik.com/free-psd/tropical-palm-fronds-lush-green-paradise_632498-25032.jpg?t=st=1770031966~exp=1770035566~hmac=3bb2da029bc828c0931494c97447e07cf06fefa7ea13db71de64e89be01875f7&w=1480"
                                 alt="Palm Decoration"
                                 className="w-full h-full object-cover"
                             />
@@ -120,7 +118,7 @@ const WhyUs = () => {
 
                             <div className="flex flex-wrap gap-4 mt-8">
                                 <Link
-                                    to="/about"
+                                    to="/about-ayurvedic-doctor-in-solan"
                                     className="bg-[#d4af37] text-[#0d2e1b] px-8 py-3 rounded-full font-bold text-base transition-all hover:bg-white hover:scale-105"
                                 >
                                     Discover Our Story
@@ -143,7 +141,7 @@ const WhyUs = () => {
                             className="group bg-[rgb(74,124,89)] p-8 rounded-[2rem] shadow-[0_10px_40px_-15px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_60px_-15px_rgba(44,95,79,0.15)] border border-ayur-beige/30 transition-all duration-500 flex flex-col items-center text-center"
                         >
                             <div className={`p-5 rounded-3xl bg-white/20 backdrop-blur-sm mb-6 transform group-hover:rotate-12 transition-transform duration-500`}>
-                                <img src={reason.icon} alt={reason.label} className="w-10 h-10 object-contain" />
+                                <img loading="lazy" src={reason.icon} alt={reason.label} className="w-10 h-10 object-contain" />
                             </div>
 
                             <h3 className="text-3xl font-bold text-white mb-1 transition-colors">

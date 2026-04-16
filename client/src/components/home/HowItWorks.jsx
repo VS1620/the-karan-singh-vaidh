@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Pill, Clock, UserRound, ChevronRight } from 'lucide-react';
-import selectConcernIcon from '../../assets/select_concern_icon.png';
+import selectConcernIcon from '../../assets/select_concern_icon.webp';
 
 const steps = [
     {
@@ -74,7 +74,7 @@ const HowItWorks = () => {
                                     className="w-24 h-24 bg-white rounded-[2rem] border border-ayur-green/10 flex items-center justify-center text-ayur-green shadow-xl relative z-10 group-hover:border-ayur-gold/40 transition-colors"
                                 >
                                     {step.isImage ? (
-                                        <img src={step.icon} alt={step.title} className="w-10 h-10" />
+                                        <img loading="lazy" src={step.icon} alt={step.title} className="w-10 h-10" />
                                     ) : (
                                         step.icon
                                     )}

@@ -6,8 +6,8 @@ import { ArrowRight, Star, ShieldCheck, Leaf, Users } from 'lucide-react';
 import { motion } from 'framer-motion';
 import ConsultationModal from './ConsultationModal';
 
-import banner1Web from '../../assets/BANNER 1 WEB.png';
-import himAward from '../../assets/him award.png';
+import banner1Web from '../../assets/banner1-web.webp';
+import himAward from '../../assets/him award.webp';
 
 // Slider Settings
 const Hero = () => {
@@ -54,7 +54,7 @@ const Hero = () => {
             title: null,
             subtitle: null,
             cta: null,
-            link: "/shop",
+            link: "/ayurvedic-products",
             bgImage: banner1Web,
             theme: "dark",
             icon: null,
@@ -66,7 +66,7 @@ const Hero = () => {
             title: null,
             subtitle: null,
             cta: null,
-            link: "/about",
+            link: "/about-ayurvedic-doctor-in-solan",
             bgImage: himAward,
             theme: "dark",
             icon: null,
@@ -78,7 +78,7 @@ const Hero = () => {
             title: "Ayurvedic Legacy Since 2003",
             subtitle: "Trusted ancient formulations for modern lifestyle diseases",
             cta: "Shop Now",
-            link: "/shop",
+            link: "/ayurvedic-products",
             bgImage: "https://img.freepik.com/free-photo/high-angle-assortment-fine-powders-bowls-with-stones_23-2148774961.jpg",
             theme: "dark",
             icon: <Leaf className="text-yellow-400 mb-4" size={48} />
@@ -98,7 +98,7 @@ const Hero = () => {
             title: "Targeted Relief for Chronic Disorders",
             subtitle: "Diabetes, Joint Pain, Digestion, Immunity & Lifestyle Issues",
             cta: "Explore Solutions",
-            link: "/shop",
+            link: "/ayurvedic-products",
             bgImage: "https://img.freepik.com/premium-photo/midsection-doctor-patient-shaking-hand-while-sitting-clinic_1048944-15396134.jpg",
             theme: "dark",
             icon: <Star className="text-yellow-400 mb-4" size={48} />
@@ -128,9 +128,9 @@ const Hero = () => {
                     <div key={slide.id} className="relative h-[500px] md:h-[700px] w-full outline-none">
                         {/* Background Image with Overlay */}
                         <div className="absolute inset-0 overflow-hidden">
-                            <img
-                                src={getOptimizedImage(slide.bgImage, index)}
-                                alt={slide.title || "Banner"}
+                             <img
+                                 src={getOptimizedImage(slide.bgImage, index)}
+                                 alt={slide.title || slide.subtitle || "The Karan Singh Vaidh Ayurvedic Banner"}
                                 fetchpriority={index === 0 ? "high" : "auto"}
                                 loading={index === 0 ? "eager" : "lazy"}
                                 className={`w-full h-full object-center transition-transform duration-[5000ms] ${slide.hasOverlay !== false ? "object-cover hover:scale-105" : "object-cover md:object-fill"

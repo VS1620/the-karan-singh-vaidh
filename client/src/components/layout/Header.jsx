@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { AuthContext } from '../../context/AuthContext';
 import { CartContext } from '../../context/CartContext';
 
-import logo from '../../assets/thekaransinghvaidh-logo.png';
+import logo from '../../assets/thekaransinghvaidh-logo.webp';
 
 const Header = () => {
     const { userInfo, logout } = React.useContext(AuthContext);
@@ -23,8 +23,8 @@ const Header = () => {
 
     const navLinks = [
         { name: 'Home', path: '/' },
-        { name: 'Shop', path: '/shop' },
-        { name: 'About Us', path: '/about' },
+        { name: 'Shop', path: '/ayurvedic-products' },
+        { name: 'About Us', path: '/about-ayurvedic-doctor-in-solan' },
         { name: 'Contact Us', path: '/contact' },
     ];
 
@@ -41,8 +41,7 @@ const Header = () => {
 
                 {/* Logo - First on Mobile */}
                 <Link to="/" className="flex-shrink-0 order-1 md:order-2">
-                    <img
-                        src={logo}
+                    <img loading="lazy" src={logo}
                         alt="The Karan Singh  Vaidh"
                         className="h-10 md:h-14 max-w-[140px] md:max-w-none object-contain transition-all duration-300 hover:scale-105"
                     />
@@ -125,8 +124,7 @@ const Header = () => {
                         style={{ backgroundColor: '#ffffff' }}
                     >
                         <div className="flex justify-between items-center mb-10">
-                            <img
-                                src={logo}
+                            <img loading="lazy" src={logo}
                                 alt="Logo"
                                 className="h-12"
                             />

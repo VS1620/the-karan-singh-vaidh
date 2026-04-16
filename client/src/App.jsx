@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import MainLayout from './components/layout/MainLayout';
 import ScrollToTop from './components/layout/ScrollToTop';
 import { CartProvider } from './context/CartContext';
@@ -57,7 +57,24 @@ function App() {
             <Suspense fallback={<LoadingFallback />}>
               <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/shop" element={<Shop />} />
+
+                {/* Shop - SEO URL */}
+                <Route path="/ayurvedic-products" element={<Shop />} />
+                {/* Redirect old /shop URL */}
+                <Route path="/shop" element={<Navigate to="/ayurvedic-products" replace />} />
+
+                {/* SEO-friendly category routes */}
+                <Route path="/ayurvedic-asthma-treatment" element={<Shop defaultCategory="Asthma" />} />
+                <Route path="/gallbladder-stone-ayurvedic-treatment" element={<Shop defaultCategory="Gall Bladder" />} />
+                <Route path="/ayurvedic-piles-treatment" element={<Shop defaultCategory="Piles" />} />
+                <Route path="/ayurvedic-gastric-treatment" element={<Shop defaultCategory="Gastric" />} />
+                <Route path="/ayurvedic-diabetes-treatment" element={<Shop defaultCategory="Diabetes" />} />
+                <Route path="/ayurvedic-tuberculosis-support" element={<Shop defaultCategory="Tuberculosis (TB)" />} />
+                <Route path="/ayurvedic-migraine-treatment" element={<Shop defaultCategory="Migraine" />} />
+                <Route path="/ayurvedic-thyroid-treatment" element={<Shop defaultCategory="Thyroid" />} />
+                <Route path="/kidney-stone-ayurvedic-treatment" element={<Shop defaultCategory="Kidney Stone" />} />
+                <Route path="/ayurvedic-treatment-products" element={<Shop />} />
+
                 <Route path="/product/:id" element={<ProductDetails />} />
                 <Route path="/cart" element={<CartPage />} />
                 <Route path="/checkout" element={<CheckoutPage />} />
@@ -66,7 +83,12 @@ function App() {
                 <Route path="/register" element={<Register />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/account" element={<MyAccount />} />
-                <Route path="/about" element={<AboutUs />} />
+
+                {/* About - SEO URL */}
+                <Route path="/about-ayurvedic-doctor-in-solan" element={<AboutUs />} />
+                {/* Redirect old /about URL */}
+                <Route path="/about" element={<Navigate to="/about-ayurvedic-doctor-in-solan" replace />} />
+
                 <Route path="/contact" element={<ContactUs />} />
 
                 {/* Policy Pages */}

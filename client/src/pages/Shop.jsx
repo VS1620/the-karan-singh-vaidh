@@ -1,23 +1,37 @@
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { LayoutGrid, Activity, Wind, HeartPulse } from 'lucide-react';
 import api from '../api/api';
 import ProductCard from '../components/home/ProductCard';
 import ScrollToTop from '../components/layout/ScrollToTop';
 
 // Category Image Imports
-import asthmaImg from '../assets/Asthma.jpeg';
-import diabetesImg from '../assets/Diabetes.jpeg';
-import gallBladderImg from '../assets/Gall Bladder.jpeg';
-import gastricImg from '../assets/Gastric.jpeg';
-import kidneyStoneImg from '../assets/Kidney Stone.jpeg';
-import migraineImg from '../assets/Migraine.jpeg';
-import pilesImg from '../assets/Piles.jpeg';
-import thyroidImg from '../assets/Thyroid.png';
-import tuberculosisImg from '../assets/Tuberculosis.png';
-import allProductsImg from '../assets/AllProducts.png';
+import asthmaImg from '../assets/Asthma.webp';
+import diabetesImg from '../assets/Diabetes.webp';
+import gallBladderImg from '../assets/Gall Bladder.webp';
+import gastricImg from '../assets/Gastric.webp';
+import kidneyStoneImg from '../assets/Kidney Stone.webp';
+import migraineImg from '../assets/Migraine.webp';
+import pilesImg from '../assets/Piles.webp';
+import thyroidImg from '../assets/Thyroid.webp';
+import tuberculosisImg from '../assets/Tuberculosis.webp';
+import allProductsImg from '../assets/AllProducts.webp';
 
-const Shop = () => {
+const categorySlugMap = {
+    'Asthma': '/ayurvedic-asthma-treatment',
+    'Gall Bladder': '/gallbladder-stone-ayurvedic-treatment',
+    'Piles': '/ayurvedic-piles-treatment',
+    'Gastric': '/ayurvedic-gastric-treatment',
+    'Diabetes': '/ayurvedic-diabetes-treatment',
+    'Tuberculosis (TB)': '/ayurvedic-tuberculosis-support',
+    'Migraine': '/ayurvedic-migraine-treatment',
+    'Thyroid': '/ayurvedic-thyroid-treatment',
+    'Kidney Stone': '/kidney-stone-ayurvedic-treatment',
+};
+
+const Shop = ({ defaultCategory }) => {
+    const navigate = useNavigate();
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -26,15 +40,19 @@ const Shop = () => {
     const [sortBy, setSortBy] = useState('az');
     const [searchParams, setSearchParams] = useSearchParams();
 
-    // Sync selectedCategory with searchParams
+    // Sync selectedCategory with searchParams or defaultCategory prop
     useEffect(() => {
-        const cat = searchParams.get('category');
-        if (cat) {
-            setSelectedCategory(cat);
+        if (defaultCategory) {
+            setSelectedCategory(defaultCategory);
         } else {
-            setSelectedCategory('All');
+            const cat = searchParams.get('category');
+            if (cat) {
+                setSelectedCategory(cat);
+            } else {
+                setSelectedCategory('All');
+            }
         }
-    }, [searchParams]);
+    }, [searchParams, defaultCategory]);
 
     // Scroll to top when component mounts
     useEffect(() => {
@@ -59,7 +77,14 @@ const Shop = () => {
         setLoading(true);
         try {
             const params = new URLSearchParams();
-            if (selectedCategory !== 'All') params.append('category', selectedCategory);
+            // If defaultCategory is set, filter by name; otherwise use ID from search params
+            if (selectedCategory !== 'All') {
+                if (defaultCategory) {
+                    params.append('categoryName', selectedCategory);
+                } else {
+                    params.append('category', selectedCategory);
+                }
+            }
             params.append('sort', sortBy);
 
             const { data } = await api.get(`/products?${params.toString()}`);
@@ -112,7 +137,36 @@ const Shop = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 pt-16 lg:pt-24 pb-12 -mt-16">
+            <Helmet>
+                <title>{selectedCategory === 'All' ? 'Ayurvedic Products Collection' : `${selectedCategory} Ayurvedic Treatment`} | The Karan Singh Vaidh</title>
+                <meta name="description" content={`Explore our range of authentic Ayurvedic ${selectedCategory === 'All' ? 'treatments and products' : `wellness solutions for ${selectedCategory}`}. Pure and effective herbal remedies by Karan Singh Vaidh.`} />
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "BreadcrumbList",
+                        "itemListElement": [
+                            {
+                                "@type": "ListItem",
+                                "position": 1,
+                                "name": "Home",
+                                "item": "https://thekaransinghvaidh.com/"
+                            },
+                            {
+                                "@type": "ListItem",
+                                "position": 2,
+                                "name": selectedCategory === 'All' ? "Products" : selectedCategory,
+                                "item": window.location.href
+                            }
+                        ]
+                    })}
+                </script>
+            </Helmet>
             <ScrollToTop />
+            
+            {/* Hidden H1 for SEO if no visible H1 exists */}
+            <h1 className="sr-only">
+                {selectedCategory === 'All' ? 'Our Ayurvedic Collection' : `Ayurvedic ${selectedCategory} Treatment`} - The Karan Singh Vaidh
+            </h1>
             
             {/* Mobile Scrolling Marquee - Fills the gap with dynamic info */}
             <div className="lg:hidden bg-ayur-green text-white py-2.5 overflow-hidden sticky top-0 z-40 shadow-md">
@@ -154,7 +208,7 @@ const Shop = () => {
 
                     <div className="flex gap-4 overflow-x-auto no-scrollbar pb-6 px-2 snap-x scroll-smooth group">
                         <div
-                            onClick={() => setSearchParams({})}
+                            onClick={() => navigate('/ayurvedic-products')}
                             className={`flex flex-col items-center gap-3 min-w-[80px] cursor-pointer group snap-start transition-all duration-300 ${selectedCategory === 'All' ? 'scale-110' : 'scale-100'}`}
                         >
                             <div className={`w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-500 ${selectedCategory === 'All' ? 'bg-ayur-green text-white rotate-3 shadow-lg shadow-ayur-green/10' : 'bg-white border border-gray-100 text-gray-500 group-hover:border-ayur-green/10 hover:shadow-md'}`}>
@@ -165,12 +219,13 @@ const Shop = () => {
 
                         {categories?.map(cat => {
                             const config = categoryConfig[cat?.name] || { image: allProductsImg };
-                            const isSelected = selectedCategory === cat._id;
+                            const isSelected = selectedCategory === cat._id || selectedCategory === cat.name;
+                            const slug = categorySlugMap[cat.name];
 
                             return (
                                 <div
                                     key={cat._id}
-                                    onClick={() => setSearchParams({ category: cat._id })}
+                                    onClick={() => slug ? navigate(slug) : setSearchParams({ category: cat._id })}
                                     className={`flex flex-col items-center gap-3 min-w-[90px] cursor-pointer group snap-start transition-all duration-300 ${isSelected ? 'scale-110' : 'scale-100'}`}
                                 >
                                     <div className={`w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-500 border overflow-hidden ${isSelected ? `border-ayur-green/20 shadow-lg shadow-gray-100 -rotate-2` : 'border-gray-100 bg-white group-hover:border-ayur-green/10 group-hover:shadow-md'}`}>
@@ -230,7 +285,7 @@ const Shop = () => {
                             <ul className="space-y-2">
                                 <li>
                                     <button
-                                        onClick={() => setSearchParams({})}
+                                        onClick={() => navigate('/ayurvedic-products')}
                                         className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group ${selectedCategory === 'All' ? 'bg-ayur-green text-white font-bold shadow-md shadow-ayur-green/10 translate-x-1' : 'text-gray-600 hover:bg-gray-50 hover:translate-x-1'}`}
                                     >
                                         <div className={`w-8 h-8 rounded-lg transition-colors overflow-hidden ${selectedCategory === 'All' ? 'ring-2 ring-white/50' : 'bg-gray-100 group-hover:bg-gray-200'}`}>
@@ -245,12 +300,13 @@ const Shop = () => {
                                 </li>
                                 {displayedCategories?.map(cat => {
                                     const config = categoryConfig[cat?.name] || { image: allProductsImg };
-                                    const isSelected = selectedCategory === cat._id;
+                                    const isSelected = selectedCategory === cat._id || selectedCategory === cat.name;
+                                    const slug = categorySlugMap[cat.name];
 
                                     return (
                                         <li key={cat._id}>
                                             <button
-                                                onClick={() => setSearchParams({ category: cat._id })}
+                                                onClick={() => slug ? navigate(slug) : setSearchParams({ category: cat._id })}
                                                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group ${isSelected ? 'bg-ayur-green text-white font-bold shadow-md shadow-ayur-green/10 translate-x-1' : 'text-gray-600 hover:bg-gray-50 hover:translate-x-1'}`}
                                             >
                                                 <div className={`w-8 h-8 rounded-lg transition-colors overflow-hidden ${isSelected ? 'ring-2 ring-white/50' : 'bg-gray-100 group-hover:bg-gray-200'}`}>

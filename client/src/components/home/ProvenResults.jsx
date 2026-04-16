@@ -108,8 +108,7 @@ const ProvenResults = () => {
                                     <div className="relative max-w-sm mx-auto">
                                         {/* Product/Result Image in Arch */}
                                         <div className="relative rounded-t-[200px] rounded-b-lg overflow-hidden h-[450px] shadow-2xl border-4 border-white/10">
-                                            <img
-                                                src={item.image}
+                                            <img loading="lazy" src={item.image}
                                                 alt="Result"
                                                 className="w-full h-full object-cover"
                                             />

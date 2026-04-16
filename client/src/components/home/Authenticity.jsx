@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { CheckCircle, Leaf, Sparkles, Quote } from 'lucide-react';
 import { motion } from 'framer-motion';
 import ConsultationModal from './ConsultationModal';
-import expertConsultation from '../../assets/Ayurvedic Consultation Scene.png';
+import expertConsultation from '../../assets/Ayurvedic Consultation Scene.webp';
 
 const Authenticity = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -39,8 +39,7 @@ const Authenticity = () => {
                         <div className="relative group">
                             <div className="absolute inset-0 bg-ayur-green rounded-[2rem] transform rotate-3 scale-105 opacity-10 group-hover:rotate-1 transition-transform duration-500" />
                             <div className="relative rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white transition-transform duration-500 hover:scale-[1.02]">
-                                <img
-                                    src={expertConsultation}
+                                <img loading="lazy" src={expertConsultation}
                                     alt="Ayurveda Consultation"
                                     className="w-full h-auto max-h-[650px] object-contain bg-white"
                                 />

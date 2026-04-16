@@ -258,7 +258,7 @@ const ShippingPolicy = () => {
                         <p>
                             <span className="font-semibold">Phone:</span>{' '}
                             <a href="tel:8219658454" className="hover:underline">
-                                82196 58454 | 80911 34027 | 88947 72187
+                                82196 58454
                             </a>
                         </p>
                         <p className="text-sm opacity-90">Customer service hours: Monday - Saturday, 9:00 AM - 6:00 PM IST</p>

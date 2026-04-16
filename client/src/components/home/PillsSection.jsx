@@ -45,7 +45,7 @@ const PillsSection = () => {
                         </div>
 
                         <div className="text-center mt-12">
-                            <Link to="/shop" className="inline-block border-b-2 border-ayur-gold text-ayur-green hover:text-ayur-gold font-bold transition-all pb-1 uppercase text-sm tracking-wider">
+                            <Link to="/ayurvedic-products" className="inline-block border-b-2 border-ayur-gold text-ayur-green hover:text-ayur-gold font-bold transition-all pb-1 uppercase text-sm tracking-wider">
                                 View All Products
                             </Link>
                         </div>

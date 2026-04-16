@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Instagram, Youtube, Mail, Phone, MapPin, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaFacebookSquare } from 'react-icons/fa';
-import logo from '../../assets/thekaransinghvaidh-logo.png';
+import logo from '../../assets/thekaransinghvaidh-logo.webp';
 
 const Footer = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -18,8 +18,7 @@ const Footer = () => {
                         {/* Logo */}
                         <div className="mb-6">
                             <div className="bg-white/95 px-5 py-3 inline-block rounded-lg shadow-lg">
-                                <img
-                                    src={logo}
+                                <img loading="lazy" src={logo}
                                     alt="The Karan Singh  Vaidh - Ancient Ayurvedas"
                                     className="h-14 md:h-16 object-contain"
                                 />
@@ -104,7 +103,7 @@ const Footer = () => {
                             {/* Contact Info */}
                             <div className="space-y-3 pt-3 border-t border-[#d4af37]/30">
                                 <a
-                                    href="tel:8894772187"
+                                    href="tel:8219658454"
                                     className="flex items-center gap-3 text-base text-gray-100 hover:text-[#d4af37] transition-colors group"
                                 >
                                     <Phone size={20} className="text-[#d4af37] group-hover:scale-110 transition-transform" />
@@ -136,13 +135,13 @@ const Footer = () => {
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/shop" className="group flex items-center text-gray-300 hover:text-[#d4af37] transition-all duration-300 font-medium">
+                                <Link to="/ayurvedic-products" className="group flex items-center text-gray-300 hover:text-[#d4af37] transition-all duration-300 font-medium">
                                     <span className="w-0 group-hover:w-4 h-[1px] bg-[#d4af37] mr-0 group-hover:mr-3 transition-all duration-300"></span>
                                     Shop All
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/about" className="group flex items-center text-gray-300 hover:text-[#d4af37] transition-all duration-300 font-medium">
+                                <Link to="/about-ayurvedic-doctor-in-solan" className="group flex items-center text-gray-300 hover:text-[#d4af37] transition-all duration-300 font-medium">
                                     <span className="w-0 group-hover:w-4 h-[1px] bg-[#d4af37] mr-0 group-hover:mr-3 transition-all duration-300"></span>
                                     About Us
                                 </Link>
@@ -274,43 +273,43 @@ const Footer = () => {
                             </h5>
                             <div className="flex items-center gap-3">
                                 <div className="bg-white p-2 rounded-lg h-12 w-28 flex items-center justify-center shadow-md transition-transform hover:scale-105">
-                                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon" className="max-h-8" />
+                                    <img loading="lazy" src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon" className="max-h-8" />
                                 </div>
                                 <div className="bg-white p-2 rounded-lg h-12 w-28 flex items-center justify-center shadow-md transition-transform hover:scale-105">
-                                    <img src="https://kapiva-in-nextjs.pages.dev/assets/images/footer/top_strip/flipkart.png?webp" alt="Flipkart" className="max-h-8" />
+                                    <img loading="lazy" src="https://kapiva-in-nextjs.pages.dev/assets/images/footer/top_strip/flipkart.png?webp" alt="Flipkart" className="max-h-8" />
                                 </div>
                                 <div className="bg-white p-2 rounded-lg h-12 w-28 flex items-center justify-center shadow-md transition-transform hover:scale-105">
-                                    <img src="https://static.cdnlogo.com/logos/i/39/indiamart.svg" alt="IndiaMart" className="max-h-6 object-contain" />
+                                    <img loading="lazy" src="https://static.cdnlogo.com/logos/i/39/indiamart.svg" alt="IndiaMart" className="max-h-6 object-contain" />
                                 </div>
                             </div>
                         </div>
 
-                                            <div className="space-y-4">
+                        <div className="space-y-4">
                             <h5 className="text-xs font-bold text-[#d4af37] uppercase tracking-[0.2em] mb-4">
                                 We Accept:
                             </h5>
                             <div className="flex items-center gap-2">
                                 <div className="bg-white px-2 py-2 rounded-lg h-11 min-w-[80px] flex items-center justify-center shadow-md transition-transform hover:scale-105">
-                                    <img src="https://kapiva-in-nextjs.pages.dev/assets/images/footer/bottom_strip/amazon_pay.png?webp" alt="Amazon Pay" className="max-h-7 object-contain" />
+                                    <img loading="lazy" src="https://kapiva-in-nextjs.pages.dev/assets/images/footer/bottom_strip/amazon_pay.png?webp" alt="Amazon Pay" className="max-h-7 object-contain" />
                                 </div>
                                 <div className="bg-white px-2 py-2 rounded-lg h-11 min-w-[80px] flex items-center justify-center shadow-md transition-transform hover:scale-105">
-                                    <img src="https://kapiva-in-nextjs.pages.dev/assets/images/footer/bottom_strip/bhim_upi.png?webp" alt="UPI" className="max-h-7 object-contain" />
+                                    <img loading="lazy" src="https://kapiva-in-nextjs.pages.dev/assets/images/footer/bottom_strip/bhim_upi.png?webp" alt="UPI" className="max-h-7 object-contain" />
                                 </div>
                                 <div className="bg-[#f0f0f0] rounded-full h-12 w-12 flex flex-col items-center justify-center text-center border border-gray-300 shadow-inner group flex-shrink-0">
                                     <span className="text-[6px] text-gray-500 leading-tight uppercase font-bold">Pay Online</span>
                                     <span className="text-[9px] font-black text-gray-800 leading-none">OR COD</span>
                                 </div>
                                 <div className="bg-white px-2 py-2 rounded-lg h-11 min-w-[80px] flex items-center justify-center shadow-md transition-transform hover:scale-105">
-                                    <img src="https://kapiva-in-nextjs.pages.dev/assets/images/footer/bottom_strip/google_pay.png?webp  " alt="GPay" className="max-h-7 object-contain" />
+                                    <img loading="lazy" src="https://kapiva-in-nextjs.pages.dev/assets/images/footer/bottom_strip/google_pay.png?webp  " alt="GPay" className="max-h-7 object-contain" />
                                 </div>
                                 <div className="bg-white px-2 py-2 rounded-lg h-11 min-w-[80px] flex items-center justify-center shadow-md transition-transform hover:scale-105">
-                                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" className="max-h-8 object-contain" />
+                                    <img loading="lazy" src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" className="max-h-8 object-contain" />
                                 </div>
                                 <div className="bg-white px-2 py-2 rounded-lg h-11 min-w-[80px] flex items-center justify-center shadow-md transition-transform hover:scale-105">
-                                    <img src="https://upload.wikimedia.org/wikipedia/commons/d/d1/RuPay.svg" alt="RuPay" className="max-h-7 object-contain" />
+                                    <img loading="lazy" src="https://upload.wikimedia.org/wikipedia/commons/d/d1/RuPay.svg" alt="RuPay" className="max-h-7 object-contain" />
                                 </div>
                                 <div className="bg-white px-2 py-2 rounded-lg h-11 min-w-[80px] flex items-center justify-center shadow-md transition-transform hover:scale-105">
-                                    <img src="https://kapiva-in-nextjs.pages.dev/assets/images/footer/bottom_strip/visa.png?webp" alt="Visa" className="max-h-7 object-contain" />
+                                    <img loading="lazy" src="https://kapiva-in-nextjs.pages.dev/assets/images/footer/bottom_strip/visa.png?webp" alt="Visa" className="max-h-7 object-contain" />
                                 </div>
                             </div>
                         </div>
