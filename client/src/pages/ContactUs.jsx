@@ -228,7 +228,7 @@ const ContactUs = () => {
                         {/* Google Map */}
                         <div id="map" className="bg-white rounded-[2.5rem] overflow-hidden border border-gray-100 shadow-lg">
                             <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3423.6154436930697!2d77.0950683!3d30.8974171!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390f86ae3324e9c3%3A0x2c28814c987a2667!2sRadha%20Soami%20Satsang%20Beas%2C%20Solan!5e0!3m2!1sen!2sin!4v1777901564367!5m2!1sen!2sin"
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3423.66713793062!2d77.09296789999999!3d30.8959714!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390f89cea1a75c47%3A0x1a68eda57c0d4c02!2sKARAN%20SINGH%20VAIDH!5e0!3m2!1sen!2sin!4v1777959729563!5m2!1sen!2sin"
                                 width="100%"
                                 height="350"
                                 style={{ border: 0 }}
