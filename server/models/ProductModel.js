@@ -90,10 +90,14 @@ const productSchema = mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    isWellness: {
-        type: Boolean,
-        default: false,
-    }
+    metaTitle: {
+        type: String,
+        required: false,
+    },
+    metaDescription: {
+        type: String,
+        required: false,
+    },
 }, {
     timestamps: true,
 });

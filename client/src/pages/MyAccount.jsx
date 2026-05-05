@@ -3,6 +3,7 @@ import { User, Package, LogOut, ChevronRight, ShieldCheck, Activity, Calendar, A
 import { Link, useNavigate } from 'react-router-dom';
 import api, { getAssetUrl } from '../api/api';
 import { AuthContext } from '../context/AuthContext';
+import SEO from '../components/seo/SEO';
 
 const MyAccount = () => {
     const { userInfo, logout, loading } = useContext(AuthContext);
@@ -67,6 +68,7 @@ const MyAccount = () => {
 
     return (
         <div className="min-h-screen bg-[#FDFCFB] pt-28 pb-20 px-4 md:px-8">
+            <SEO title="My Account | The Karan Singh Vaidh" />
             <div className="container mx-auto max-w-6xl">
                 {/* Header Section with Glassmorphism */}
                 <div className="relative mb-12 p-8 md:p-12 rounded-[3rem] overflow-hidden bg-white shadow-2xl shadow-gray-200/50 border border-white/20">

@@ -4,6 +4,7 @@ import api, { getAssetUrl } from '../api/api';
 import { CartContext } from '../context/CartContext';
 import { AuthContext } from '../context/AuthContext';
 import { ArrowRight, Lock, Loader2, CreditCard, Banknote } from 'lucide-react';
+import SEO from '../components/seo/SEO';
 
 const CheckoutPage = () => {
     const { cartItems, getCartTotal, clearCart } = useContext(CartContext);
@@ -34,6 +35,19 @@ const CheckoutPage = () => {
             }));
         }
     }, [userInfo, authLoading, navigate]);
+
+    // Track InitiateCheckout
+    useEffect(() => {
+        if (cartItems.length > 0 && window.fbq) {
+            window.fbq('track', 'InitiateCheckout', {
+                content_ids: cartItems.map(item => item.product),
+                content_type: 'product',
+                value: getCartTotal(),
+                currency: 'INR',
+                num_items: cartItems.reduce((acc, item) => acc + item.qty, 0)
+            });
+        }
+    }, []); // Only once on mount
 
     // Load Razorpay Script
     useEffect(() => {
@@ -188,6 +202,7 @@ const CheckoutPage = () => {
 
     return (
         <div className="bg-gray-50 min-h-screen py-10">
+            <SEO title="Checkout | The Karan Singh Vaidh" />
             <div className="container mx-auto px-4 max-w-4xl">
                 <h1 className="text-3xl font-bold text-gray-800 mb-8 font-serif">Checkout</h1>
 

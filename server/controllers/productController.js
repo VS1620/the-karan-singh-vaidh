@@ -117,7 +117,8 @@ const createProduct = asyncHandler(async (req, res) => {
             name, image, images, category, countInStock,
             shortDescription, fullDescription, packs,
             discount, isBestSeller, isWellness,
-            ingredients, usage, benefits
+            ingredients, usage, benefits,
+            metaTitle, metaDescription
         } = req.body;
 
         // Validation: Must have at least one pack with sellingPrice
@@ -189,6 +190,8 @@ const createProduct = asyncHandler(async (req, res) => {
         product.ingredients = ingredients;
         product.usage = usage;
         product.benefits = benefits;
+        product.metaTitle = metaTitle;
+        product.metaDescription = metaDescription;
     }
 
     const createdProduct = await product.save();
@@ -214,7 +217,9 @@ const updateProduct = asyncHandler(async (req, res) => {
         isWellness,
         ingredients,
         usage,
-        benefits
+        benefits,
+        metaTitle,
+        metaDescription
     } = req.body;
 
     const product = await Product.findById(req.params.id);
@@ -277,6 +282,8 @@ const updateProduct = asyncHandler(async (req, res) => {
         product.ingredients = ingredients !== undefined ? ingredients : product.ingredients;
         product.usage = usage !== undefined ? usage : product.usage;
         product.benefits = benefits !== undefined ? benefits : product.benefits;
+        product.metaTitle = metaTitle !== undefined ? metaTitle : product.metaTitle;
+        product.metaDescription = metaDescription !== undefined ? metaDescription : product.metaDescription;
 
         // Required for Mongoose to detect changes inside Mixed-type arrays (medicines)
         product.markModified('packs');

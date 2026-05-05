@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../components/seo/SEO';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import ProductCard from '../components/home/ProductCard';
 import api, { getAssetUrl } from '../api/api';
@@ -62,9 +62,36 @@ const ProductDetails = () => {
         fetchProduct();
     }, [id]);
 
+    // Track ViewContent when product is loaded
+    useEffect(() => {
+        if (product && window.fbq) {
+            window.fbq('track', 'ViewContent', {
+                content_name: product.name,
+                content_category: product.category?.name,
+                content_ids: [product._id || product.id],
+                content_type: 'product',
+                value: product.packs?.[selectedPackIndex]?.sellingPrice || 0,
+                currency: 'INR'
+            });
+        }
+    }, [product, selectedPackIndex]);
+
     const handleAddToCart = () => {
         if (!product || !product.packs || product.packs.length === 0) return;
         const pack = product.packs[selectedPackIndex];
+        
+        // Track AddToCart
+        if (window.fbq) {
+            window.fbq('track', 'AddToCart', {
+                content_name: product.name,
+                content_category: product.category?.name,
+                content_ids: [product._id || product.id],
+                content_type: 'product',
+                value: pack.sellingPrice * qty,
+                currency: 'INR'
+            });
+        }
+
         addToCart(product, pack, qty);
         navigate('/cart');
     };
@@ -104,63 +131,179 @@ const ProductDetails = () => {
 
     return (
         <div className="bg-white min-h-screen pt-16 lg:pt-20 pb-20 lg:pb-12 font-sans">
-            <Helmet>
-                <title>{`${product.name} | Ayurvedic Treatment & Medicine | The Karan Singh Vaidh`}</title>
-                <meta name="description" content={product.shortDescription || `Buy ${product.name} online. Authentic Ayurvedic remedy by Karan Singh Vaidh. Effective results, 100% natural ingredients.`} />
-                <script type="application/ld+json">
-                    {JSON.stringify({
-                        "@context": "https://schema.org/",
-                        "@type": "Product",
-                        "name": product.name,
-                        "image": [getAssetUrl(product.image)],
-                        "description": product.shortDescription,
-                        "sku": product._id,
-                        "brand": {
-                            "@type": "Brand",
-                            "name": "The Karan Singh Vaidh"
-                        },
-                        "offers": {
-                            "@type": "Offer",
-                            "url": window.location.href,
-                            "priceCurrency": "INR",
-                            "price": currentPack?.sellingPrice,
-                            "itemCondition": "https://schema.org/NewCondition",
-                            "availability": "https://schema.org/InStock"
-                        },
-                        "aggregateRating": {
-                            "@type": "AggregateRating",
-                            "ratingValue": "4.9",
-                            "reviewCount": "2500"
-                        }
-                    })}
-                </script>
+            <SEO 
+                title={product.metaTitle || `${product.name} | Ayurvedic Treatment & Medicine`}
+                description={product.metaDescription || product.shortDescription || `Buy ${product.name} online. Authentic Ayurvedic remedy by Karan Singh Vaidh. Effective results, 100% natural ingredients.`}
+                url={`/product/${product.slug || product._id || product.id || id}`}
+                image={getAssetUrl(product.image)}
+            >
                 <script type="application/ld+json">
                     {JSON.stringify({
                         "@context": "https://schema.org",
-                        "@type": "BreadcrumbList",
-                        "itemListElement": [
+                        "@graph": [
                             {
-                                "@type": "ListItem",
-                                "position": 1,
-                                "name": "Home",
-                                "item": "https://thekaransinghvaidh.com/"
+                                "@type": "Organization",
+                                "@id": "https://thekaransinghvaidh.com/#organization",
+                                "name": "Karan Singh Vaidh",
+                                "url": "https://thekaransinghvaidh.com/",
+                                "logo": "https://thekaransinghvaidh.com/thekaransinghvaidh-logo.webp",
+                                "sameAs": [
+                                    "https://www.youtube.com/c/karansinghvaidhhp",
+                                    "https://www.facebook.com/AncientAyurvedas.org/",
+                                    "https://www.instagram.com/karan_singh_vaidh/",
+                                    "https://www.linkedin.com/in/karan-singh-vaidh-hp-56a903204?originalSubdomain=in"
+                                ],
+                                "contactPoint": {
+                                    "@type": "ContactPoint",
+                                    "telephone": "+91-8219658454",
+                                    "contactType": "Customer Support",
+                                    "areaServed": "IN",
+                                    "availableLanguage": ["Hindi", "English"]
+                                }
                             },
                             {
-                                "@type": "ListItem",
-                                "position": 2,
-                                "name": "Products",
-                                "item": "https://thekaransinghvaidh.com/ayurvedic-products"
+                                "@type": "MedicalBusiness",
+                                "@id": "https://thekaransinghvaidh.com/#localbusiness",
+                                "name": "Karan Singh Vaidh Ayurvedic Hospital",
+                                "image": "https://thekaransinghvaidh.com/thekaransinghvaidh-logo.webp",
+                                "address": {
+                                    "@type": "PostalAddress",
+                                    "streetAddress": "Radhasoami Satsang Ghar Road, Rebuan, Deoghat, Anji",
+                                    "addressLocality": "Solan",
+                                    "addressRegion": "Himachal Pradesh",
+                                    "postalCode": "173211",
+                                    "addressCountry": "IN"
+                                },
+                                "telephone": "+91-8219658454",
+                                "openingHours": "Mo-Su 10:00-17:00",
+                                "priceRange": "₹₹",
+                                "areaServed": "India"
                             },
                             {
-                                "@type": "ListItem",
-                                "position": 3,
+                                "@type": "Person",
+                                "@id": "https://thekaransinghvaidh.com/#doctor",
+                                "name": "Dr. Karan Singh Vaidh",
+                                "jobTitle": "Ayurvedic Doctor",
+                                "worksFor": {
+                                    "@id": "https://thekaransinghvaidh.com/#organization"
+                                },
+                                "description": "Experienced Ayurvedic doctor specializing in chronic disease treatment using natural herbal formulations.",
+                                "address": {
+                                    "@type": "PostalAddress",
+                                    "addressLocality": "Solan",
+                                    "addressRegion": "Himachal Pradesh",
+                                    "addressCountry": "India"
+                                }
+                            },
+                            {
+                                "@type": "WebSite",
+                                "@id": "https://thekaransinghvaidh.com/#website",
+                                "url": "https://thekaransinghvaidh.com/",
+                                "name": "Karan Singh Vaidh Ayurveda",
+                                "publisher": {
+                                    "@id": "https://thekaransinghvaidh.com/#organization"
+                                },
+                                "potentialAction": {
+                                    "@type": "SearchAction",
+                                    "target": "https://thekaransinghvaidh.com/ayurvedic-products?s={search_term_string}",
+                                    "query-input": "required name=search_term_string"
+                                }
+                            },
+                            {
+                                "@type": "WebPage",
+                                "@id": "https://thekaransinghvaidh.com/#webpage",
+                                "url": window.location.href,
+                                "name": product.metaTitle || product.name,
+                                "isPartOf": {
+                                    "@id": "https://thekaransinghvaidh.com/#website"
+                                },
+                                "about": {
+                                    "@id": "https://thekaransinghvaidh.com/#organization"
+                                },
+                                "primaryImageOfPage": {
+                                    "@type": "ImageObject",
+                                    "url": "https://thekaransinghvaidh.com/banner1-web.webp"
+                                }
+                            },
+                            {
+                                "@type": "FAQPage",
+                                "@id": "https://thekaransinghvaidh.com/#faq",
+                                "mainEntity": [
+                                    {
+                                        "@type": "Question",
+                                        "name": "Is Ayurvedic treatment safe?",
+                                        "acceptedAnswer": {
+                                            "@type": "Answer",
+                                            "text": "Yes, Ayurvedic treatments use natural herbs and are generally safe when used under expert guidance."
+                                        }
+                                    },
+                                    {
+                                        "@type": "Question",
+                                        "name": "How long does it take to see results?",
+                                        "acceptedAnswer": {
+                                            "@type": "Answer",
+                                            "text": "Most users start noticing improvements within 15 to 30 days depending on the condition and regular usage."
+                                        }
+                                    },
+                                    {
+                                        "@type": "Question",
+                                        "name": "Do these treatments have side effects?",
+                                        "acceptedAnswer": {
+                                            "@type": "Answer",
+                                            "text": "These herbal formulations are designed to be natural and safe, with minimal side effects when used as directed."
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "@type": "Product",
                                 "name": product.name,
-                                "item": window.location.href
+                                "image": getAssetUrl(product.image),
+                                "description": product.shortDescription,
+                                "brand": {
+                                    "@type": "Brand",
+                                    "name": "Karan Singh Vaidh"
+                                },
+                                "offers": {
+                                    "@type": "Offer",
+                                    "priceCurrency": "INR",
+                                    "price": currentPack?.sellingPrice || 0,
+                                    "availability": "https://schema.org/InStock",
+                                    "url": window.location.href
+                                },
+                                "aggregateRating": {
+                                    "@type": "AggregateRating",
+                                    "ratingValue": "4.8",
+                                    "reviewCount": "300"
+                                }
+                            },
+                            {
+                                "@type": "BreadcrumbList",
+                                "itemListElement": [
+                                    {
+                                        "@type": "ListItem",
+                                        "position": 1,
+                                        "name": "Home",
+                                        "item": "https://thekaransinghvaidh.com/"
+                                    },
+                                    {
+                                        "@type": "ListItem",
+                                        "position": 2,
+                                        "name": "Products",
+                                        "item": "https://thekaransinghvaidh.com/ayurvedic-products"
+                                    },
+                                    {
+                                        "@type": "ListItem",
+                                        "position": 3,
+                                        "name": product.name,
+                                        "item": window.location.href
+                                    }
+                                ]
                             }
                         ]
                     })}
                 </script>
-            </Helmet>
+            </SEO>
             <div className="container mx-auto px-4 md:px-4 max-w-7xl">
                 {/* SEO Breadcrumb UI */}
                 <nav className="flex items-center gap-2 text-[10px] md:text-xs font-bold uppercase tracking-widest text-gray-400 mb-6 py-2 overflow-x-auto no-scrollbar whitespace-nowrap">

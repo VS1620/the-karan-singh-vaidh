@@ -60,7 +60,14 @@ const Footer = () => {
                                             </h4>
                                             <div className="text-sm text-gray-100 leading-relaxed space-y-1">
                                                 <p className="font-semibold text-white">Karan Singh Vaidh Ayurvedic Hospital – Excellence in Patient Care</p>
-                                                <p>📍 Anji, Radhasoami Satsang Road, Reboun P.O., Solan, Himachal Pradesh – 173211</p>
+                                                <a 
+                                                    href="https://www.google.com/maps/place/Radha+Soami+Satsang+Beas,+Solan/@30.897417,77.095068,17z/data=!3m1!4b1!4m6!3m5!1s0x390f86ae3324e9c3:0x2c28814c987a2667!8m2!3d30.897417!4d77.095068!16s%2Fg%2F1tdmpx4_" 
+                                                    target="_blank" 
+                                                    rel="noopener noreferrer"
+                                                    className="hover:text-[#d4af37] transition-colors flex items-start gap-1"
+                                                >
+                                                    <span>📍 Anji, Radhasoami Satsang Road, Reboun P.O., Solan, Himachal Pradesh – 173211</span>
+                                                </a>
                                             </div>
                                         </div>
 

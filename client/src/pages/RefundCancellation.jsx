@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { RotateCcw, CheckCircle2, XCircle, AlertCircle, Clock } from 'lucide-react';
+import SEO from '../components/seo/SEO';
 
 const RefundCancellation = () => {
     useEffect(() => {
@@ -8,6 +9,10 @@ const RefundCancellation = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white pt-24 pb-16">
+            <SEO 
+                title="Refund & Cancellation Policy | The Karan Singh Vaidh"
+                description="Understand our policies regarding order cancellations, returns, and refunds at The Karan Singh Vaidh."
+            />
             <div className="max-w-5xl mx-auto px-6 md:px-12">
                 {/* Header */}
                 <div className="text-center mb-16">

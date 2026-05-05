@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../components/seo/SEO';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { LayoutGrid, Activity, Wind, HeartPulse } from 'lucide-react';
 import api from '../api/api';
@@ -17,6 +17,95 @@ import pilesImg from '../assets/Piles.webp';
 import thyroidImg from '../assets/Thyroid.webp';
 import tuberculosisImg from '../assets/Tuberculosis.webp';
 import allProductsImg from '../assets/AllProducts.webp';
+
+const seoData = {
+    'All': {
+        '/ayurvedic-products': {
+            title: 'Buy Ayurvedic Products in Solan | 100% Natural & Trusted – Karan Singh Vaidh',
+            description: 'Shop 100% natural Ayurvedic medicines in Solan by Karan Singh Vaidh (23+ yrs experience). Effective remedies for diabetes, piles, kidney stones & more. Order now for safe & herbal treatment.',
+            keywords: 'Ayurvedic Products in Solan',
+            h1: 'Buy 100% Natural Ayurvedic Products in Solan for Safe Healing',
+            url: '/ayurvedic-products'
+        },
+        '/ayurvedic-treatment-products': {
+            title: 'Ayurvedic Disease Wise Products | Herbal Health Care',
+            description: 'Explore Ayurvedic Disease Wise Products for natural healing. Target root causes & improve health with safe, effective herbal remedies for every condition.',
+            keywords: 'Ayurvedic Disease Wise Products',
+            h1: 'Ayurvedic Disease Wise Products for Effective Treatment',
+            url: '/ayurvedic-treatment-products'
+        },
+        default: {
+            title: 'Buy Ayurvedic Products in Solan | 100% Natural & Trusted – Karan Singh Vaidh',
+            description: 'Shop 100% natural Ayurvedic medicines in Solan by Karan Singh Vaidh (23+ yrs experience). Effective remedies for diabetes, piles, kidney stones & more. Order now for safe & herbal treatment.',
+            keywords: 'Ayurvedic Products in Solan',
+            h1: 'Buy 100% Natural Ayurvedic Products in Solan for Safe Healing',
+            url: '/ayurvedic-products'
+        }
+    },
+    'Asthma': {
+        title: 'Ayurvedic Asthma Treatment in Solan | Herbal & Safe Solutions',
+        description: 'Get effective Ayurvedic Asthma Treatment in Solan with natural herbal remedies. Improve breathing, reduce symptoms & boost immunity with safe, side-effect-free care.',
+        keywords: 'Ayurvedic Asthma Treatment in Solan',
+        h1: 'Best Ayurvedic Asthma Treatment in Solan with Safe Herbal Remedies',
+        url: '/ayurvedic-asthma-treatment'
+    },
+    'Gall Bladder': {
+        title: 'Best Gallbladder Stone Treatment in Solan | Ayurvedic Care',
+        description: 'Get effective Gallbladder Stone Treatment in Solan with Ayurvedic care. Natural remedies help dissolve stones, reduce pain & improve digestion without surgery.',
+        keywords: 'Gallbladder Stone Treatment in Solan',
+        h1: 'Gallbladder Stone Treatment in Solan – Ayurvedic Care',
+        url: '/gallbladder-stone-ayurvedic-treatment'
+    },
+    'Piles': {
+        title: 'Best Piles Treatment in Solan | Natural & Affordable Care',
+        description: 'Get effective Piles Treatment in Solan with Ayurvedic care. Reduce pain, swelling & bleeding naturally with safe, affordable remedies for long-term relief.',
+        keywords: 'Piles Treatment in Solan',
+        h1: 'Best Piles Treatment in Solan with Safe Ayurvedic Care',
+        url: '/ayurvedic-piles-treatment'
+    },
+    'Gastric': {
+        title: 'Best Gastric Treatment in Solan | Natural Ayurvedic Care',
+        description: 'Get expert Gastric Treatment in Solan with Ayurvedic care. Relieve acidity, gas & indigestion naturally with safe, effective and long-lasting solutions.',
+        keywords: 'Gastric Treatment in Solan',
+        h1: 'Gastric Treatment in Solan for Acidity & Digestive Issues',
+        url: '/ayurvedic-gastric-treatment'
+    },
+    'Diabetes': {
+        title: 'Best Diabetes Treatment in Solan | Natural Ayurvedic Care',
+        description: 'Get effective Diabetes Treatment in Solan with Ayurvedic care. Control blood sugar naturally, improve insulin function & achieve long-term health safely.',
+        keywords: 'Diabetes Treatment in Solan',
+        h1: 'Effective Diabetes Treatment in Solan for Long-Term Control',
+        url: '/ayurvedic-diabetes-treatment'
+    },
+    'Tuberculosis (TB)': {
+        title: 'Tuberculosis Support in Solan | Safe Ayurvedic Treatment',
+        description: 'Find trusted Tuberculosis Treatment Support in Solan. Ayurvedic care helps reduce symptoms, improve strength & support faster, safer recovery naturally.',
+        keywords: 'Tuberculosis Treatment Support in Solan',
+        h1: 'Tuberculosis Treatment Support in Solan for Faster Recovery',
+        url: '/ayurvedic-tuberculosis-support'
+    },
+    'Migraine': {
+        title: 'Best Migraine Treatment in Solan | Natural Ayurvedic Care',
+        description: 'Get effective Migraine Treatment in Solan with Ayurvedic care. Reduce headache frequency, relieve pain & achieve long-term relief naturally without side effects.',
+        keywords: 'Migraine Treatment in Solan',
+        h1: 'Migraine Treatment in Solan for Chronic Headache Relief',
+        url: '/ayurvedic-migraine-treatment'
+    },
+    'Thyroid': {
+        title: 'Best Thyroid Treatment in Solan | Ayurvedic Care & Relief',
+        description: 'Get effective Thyroid Treatment in Solan with Ayurvedic care. Balance hormones naturally, manage symptoms & improve overall health with safe solutions.',
+        keywords: 'Thyroid Treatment in Solan',
+        h1: 'Thyroid Treatment in Solan for Safe Hormone Control',
+        url: '/ayurvedic-thyroid-treatment'
+    },
+    'Kidney Stone': {
+        title: 'Kidney Stone Treatment in Solan for Pain & Stone Relief',
+        description: 'Find trusted Kidney Stone Treatment in Solan. Ayurvedic solutions help reduce pain, dissolve stones & improve kidney health naturally without surgery.',
+        keywords: 'Kidney Stone Treatment in Solan',
+        h1: 'Natural Kidney Stone Treatment in Solan Without Surgery',
+        url: '/kidney-stone-ayurvedic-treatment'
+    }
+};
 
 const categorySlugMap = {
     'Asthma': '/ayurvedic-asthma-treatment',
@@ -42,17 +131,38 @@ const Shop = ({ defaultCategory }) => {
 
     // Sync selectedCategory with searchParams or defaultCategory prop
     useEffect(() => {
+        const catId = searchParams.get('category');
+        
+        // Old Category ID to New SEO URL Mapping
+        const categoryIdToSlugMap = {
+            '696fa8160b6f6dc6db28bd16': '/ayurvedic-asthma-treatment',
+            '69739e5df6c84d69035b1fec': '/gallbladder-stone-ayurvedic-treatment',
+            '69739e67f6c84d69035b1ff1': '/ayurvedic-piles-treatment',
+            '69739e6df6c84d69035b1ff6': '/ayurvedic-gastric-treatment',
+            '69739e78f6c84d69035b1ffd': '/ayurvedic-diabetes-treatment',
+            '69739e7df6c84d69035b2002': '/ayurvedic-tuberculosis-support',
+            '69739e81f6c84d69035b2007': '/ayurvedic-migraine-treatment',
+            '69739e86f6c84d69035b200c': '/ayurvedic-thyroid-treatment',
+            '69760bf4f06a3c1381aab1a0': '/kidney-stone-ayurvedic-treatment',
+            '69761f81bd94a7bc32beb998': '/ayurvedic-treatment-products',
+        };
+
+        // If the URL has an old category ID, redirect to the new SEO URL
+        if (catId && categoryIdToSlugMap[catId]) {
+            navigate(categoryIdToSlugMap[catId], { replace: true });
+            return;
+        }
+
         if (defaultCategory) {
             setSelectedCategory(defaultCategory);
         } else {
-            const cat = searchParams.get('category');
-            if (cat) {
-                setSelectedCategory(cat);
+            if (catId) {
+                setSelectedCategory(catId);
             } else {
                 setSelectedCategory('All');
             }
         }
-    }, [searchParams, defaultCategory]);
+    }, [searchParams, defaultCategory, navigate]);
 
     // Scroll to top when component mounts
     useEffect(() => {
@@ -90,7 +200,6 @@ const Shop = ({ defaultCategory }) => {
             const { data } = await api.get(`/products?${params.toString()}`);
             
             // Client-side sorting as a foolproof fallback
-            // This ensures products are correctly sorted even if backend doesn't apply it
             let sortedData = Array.isArray(data) ? [...data] : [];
             
             if (sortBy === 'az') {
@@ -119,6 +228,11 @@ const Shop = ({ defaultCategory }) => {
         }
     };
 
+    const currentPath = window.location.pathname;
+    const currentSEO = selectedCategory === 'All' 
+        ? (seoData['All'][currentPath] || seoData['All'].default)
+        : (seoData[selectedCategory] || seoData['All'].default);
+
     // Category Configuration for Visuals
     const categoryConfig = {
         'Asthma': { image: asthmaImg, color: 'bg-blue-100 text-blue-600', label: 'Asthma' },
@@ -137,9 +251,12 @@ const Shop = ({ defaultCategory }) => {
 
     return (
         <div className="min-h-screen bg-gray-50 pt-16 lg:pt-24 pb-12 -mt-16">
-            <Helmet>
-                <title>{selectedCategory === 'All' ? 'Ayurvedic Products Collection' : `${selectedCategory} Ayurvedic Treatment`} | The Karan Singh Vaidh</title>
-                <meta name="description" content={`Explore our range of authentic Ayurvedic ${selectedCategory === 'All' ? 'treatments and products' : `wellness solutions for ${selectedCategory}`}. Pure and effective herbal remedies by Karan Singh Vaidh.`} />
+            <SEO 
+                title={currentSEO.title}
+                description={currentSEO.description}
+                keywords={currentSEO.keywords}
+                url={currentSEO.url}
+            >
                 <script type="application/ld+json">
                     {JSON.stringify({
                         "@context": "https://schema.org",
@@ -160,12 +277,12 @@ const Shop = ({ defaultCategory }) => {
                         ]
                     })}
                 </script>
-            </Helmet>
+            </SEO>
             <ScrollToTop />
             
             {/* Hidden H1 for SEO if no visible H1 exists */}
             <h1 className="sr-only">
-                {selectedCategory === 'All' ? 'Our Ayurvedic Collection' : `Ayurvedic ${selectedCategory} Treatment`} - The Karan Singh Vaidh
+                {currentSEO.h1}
             </h1>
             
             {/* Mobile Scrolling Marquee - Fills the gap with dynamic info */}

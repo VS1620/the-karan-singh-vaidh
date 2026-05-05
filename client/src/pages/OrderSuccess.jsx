@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import api, { getAssetUrl } from '../api/api';
 import { CheckCircle, Truck, CreditCard, Headphones, Download, ChevronRight } from 'lucide-react';
+import SEO from '../components/seo/SEO';
 
 const OrderSuccess = () => {
     const { id } = useParams();
@@ -23,6 +24,19 @@ const OrderSuccess = () => {
 
         fetchOrder();
     }, [id]);
+
+    // Track Purchase event when order is loaded
+    useEffect(() => {
+        if (order && window.fbq) {
+            window.fbq('track', 'Purchase', {
+                value: order.totalPrice,
+                currency: 'INR',
+                content_ids: order.orderItems.map(item => item.product),
+                content_type: 'product',
+                num_items: order.orderItems.reduce((acc, item) => acc + item.qty, 0)
+            });
+        }
+    }, [order]);
 
     if (loading) return (
         <div className="flex flex-col justify-center items-center min-h-[60vh] gap-4">
@@ -57,6 +71,7 @@ const OrderSuccess = () => {
 
     return (
         <div className="min-h-screen bg-gray-50/50 pb-20 font-sans">
+            <SEO title="Order Success | The Karan Singh Vaidh" />
             {/* Breadcrumb */}
             <div className="bg-white border-b py-4">
                 <div className="container mx-auto px-4 max-w-5xl flex items-center gap-2 text-sm text-gray-500">

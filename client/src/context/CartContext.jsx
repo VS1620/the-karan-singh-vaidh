@@ -21,12 +21,12 @@ export const CartProvider = ({ children }) => {
     const addToCart = (product, selectedPack, qty = 1) => {
         setCartItems((prevItems) => {
             // Check if item with same product ID AND same pack name exists
-            const existItem = prevItems.find((x) => x.product === product._id && x.pack.name === selectedPack.name);
+            const existItem = prevItems.find((x) => x.product === product._id && x.pack?.name === selectedPack?.name);
 
             if (existItem) {
                 // Update quantity
                 return prevItems.map((x) =>
-                    x.product === product._id && x.pack.name === selectedPack.name
+                    x.product === product._id && x.pack?.name === selectedPack?.name
                         ? { ...x, qty: x.qty + qty } // Just add qty, or replace? Usually add.
                         : x
                 );
@@ -44,12 +44,12 @@ export const CartProvider = ({ children }) => {
     };
 
     const removeFromCart = (productId, packName) => {
-        setCartItems((prevItems) => prevItems.filter((x) => !(x.product === productId && x.pack.name === packName)));
+        setCartItems((prevItems) => prevItems.filter((x) => !(x.product === productId && x.pack?.name === packName)));
     };
 
     const updateQty = (productId, packName, qty) => {
         setCartItems((prevItems) =>
-            prevItems.map(x => (x.product === productId && x.pack.name === packName) ? { ...x, qty: Number(qty) } : x)
+            prevItems.map(x => (x.product === productId && x.pack?.name === packName) ? { ...x, qty: Number(qty) } : x)
         );
     }
 

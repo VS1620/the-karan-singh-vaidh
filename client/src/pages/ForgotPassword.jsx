@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, AlertCircle, Loader2, CheckCircle2, Lock } from 'lucide-react';
 import api from '../api/api';
+import SEO from '../components/seo/SEO';
 
 const ForgotPassword = () => {
     const navigate = useNavigate();
@@ -109,6 +110,7 @@ const ForgotPassword = () => {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-ayur-beige/20 py-12 px-4 sm:px-6 lg:px-8">
+            <SEO title="Forgot Password | The Karan Singh Vaidh" />
             <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-2xl shadow-xl border border-gray-100">
                 <div className="text-center">
                     <div className="mx-auto h-12 w-12 bg-ayur-green/10 rounded-full flex items-center justify-center mb-4">

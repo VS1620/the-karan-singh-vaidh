@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Trash2, ShoppingBag, ArrowRight, Phone } from 'lucide-react';
 import { CartContext } from '../context/CartContext';
 import { getAssetUrl } from '../api/api';
+import SEO from '../components/seo/SEO';
 
 const CartPage = () => {
     const { cartItems, removeFromCart, updateQty, getCartTotal } = useContext(CartContext);
@@ -13,6 +14,7 @@ const CartPage = () => {
     if (cartItems.length === 0) {
         return (
             <div className="min-h-[60vh] flex flex-col items-center justify-center text-center p-4">
+                <SEO title="Your Cart | The Karan Singh Vaidh" />
                 <ShoppingBag size={64} className="text-gray-300 mb-4" />
                 <h2 className="text-2xl font-bold text-gray-800 mb-2">Your Cart is Empty</h2>
                 <p className="text-gray-500 mb-6">Looks like you haven't added any packs yet.</p>
@@ -25,6 +27,7 @@ const CartPage = () => {
 
     return (
         <div className="bg-gray-50 min-h-screen py-10">
+            <SEO title="Your Cart | The Karan Singh Vaidh" />
             <div className="container mx-auto px-4 max-w-4xl">
                 <h1 className="text-3xl font-bold text-gray-800 mb-8 font-serif">Your Cart ({cartItems.length} items)</h1>
 

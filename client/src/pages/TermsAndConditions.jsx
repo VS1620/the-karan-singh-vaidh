@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { FileText, CheckCircle, AlertTriangle, Scale } from 'lucide-react';
+import SEO from '../components/seo/SEO';
 
 const TermsAndConditions = () => {
     useEffect(() => {
@@ -8,6 +9,10 @@ const TermsAndConditions = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white pt-24 pb-16">
+            <SEO 
+                title="Terms & Conditions | The Karan Singh Vaidh"
+                description="Review the Terms & Conditions for using the services and products provided by The Karan Singh Vaidh."
+            />
             <div className="max-w-5xl mx-auto px-6 md:px-12">
                 {/* Header */}
                 <div className="text-center mb-16">

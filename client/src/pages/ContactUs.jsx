@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../components/seo/SEO';
 import { Mail, Phone, MapPin, Send, Clock, MessageSquare } from 'lucide-react';
 
 const ContactUs = () => {
@@ -57,11 +57,12 @@ const ContactUs = () => {
 
     return (
         <div className="bg-[#FCFAFA] min-h-screen pt-24 pb-12">
-            <Helmet>
-                <title>Contact Us | The Karan Singh Vaidh | Ayurvedic Clinic Solan</title>
-                <meta name="description" content="Get in touch with The Karan Singh Vaidh for authentic Ayurvedic consultations and wellness guidance. Visit our clinic in Solan or call +91-8219658454." />
-                <meta name="keywords" content="Contact Ayurveda Solan, Ayurvedic Consultation, Karan Singh Vaidh Contact, Ayurvedic Clinic Himachal" />
-            </Helmet>
+            <SEO 
+                title="Contact Ayurvedic Clinic in Solan | Get Expert Care"
+                description="Contact Ayurvedic Clinic in Solan to get expert Ayurvedic advice. Book consultation for natural treatment, personalized care & holistic healing support."
+                keywords="Contact Ayurvedic Clinic in Solan"
+                url="/contact"
+            />
             {/* Hero Section */}
             <div className="container mx-auto px-4 mb-16">
                 <div className="max-w-3xl mx-auto text-center">
@@ -70,7 +71,7 @@ const ContactUs = () => {
                             Get In Touch
                         </span>
                     </div>
-                    <h1 className="text-3xl md:text-6xl font-serif font-bold text-ayur-green mb-6">Contact Us</h1>
+                    <h1 className="text-3xl md:text-6xl font-serif font-bold text-ayur-green mb-6">Contact Ayurvedic Clinic in Solan for Ayurvedic Advice</h1>
                     <p className="text-xl text-gray-600 leading-relaxed">
                         Have questions about our Ayurvedic products or need personalized wellness guidance? We're here to help you on your journey to holistic health.
                     </p>
@@ -227,7 +228,7 @@ const ContactUs = () => {
                         {/* Google Map */}
                         <div id="map" className="bg-white rounded-[2.5rem] overflow-hidden border border-gray-100 shadow-lg">
                             <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d13694.461789075474!2d77.095068!3d30.897417!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390f86ae3324e9c3%3A0x2c28814c987a2667!2sRadha%20Soami%20Satsang%20Beas%2C%20Solan!5e0!3m2!1sen!2sin!4v1769182809151!5m2!1sen!2sin"
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3423.6154436930697!2d77.0950683!3d30.8974171!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390f86ae3324e9c3%3A0x2c28814c987a2667!2sRadha%20Soami%20Satsang%20Beas%2C%20Solan!5e0!3m2!1sen!2sin!4v1777901564367!5m2!1sen!2sin"
                                 width="100%"
                                 height="350"
                                 style={{ border: 0 }}

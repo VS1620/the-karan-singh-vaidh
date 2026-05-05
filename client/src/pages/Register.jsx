@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, AlertCircle, Loader2, CheckCircle2 } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
 import api from '../api/api';
+import SEO from '../components/seo/SEO';
 
 const Register = () => {
     const navigate = useNavigate();
@@ -111,6 +112,7 @@ const Register = () => {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-ayur-beige/20 py-12 px-4 sm:px-6 lg:px-8">
+            <SEO title="Register | The Karan Singh Vaidh" />
             <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-2xl shadow-xl border border-gray-100">
                 <div className="text-center">
                     <h2 className="mt-6 text-3xl font-serif text-ayur-green">Create Account</h2>

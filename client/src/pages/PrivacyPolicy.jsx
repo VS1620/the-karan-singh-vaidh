@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Shield, Lock, Eye, Database, Mail } from 'lucide-react';
+import SEO from '../components/seo/SEO';
 
 const PrivacyPolicy = () => {
     useEffect(() => {
@@ -8,6 +9,10 @@ const PrivacyPolicy = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white pt-24 pb-16">
+            <SEO 
+                title="Privacy Policy | The Karan Singh Vaidh"
+                description="Read our Privacy Policy to understand how we collect, use, and protect your personal information at The Karan Singh Vaidh."
+            />
             <div className="max-w-5xl mx-auto px-6 md:px-12">
                 {/* Header */}
                 <div className="text-center mb-16">

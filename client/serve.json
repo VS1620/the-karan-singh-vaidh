@@ -10,6 +10,18 @@
       ]
     }
   ],
+  "redirects": [
+    {
+      "source": "/shop",
+      "destination": "/ayurvedic-products",
+      "type": 301
+    },
+    {
+      "source": "/about",
+      "destination": "/about-ayurvedic-doctor-in-solan",
+      "type": 301
+    }
+  ],
   "rewrites": [
     {
       "source": "**",
