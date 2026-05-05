@@ -153,9 +153,10 @@ app.get('/', (req, res) => {
 
 app.get('/api/version', (req, res) => {
     res.json({
-        version: '1.3.0',
+        version: '1.3.1',
         deployedAt: new Date().toLocaleString(),
-        status: 'Complete Shiprocket Automation Implemented'
+        status: 'Complete Shiprocket Automation Implemented',
+        database: mongoose.connection.name
     });
 });
 
