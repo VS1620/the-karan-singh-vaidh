@@ -173,6 +173,16 @@ app.get('/api/diagnose', (req, res) => {
     });
 });
 
+app.get('/api/debug-slugs', async (req, res) => {
+    try {
+        const Product = require('./models/ProductModel');
+        const products = await Product.find({}, 'name slug');
+        res.json(products);
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
 // Error Handling
 app.use(notFound);
 app.use(errorHandler);
