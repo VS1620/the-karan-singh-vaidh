@@ -22,8 +22,8 @@ const getBaseURL = () => {
                     
     if (isLocal) return "http://localhost:5000";
     
-    // Priority 3: Fallback to current origin
-    return origin || "http://localhost:5000";
+    // Priority 3: Fallback to Render Production URL
+    return "https://the-karan-singh-vaidh.onrender.com";
 };
 
 const BASE_URL = getBaseURL();
