@@ -18554,3 +18554,13 @@ Error: Invalid email or password
 Error: Invalid email or password
     at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:45:19
     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-05-06T11:01:33.870Z] 404 - Order not found
+Error: Order not found
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\orderController.js:84:15
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-05-06T11:01:34.080Z] 404 - Order not found
+Error: Order not found
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\orderController.js:84:15
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)

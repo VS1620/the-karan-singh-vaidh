@@ -12,18 +12,21 @@ const MetaPixel = () => {
     const now = Date.now();
     const currentPath = location.pathname;
 
-    // Only fire if the path has changed OR if it's been a while (to be safe)
-    // but NEVER fire twice for the same path within a short window (1s)
-    if (window.fbq && (currentPath !== lastTrackedPath || now - lastTrackedTime > 1000)) {
-      
-      // Strict identical data check
-      if (currentPath === lastTrackedPath && now - lastTrackedTime < 2000) {
-        return; // Skip if it's the exact same path within 2 seconds
-      }
+    // Skip the VERY FIRST fire on initial load because GTM (GTM-5PL65H47) 
+    // is likely already firing a PageView for the initial load.
+    if (lastTrackedPath === '') {
+      lastTrackedPath = currentPath;
+      lastTrackedTime = now;
+      console.log('[PIXEL] Skipping initial fire (GTM fallback)');
+      return;
+    }
 
+    // Only fire for SUBSEQUENT navigations
+    if (window.fbq && (currentPath !== lastTrackedPath || now - lastTrackedTime > 1000)) {
       window.fbq('track', 'PageView');
       lastTrackedPath = currentPath;
       lastTrackedTime = now;
+      console.log('[PIXEL] Tracking internal PageView:', currentPath);
     }
   }, [location.pathname]);
 
