@@ -104,7 +104,13 @@ const createShiprocketOrder = async (order) => {
         const firstName = nameParts[0];
         const lastName = nameParts.slice(1).join(' ') || '.';
 
-        const pickupLocation = process.env.SHIPROCKET_PICKUP_LOCATION || 'Primary';
+        let pickupLocation = process.env.SHIPROCKET_PICKUP_LOCATION || 'work';
+        
+        // Critical Fix: If environment variable is 'Home' (legacy), override it to 'work'
+        // as 'work' is the only valid location nickname in the Shiprocket account.
+        if (pickupLocation.toLowerCase() === 'home') {
+            pickupLocation = 'work';
+        }
 
         // Sanitize phone number: strip all non-digits and take last 10
         let phone = (order.shippingAddress.phone || '').replace(/\D/g, '');
