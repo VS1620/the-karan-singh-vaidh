@@ -81,7 +81,14 @@ const getProductById = asyncHandler(async (req, res) => {
         product = await Product.findById(req.params.id).populate('category', 'name');
     } else {
         // Query by slug for SEO-friendly URLs
-        product = await Product.findOne({ slug: req.params.id }).populate('category', 'name');
+        // Robust slug lookup: handle hyphens, underscores, and spaces interchangeably
+        const searchSlug = req.params.id.replace(/[_\s]/g, '-').toLowerCase();
+        product = await Product.findOne({ slug: searchSlug }).populate('category', 'name');
+        
+        // If still not found, try exact match as fallback
+        if (!product) {
+            product = await Product.findOne({ slug: req.params.id }).populate('category', 'name');
+        }
     }
 
     if (product) {
