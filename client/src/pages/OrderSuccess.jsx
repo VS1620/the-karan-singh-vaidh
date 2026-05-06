@@ -29,7 +29,13 @@ const OrderSuccess = () => {
 
     // Track Purchase event when order is loaded
     useEffect(() => {
-        if (order && window.fbq && lastTrackedOrderId !== order._id) {
+        if (order && window.fbq) {
+            // Persistent check: Don't fire if this specific Order ID has been tracked in this session
+            const sessionTrackedKey = `tracked_order_${order._id}`;
+            if (sessionStorage.getItem(sessionTrackedKey)) {
+                return;
+            }
+
             window.fbq('track', 'Purchase', {
                 value: order.totalPrice,
                 currency: 'INR',
@@ -37,7 +43,8 @@ const OrderSuccess = () => {
                 content_type: 'product',
                 num_items: order.orderItems.reduce((acc, item) => acc + item.qty, 0)
             });
-            lastTrackedOrderId = order._id;
+            
+            sessionStorage.setItem(sessionTrackedKey, 'true');
         }
     }, [order]);
 

@@ -6,7 +6,9 @@ import api, { getAssetUrl } from '../api/api';
 import { Star, Check, ShoppingCart, Truck, ShieldCheck, Heart, Info, Phone, ZoomIn, MousePointerClick } from 'lucide-react';
 import { CartContext } from '../context/CartContext';
 
+// Global tracking state to prevent double-firing (persists across re-renders)
 let lastTrackedViewContent = null;
+let lastTrackedViewTime = 0;
 
 const ProductDetails = () => {
     const { id } = useParams();
@@ -67,23 +69,29 @@ const ProductDetails = () => {
     // Track ViewContent when product is loaded
     useEffect(() => {
         if (product && window.fbq) {
+            const now = Date.now();
             const currentEventData = JSON.stringify({
                 id: product._id || product.id,
                 packIndex: selectedPackIndex,
                 price: product.packs?.[selectedPackIndex]?.sellingPrice || 0
             });
 
-            if (lastTrackedViewContent !== currentEventData) {
-                window.fbq('track', 'ViewContent', {
-                    content_name: product.name,
-                    content_category: product.category?.name,
-                    content_ids: [product._id || product.id],
-                    content_type: 'product',
-                    value: product.packs?.[selectedPackIndex]?.sellingPrice || 0,
-                    currency: 'INR'
-                });
-                lastTrackedViewContent = currentEventData;
+            // STRICT GUARD: Don't fire if it's the exact same data within 2 seconds
+            if (lastTrackedViewContent === currentEventData && now - lastTrackedViewTime < 2000) {
+                return;
             }
+
+            window.fbq('track', 'ViewContent', {
+                content_name: product.name,
+                content_category: product.category?.name,
+                content_ids: [product._id || product.id],
+                content_type: 'product',
+                value: product.packs?.[selectedPackIndex]?.sellingPrice || 0,
+                currency: 'INR'
+            });
+            
+            lastTrackedViewContent = currentEventData;
+            lastTrackedViewTime = now;
         }
     }, [product, selectedPackIndex]);
 
