@@ -81,13 +81,21 @@ const getProductById = asyncHandler(async (req, res) => {
         product = await Product.findById(req.params.id).populate('category', 'name');
     } else {
         // Query by slug for SEO-friendly URLs
-        // Robust slug lookup: handle hyphens, underscores, and spaces interchangeably
-        const searchSlug = req.params.id.replace(/[_\s]/g, '-').toLowerCase();
-        product = await Product.findOne({ slug: searchSlug }).populate('category', 'name');
-        
-        // If still not found, try exact match as fallback
-        if (!product) {
-            product = await Product.findOne({ slug: req.params.id }).populate('category', 'name');
+        try {
+            const decodedId = decodeURIComponent(req.params.id);
+            const searchSlug = decodedId.replace(/[_\s]/g, '-').toLowerCase();
+            
+            console.log(`[DEBUG] Slug lookup for: "${req.params.id}" -> decoded: "${decodedId}" -> searching: "${searchSlug}"`);
+            
+            product = await Product.findOne({ slug: searchSlug }).populate('category', 'name');
+            
+            // If still not found, try exact match as fallback
+            if (!product) {
+                console.log(`[DEBUG] Slug "${searchSlug}" not found, trying exact: "${req.params.id}"`);
+                product = await Product.findOne({ slug: req.params.id }).populate('category', 'name');
+            }
+        } catch (e) {
+            console.error(`[ERROR] Slug lookup failed for ${req.params.id}:`, e.message);
         }
     }
 
