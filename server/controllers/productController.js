@@ -87,11 +87,26 @@ const getProductById = asyncHandler(async (req, res) => {
             
             console.log(`[DEBUG] Slug lookup for: "${req.params.id}" -> decoded: "${decodedId}" -> searching: "${searchSlug}"`);
             
+            // Strategy 1: Exact match of the processed slug
             product = await Product.findOne({ slug: searchSlug }).populate('category', 'name');
             
-            // If still not found, try exact match as fallback
+            // Strategy 2: If slug ends with "-ayurvedic-treatment", try without it
+            if (!product && searchSlug.endsWith('-ayurvedic-treatment')) {
+                const baseSlug = searchSlug.replace('-ayurvedic-treatment', '');
+                console.log(`[DEBUG] Trying base slug: "${baseSlug}"`);
+                product = await Product.findOne({ slug: baseSlug }).populate('category', 'name');
+            }
+            
+            // Strategy 3: If slug doesn't have it, try adding it
+            if (!product && !searchSlug.endsWith('-ayurvedic-treatment')) {
+                const fullSlug = `${searchSlug}-ayurvedic-treatment`;
+                console.log(`[DEBUG] Trying full slug: "${fullSlug}"`);
+                product = await Product.findOne({ slug: fullSlug }).populate('category', 'name');
+            }
+
+            // Strategy 4: Fallback to exact match of raw param
             if (!product) {
-                console.log(`[DEBUG] Slug "${searchSlug}" not found, trying exact: "${req.params.id}"`);
+                console.log(`[DEBUG] No matches, trying raw exact: "${req.params.id}"`);
                 product = await Product.findOne({ slug: req.params.id }).populate('category', 'name');
             }
         } catch (e) {
