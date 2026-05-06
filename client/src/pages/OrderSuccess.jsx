@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import api, { getAssetUrl } from '../api/api';
 import { CheckCircle, Truck, CreditCard, Headphones, Download, ChevronRight } from 'lucide-react';
 import SEO from '../components/seo/SEO';
+
+let lastTrackedOrderId = null;
 
 const OrderSuccess = () => {
     const { id } = useParams();
@@ -27,7 +29,7 @@ const OrderSuccess = () => {
 
     // Track Purchase event when order is loaded
     useEffect(() => {
-        if (order && window.fbq) {
+        if (order && window.fbq && lastTrackedOrderId !== order._id) {
             window.fbq('track', 'Purchase', {
                 value: order.totalPrice,
                 currency: 'INR',
@@ -35,6 +37,7 @@ const OrderSuccess = () => {
                 content_type: 'product',
                 num_items: order.orderItems.reduce((acc, item) => acc + item.qty, 0)
             });
+            lastTrackedOrderId = order._id;
         }
     }, [order]);
 

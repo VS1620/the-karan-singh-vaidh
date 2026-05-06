@@ -78,7 +78,7 @@ const RealStores = () => {
 
                         {/* GMB Button */}
                         <a
-                            href="https://www.google.com/maps/place/Radha+Soami+Satsang+Beas,+Solan/@30.897417,77.095068,17z/data=!3m1!4b1!4m6!3m5!1s0x390f86ae3324e9c3:0x2c28814c987a2667!8m2!3d30.897417!4d77.095068!16s%2Fg%2F1tdmpx4_"
+                            href="https://www.google.com/maps/place/KARAN+SINGH+VAIDH/@30.8959714,77.0929679,17z/data=!3m1!4b1!4m6!3m5!1s0x390f89cea1a75c47:0x1a68eda57c0d4c02!8m2!3d30.8959714!4d77.0929679!16s%2Fg%2F11y1m7q9_0"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="group relative w-full sm:w-auto overflow-hidden px-8 py-4 md:px-10 md:py-5 rounded-full border-2 border-white/30 bg-white/5 backdrop-blur-sm text-white font-bold text-sm md:text-base tracking-widest uppercase transition-all duration-300 hover:bg-white hover:text-[#132e1b] hover:border-white hover:shadow-[0_0_40px_rgba(255,255,255,0.4)] hover:scale-[1.02] active:scale-95 text-center"

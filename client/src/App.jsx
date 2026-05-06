@@ -5,6 +5,7 @@ import ScrollToTop from './components/layout/ScrollToTop';
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
 import { Loader2 } from 'lucide-react';
+import MetaPixel from './components/common/MetaPixel';
 
 // Common Components for initial load
 import Home from './pages/Home'; // Home stays for faster LCP
@@ -52,6 +53,7 @@ function App() {
     <AuthProvider>
       <CartProvider>
         <Router>
+          <MetaPixel />
           <ScrollToTop />
           <MainLayout>
             <Suspense fallback={<LoadingFallback />}>

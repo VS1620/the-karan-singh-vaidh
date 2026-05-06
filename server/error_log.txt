@@ -18459,3 +18459,98 @@ Error: Not Found - /api/v1/menus/category-name/Delivery%20Only
     at Layer.handleRequest (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\lib\layer.js:152:17)
     at trimPrefix (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:342:13)
     at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:297:9
+
+[2026-05-05T08:30:55.070Z] 404 - Not Found - /api/v1/auth/me
+Error: Not Found - /api/v1/auth/me
+    at notFound (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\middleware\errorMiddleware.js:5:19)
+    at Layer.handleRequest (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:342:13)
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:297:9
+    at processParams (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:582:12)
+    at next (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:291:5)
+    at logger (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\morgan\index.js:144:5)
+    at Layer.handleRequest (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:342:13)
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:297:9
+
+[2026-05-05T08:30:55.091Z] 404 - Not Found - /api/v1/auth/me
+Error: Not Found - /api/v1/auth/me
+    at notFound (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\middleware\errorMiddleware.js:5:19)
+    at Layer.handleRequest (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:342:13)
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:297:9
+    at processParams (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:582:12)
+    at next (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:291:5)
+    at logger (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\morgan\index.js:144:5)
+    at Layer.handleRequest (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:342:13)
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:297:9
+
+[2026-05-05T08:30:59.708Z] 404 - Not Found - /api/v1/menus/category-name/Delivery%20Only
+Error: Not Found - /api/v1/menus/category-name/Delivery%20Only
+    at notFound (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\middleware\errorMiddleware.js:5:19)
+    at Layer.handleRequest (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:342:13)
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:297:9
+    at processParams (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:582:12)
+    at next (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:291:5)
+    at logger (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\morgan\index.js:144:5)
+    at Layer.handleRequest (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:342:13)
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:297:9
+
+[2026-05-05T08:30:59.737Z] 404 - Not Found - /api/v1/menus/category-name/Delivery%20Only
+Error: Not Found - /api/v1/menus/category-name/Delivery%20Only
+    at notFound (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\middleware\errorMiddleware.js:5:19)
+    at Layer.handleRequest (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:342:13)
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:297:9
+    at processParams (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:582:12)
+    at next (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:291:5)
+    at logger (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\morgan\index.js:144:5)
+    at Layer.handleRequest (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:342:13)
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:297:9
+
+[2026-05-06T10:28:21.167Z] 401 - Invalid email or password
+Error: Invalid email or password
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:40:23
+
+[2026-05-06T10:28:29.086Z] 401 - Invalid email or password
+Error: Invalid email or password
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:45:19
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-05-06T10:28:36.813Z] 401 - Invalid email or password
+Error: Invalid email or password
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:45:19
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-05-06T10:35:42.334Z] 401 - Invalid email or password
+Error: Invalid email or password
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:45:19
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-05-06T10:35:46.537Z] 401 - Invalid email or password
+Error: Invalid email or password
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:45:19
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-05-06T10:35:50.242Z] 401 - Invalid email or password
+Error: Invalid email or password
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:40:23
+
+[2026-05-06T10:37:33.298Z] 401 - Invalid email or password
+Error: Invalid email or password
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:45:19
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-05-06T10:37:52.950Z] 401 - Invalid email or password
+Error: Invalid email or password
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:45:19
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-05-06T10:38:48.248Z] 401 - Invalid email or password
+Error: Invalid email or password
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:45:19
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)

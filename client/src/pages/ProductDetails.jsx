@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import SEO from '../components/seo/SEO';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import ProductCard from '../components/home/ProductCard';
 import api, { getAssetUrl } from '../api/api';
 import { Star, Check, ShoppingCart, Truck, ShieldCheck, Heart, Info, Phone, ZoomIn, MousePointerClick } from 'lucide-react';
 import { CartContext } from '../context/CartContext';
+
+let lastTrackedViewContent = null;
 
 const ProductDetails = () => {
     const { id } = useParams();
@@ -65,14 +67,23 @@ const ProductDetails = () => {
     // Track ViewContent when product is loaded
     useEffect(() => {
         if (product && window.fbq) {
-            window.fbq('track', 'ViewContent', {
-                content_name: product.name,
-                content_category: product.category?.name,
-                content_ids: [product._id || product.id],
-                content_type: 'product',
-                value: product.packs?.[selectedPackIndex]?.sellingPrice || 0,
-                currency: 'INR'
+            const currentEventData = JSON.stringify({
+                id: product._id || product.id,
+                packIndex: selectedPackIndex,
+                price: product.packs?.[selectedPackIndex]?.sellingPrice || 0
             });
+
+            if (lastTrackedViewContent !== currentEventData) {
+                window.fbq('track', 'ViewContent', {
+                    content_name: product.name,
+                    content_category: product.category?.name,
+                    content_ids: [product._id || product.id],
+                    content_type: 'product',
+                    value: product.packs?.[selectedPackIndex]?.sellingPrice || 0,
+                    currency: 'INR'
+                });
+                lastTrackedViewContent = currentEventData;
+            }
         }
     }, [product, selectedPackIndex]);
 

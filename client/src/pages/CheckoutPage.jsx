@@ -1,10 +1,12 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api, { getAssetUrl } from '../api/api';
 import { CartContext } from '../context/CartContext';
 import { AuthContext } from '../context/AuthContext';
 import { ArrowRight, Lock, Loader2, CreditCard, Banknote } from 'lucide-react';
 import SEO from '../components/seo/SEO';
+
+let hasTrackedCheckoutGlobal = false;
 
 const CheckoutPage = () => {
     const { cartItems, getCartTotal, clearCart } = useContext(CartContext);
@@ -38,7 +40,7 @@ const CheckoutPage = () => {
 
     // Track InitiateCheckout
     useEffect(() => {
-        if (cartItems.length > 0 && window.fbq) {
+        if (cartItems.length > 0 && window.fbq && !hasTrackedCheckoutGlobal) {
             window.fbq('track', 'InitiateCheckout', {
                 content_ids: cartItems.map(item => item.product),
                 content_type: 'product',
@@ -46,8 +48,9 @@ const CheckoutPage = () => {
                 currency: 'INR',
                 num_items: cartItems.reduce((acc, item) => acc + item.qty, 0)
             });
+            hasTrackedCheckoutGlobal = true;
         }
-    }, []); // Only once on mount
+    }, [cartItems, getCartTotal]);
 
     // Load Razorpay Script
     useEffect(() => {

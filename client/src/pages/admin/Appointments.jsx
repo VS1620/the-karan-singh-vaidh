@@ -312,7 +312,7 @@ const Appointments = () => {
                                                         <Banknote size={20} />
                                                     </div>
                                                     <div>
-                                                        <span className="text-[10px] font-black uppercase tracking-widest text-green-600/70 block mb-1">Payment Completed (₹699)</span>
+                                                        <span className="text-[10px] font-black uppercase tracking-widest text-green-600/70 block mb-1">Payment Completed (₹{selectedAppointment.duration === '45 Min' ? '2999' : selectedAppointment.duration === '30 Min' ? '1999' : '999'})</span>
                                                         <p className="font-mono text-xs font-bold text-green-800">TXN ID: {selectedAppointment.paymentId}</p>
                                                     </div>
                                                 </div>

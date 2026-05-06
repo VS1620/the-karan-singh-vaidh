@@ -49,7 +49,7 @@ const ContactUs = () => {
             icon: MapPin,
             title: 'Hospital Address',
             details: 'Anji, Radhasoami Satsang Road, Reboun P.O. Solan, Himachal Pradesh – 173211',
-            link: '#map',
+            link: 'https://www.google.com/maps/place/KARAN+SINGH+VAIDH/@30.8959714,77.0929679,17z/data=!3m1!4b1!4m6!3m5!1s0x390f89cea1a75c47:0x1a68eda57c0d4c02!8m2!3d30.8959714!4d77.0929679!16s%2Fg%2F11y1m7q9_0',
             color: 'text-ayur-green',
             bg: 'bg-ayur-beige/30'
         }
