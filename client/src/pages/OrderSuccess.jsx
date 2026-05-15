@@ -28,11 +28,15 @@ const OrderSuccess = () => {
 
     useEffect(() => {
         if (order) {
+            // Standard Purchase tracking
             metaPixelService.trackPurchase({
                 orderId: order._id,
                 totalAmount: order.totalPrice,
                 items: order.orderItems
             });
+
+            // Enhanced ViewContent tracking for the success page
+            metaPixelService.trackCartViewContent(order.orderItems, order.totalPrice, 'success_page');
         }
     }, [order]);
 
