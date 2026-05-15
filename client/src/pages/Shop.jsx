@@ -5,6 +5,7 @@ import { LayoutGrid, Activity, Wind, HeartPulse } from 'lucide-react';
 import api from '../api/api';
 import ProductCard from '../components/home/ProductCard';
 import ScrollToTop from '../components/layout/ScrollToTop';
+import { metaPixelService } from '../services/metaPixel';
 
 // Category Image Imports
 import asthmaImg from '../assets/Asthma.webp';
@@ -172,7 +173,21 @@ const Shop = ({ defaultCategory }) => {
 
     useEffect(() => {
         fetchProducts();
-    }, [selectedCategory, sortBy]);
+        
+        // Track Category View for Meta Pixel
+        if (selectedCategory !== 'All') {
+            metaPixelService.trackCustom('ViewCategory', {
+                content_name: selectedCategory,
+                content_category: 'Ayurvedic Products'
+            });
+        }
+
+        // Track Search for Meta Pixel (if search query exists)
+        const searchQuery = searchParams.get('s') || searchParams.get('q') || searchParams.get('search');
+        if (searchQuery) {
+            metaPixelService.trackSearch(searchQuery);
+        }
+    }, [selectedCategory, sortBy, searchParams]);
 
     const fetchCategories = async () => {
         try {

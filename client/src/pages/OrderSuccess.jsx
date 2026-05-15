@@ -3,8 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import api, { getAssetUrl } from '../api/api';
 import { CheckCircle, Truck, CreditCard, Headphones, Download, ChevronRight } from 'lucide-react';
 import SEO from '../components/seo/SEO';
-
-let lastTrackedOrderId = null;
+import { metaPixelService } from '../services/metaPixel';
 
 const OrderSuccess = () => {
     const { id } = useParams();
@@ -27,24 +26,13 @@ const OrderSuccess = () => {
         fetchOrder();
     }, [id]);
 
-    // Track Purchase event when order is loaded
     useEffect(() => {
-        if (order && window.fbq) {
-            // Persistent check: Don't fire if this specific Order ID has been tracked in this session
-            const sessionTrackedKey = `tracked_order_${order._id}`;
-            if (sessionStorage.getItem(sessionTrackedKey)) {
-                return;
-            }
-
-            window.fbq('track', 'Purchase', {
-                value: order.totalPrice,
-                currency: 'INR',
-                content_ids: order.orderItems.map(item => item.product),
-                content_type: 'product',
-                num_items: order.orderItems.reduce((acc, item) => acc + item.qty, 0)
+        if (order) {
+            metaPixelService.trackPurchase({
+                orderId: order._id,
+                totalAmount: order.totalPrice,
+                items: order.orderItems
             });
-            
-            sessionStorage.setItem(sessionTrackedKey, 'true');
         }
     }, [order]);
 
@@ -81,7 +69,10 @@ const OrderSuccess = () => {
 
     return (
         <div className="min-h-screen bg-gray-50/50 pb-20 font-sans">
-            <SEO title="Order Success | The Karan Singh Vaidh" />
+            <SEO 
+                title="Order Confirmed | Thank You for Shopping - Karan Singh Vaidh" 
+                description="Your order for authentic Ayurvedic products has been successfully placed. Thank you for choosing Karan Singh Vaidh for your natural wellness journey."
+            />
             {/* Breadcrumb */}
             <div className="bg-white border-b py-4">
                 <div className="container mx-auto px-4 max-w-5xl flex items-center gap-2 text-sm text-gray-500">

@@ -3,6 +3,7 @@ import { ShoppingCart, Star, Minus, Plus, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { getAssetUrl } from '../../api/api';
 import { CartContext } from '../../context/CartContext';
+import { metaPixelService } from '../../services/metaPixel';
 
 const ProductCard = ({ product }) => {
     const { addToCart } = useContext(CartContext);
@@ -31,6 +32,7 @@ const ProductCard = ({ product }) => {
     const discount = selectedPack.discount || (mrp > price ? Math.round(((mrp - price) / mrp) * 100) : 0);
 
     const handleAddToCart = () => {
+        metaPixelService.trackAddToCart(product, quantity, selectedPack?.sellingPrice || price);
         addToCart(product, selectedPack, quantity);
     };
 

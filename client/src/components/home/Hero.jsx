@@ -14,6 +14,7 @@ const Hero = () => {
     // State to track if the device is desktop (min-width: 768px for tablet/desktop)
     const [isDesktop, setIsDesktop] = React.useState(window.innerWidth >= 768);
     const [isModalOpen, setIsModalOpen] = React.useState(false);
+    const [currentSlide, setCurrentSlide] = React.useState(0);
 
     React.useEffect(() => {
         const handleResize = () => {
@@ -37,8 +38,14 @@ const Hero = () => {
         pauseOnHover: false,
         arrows: isDesktop,
         lazyLoad: 'progressive',
+        afterChange: (current) => {
+            setCurrentSlide(current);
+            if (import.meta.env.DEV) {
+                console.log(`[Slider] Focus transferred safely to slide: ${current}`);
+            }
+        },
         customPaging: i => (
-            <div className="w-3 h-3 rounded-full bg-white/40 hover:bg-white transition-all cursor-pointer mt-4"></div>
+            <div className={`w-3 h-3 rounded-full transition-all cursor-pointer mt-4 ${i === currentSlide ? 'bg-white scale-125' : 'bg-white/40 hover:bg-white'}`}></div>
         ),
         appendDots: dots => (
             <div style={{ bottom: "30px" }}>
@@ -179,6 +186,8 @@ const Hero = () => {
                                     {/* CTA Button */}
                                     {slide.cta && (
                                         <button
+                                            tabIndex={index === currentSlide ? 0 : -1}
+                                            aria-hidden={index !== currentSlide}
                                             onClick={(e) => {
                                                 if (slide.cta === "Consult Ayurveda Expert") {
                                                     e.preventDefault();

@@ -18564,3 +18564,28 @@ Error: Order not found
 Error: Order not found
     at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\orderController.js:84:15
     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-05-13T05:49:52.461Z] 404 - Product not found
+Error: Product not found
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\productController.js:121:15
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-05-14T06:18:11.980Z] 401 - Invalid email or password
+Error: Invalid email or password
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:45:19
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-05-14T06:18:15.058Z] 401 - Invalid email or password
+Error: Invalid email or password
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:45:19
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-05-14T06:18:22.738Z] 401 - Invalid email or password
+Error: Invalid email or password
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:45:19
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-05-14T07:51:16.280Z] 401 - Invalid email or password
+Error: Invalid email or password
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:45:19
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)

@@ -4,6 +4,7 @@ import { ArrowRight, AlertCircle, Loader2, CheckCircle2 } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
 import api from '../api/api';
 import SEO from '../components/seo/SEO';
+import { metaPixelService } from '../services/metaPixel';
 
 const Register = () => {
     const navigate = useNavigate();
@@ -102,6 +103,10 @@ const Register = () => {
         setError('');
         try {
             await register(formData.name, formData.email, formData.phone, formData.password);
+            metaPixelService.trackCompleteRegistration({
+                method: 'Email & Phone',
+                name: formData.name
+            });
             navigate('/account');
         } catch (err) {
             setError(err.response?.data?.message || err.message || 'Registration failed. Please try again.');
@@ -112,7 +117,10 @@ const Register = () => {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-ayur-beige/20 py-12 px-4 sm:px-6 lg:px-8">
-            <SEO title="Register | The Karan Singh Vaidh" />
+            <SEO 
+                title="Register | Join Our Wellness Community - Karan Singh Vaidh" 
+                description="Create your account with Karan Singh Vaidh to start your journey towards natural healing. Get exclusive access to Ayurvedic treatments and products."
+            />
             <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-2xl shadow-xl border border-gray-100">
                 <div className="text-center">
                     <h2 className="mt-6 text-3xl font-serif text-ayur-green">Create Account</h2>

@@ -10,7 +10,7 @@ const ShippingPolicy = () => {
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white pt-24 pb-16">
             <SEO 
-                title="Shipping & Delivery Policy | The Karan Singh Vaidh"
+                title="Shipping Policy | Fast & Secure Delivery - Karan Singh Vaidh"
                 description="Learn about our shipping rates, delivery timelines, and order tracking process at The Karan Singh Vaidh."
             />
             <div className="max-w-5xl mx-auto px-6 md:px-12">

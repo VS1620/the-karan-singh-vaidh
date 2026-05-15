@@ -68,7 +68,7 @@ const MyAccount = () => {
 
     return (
         <div className="min-h-screen bg-[#FDFCFB] pt-28 pb-20 px-4 md:px-8">
-            <SEO title="My Account | The Karan Singh Vaidh" />
+            <SEO title="My Account | Manage Your Wellness Journey - Karan Singh Vaidh" />
             <div className="container mx-auto max-w-6xl">
                 {/* Header Section with Glassmorphism */}
                 <div className="relative mb-12 p-8 md:p-12 rounded-[3rem] overflow-hidden bg-white shadow-2xl shadow-gray-200/50 border border-white/20">

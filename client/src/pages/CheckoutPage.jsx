@@ -5,8 +5,7 @@ import { CartContext } from '../context/CartContext';
 import { AuthContext } from '../context/AuthContext';
 import { ArrowRight, Lock, Loader2, CreditCard, Banknote } from 'lucide-react';
 import SEO from '../components/seo/SEO';
-
-let hasTrackedCheckoutGlobal = false;
+import { metaPixelService } from '../services/metaPixel';
 
 const CheckoutPage = () => {
     const { cartItems, getCartTotal, clearCart } = useContext(CartContext);
@@ -38,19 +37,12 @@ const CheckoutPage = () => {
         }
     }, [userInfo, authLoading, navigate]);
 
-    // Track InitiateCheckout
+    // Track InitiateCheckout only once per mount
     useEffect(() => {
-        if (cartItems.length > 0 && window.fbq && !hasTrackedCheckoutGlobal) {
-            window.fbq('track', 'InitiateCheckout', {
-                content_ids: cartItems.map(item => item.product),
-                content_type: 'product',
-                value: getCartTotal(),
-                currency: 'INR',
-                num_items: cartItems.reduce((acc, item) => acc + item.qty, 0)
-            });
-            hasTrackedCheckoutGlobal = true;
+        if (cartItems.length > 0) {
+            metaPixelService.trackInitiateCheckout(cartItems, getCartTotal());
         }
-    }, [cartItems, getCartTotal]);
+    }, []); // Only run once on mount
 
     // Load Razorpay Script
     useEffect(() => {
@@ -205,7 +197,10 @@ const CheckoutPage = () => {
 
     return (
         <div className="bg-gray-50 min-h-screen py-10">
-            <SEO title="Checkout | The Karan Singh Vaidh" />
+            <SEO 
+                title="Secure Checkout | Complete Your Order - Karan Singh Vaidh" 
+                description="Finalize your order of authentic Ayurvedic products. Secure payment and fast shipping for natural remedies from Karan Singh Vaidh."
+            />
             <div className="container mx-auto px-4 max-w-4xl">
                 <h1 className="text-3xl font-bold text-gray-800 mb-8 font-serif">Checkout</h1>
 

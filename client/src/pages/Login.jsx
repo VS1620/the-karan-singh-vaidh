@@ -32,7 +32,10 @@ const Login = () => {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-ayur-beige/20 py-12 px-4 sm:px-6 lg:px-8">
-            <SEO title="Login | The Karan Singh Vaidh" />
+            <SEO 
+                title="Login | Access Your Wellness Account - Karan Singh Vaidh" 
+                description="Sign in to your Karan Singh Vaidh account to manage your orders, track shipments, and access personalized Ayurvedic wellness recommendations."
+            />
             <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-2xl shadow-xl border border-gray-100">
                 <div className="text-center">
                     <h2 className="mt-6 text-3xl font-serif text-ayur-green">Welcome Back</h2>

@@ -2,6 +2,35 @@
 <html lang="en">
 
 <head>
+  <!-- Meta Pixel Master Interceptor - Blocks duplicate PageViews from GTM/React -->
+  <script>
+    !(function (f, b, e, v, n, t, s) {
+      if (f.fbq) return;
+      n = f.fbq = function () {
+        const args = Array.from(arguments);
+        // Master Interceptor: Block duplicate PageViews within 2 seconds
+        if (args[0] === 'track' && args[1] === 'PageView') {
+          const now = Date.now();
+          window._lastP = window._lastP || 0;
+          if (now - window._lastP < 2000) {
+            console.log('[Meta Pixel] Interceptor blocked duplicate PageView');
+            return;
+          }
+          window._lastP = now;
+        }
+        n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+      };
+      if (!f._fbq) f._fbq = n;
+      n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = [];
+      t = b.createElement(e); t.async = !0; t.src = v;
+      s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s);
+    })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1287897736635293');
+    fbq('set', 'autoConfig', false, '1287897736635293');
+  </script>
+
+  <!-- END INTERCEPTOR -->
+
   <!-- Google Tag Manager -->
   <script>(function (w, d, s, l, i) {
       w[l] = w[l] || []; w[l].push({
@@ -13,117 +42,21 @@
     })(window, document, 'script', 'dataLayer', 'GTM-5PL65H47');</script>
   <!-- End Google Tag Manager -->
 
-  <!-- Meta Pixel Code -->
-  <script>
-    !function (f, b, e, v, n, t, s) {
-      if (f.fbq) return; n = f.fbq = function () {
-        n.callMethod ?
-          n.callMethod.apply(n, arguments) : n.queue.push(arguments)
-      };
-      if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
-      n.queue = []; t = b.createElement(e); t.async = !0;
-      t.src = v; s = b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t, s)
-    }(window, document, 'script',
-      'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1287897736635293');
-  </script>
-  <!-- End Meta Pixel Code -->
-
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <link rel="apple-touch-icon" href="/logo.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Base SEO -->
   <title>The Karan Singh Vaidh - Authentic Ayurvedic Treatments & Products</title>
-  <meta name="description"
-    content="Experience the power of ancient Ayurveda. Trusted Ayurvedic doctor in Solan, HP, providing natural treatments for Asthma, Diabetes, Piles, and more." />
-  <link rel="canonical" href="https://thekaransinghvaidh.com/" />
+  <meta name="description" content="Trusted Ayurvedic doctor in Solan, HP. Natural treatments for chronic disorders." />
 
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://thekaransinghvaidh.com/" />
-  <meta property="og:title" content="The Karan Singh Vaidh - Ancient Ayurveda for Modern Life" />
-  <meta property="og:description"
-    content="Trusted Ayurvedic clinic in Solan. Proven results for chronic disorders with no side effects." />
-  <meta property="og:image" content="https://thekaransinghvaidh.com/logo.png" />
-
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:url" content="https://thekaransinghvaidh.com/" />
-  <meta property="twitter:title" content="The Karan Singh Vaidh - Ancient Ayurveda" />
-  <meta property="twitter:description"
-    content="Trusted Ayurvedic clinic in Solan. Proven results for chronic disorders." />
-  <meta property="twitter:image" content="https://thekaransinghvaidh.com/logo.png" />
-
-  <!-- Schema.org JSON-LD -->
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "The Karan Singh Vaidh",
-      "url": "https://thekaransinghvaidh.com/",
-      "logo": "https://thekaransinghvaidh.com/logo.png",
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "telephone": "+91-8219658454",
-        "contactType": "customer service",
-        "areaServed": "IN",
-        "availableLanguage": ["Hindi", "English"]
-      },
-      "sameAs": [
-        "https://www.facebook.com/thekaransinghvaidh",
-        "https://www.instagram.com/thekaransinghvaidh"
-      ]
-    }
-  </script>
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "The Karan Singh Vaidh",
-      "url": "https://thekaransinghvaidh.com/",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://thekaransinghvaidh.com/ayurvedic-products?search={search_term_string}",
-        "query-input": "required name=search_term_string"
-      }
-    }
-  </script>
-
-  <!-- Preconnect for performance -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://img.freepik.com">
-
-  <!-- Fonts -->
-  <link rel="preload"
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Inter:wght@300;400;500;600;700&display=swap"
-    as="style">
-  <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Inter:wght@300;400;500;600;700&display=swap"
-    media="print" onload="this.media='all'">
-  <noscript>
-    <link rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Inter:wght@300;400;500;600;700&display=swap">
-  </noscript>
-
-  <!-- Critical Resource Preload -->
-  <link rel="preload" as="image" href="/src/assets/banner1-web.webp" fetchPriority="high">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;700&display=swap">
 </head>
 
 <body>
-  <!-- Meta Pixel Code (noscript) -->
-  <noscript><img height="1" width="1" style="display:none"
-      src="https://www.facebook.com/tr?id=1287897736635293&ev=PageView&noscript=1" /></noscript>
-  <!-- End Meta Pixel Code (noscript) -->
-  <!-- Google Tag Manager (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5PL65H47" height="0" width="0"
-      style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
-
-  <!-- End Meta Pixel Code (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5PL65H47" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div id="root"></div>
   <script type="module" src="/src/main.jsx"></script>
 </body>

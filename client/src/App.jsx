@@ -5,7 +5,7 @@ import ScrollToTop from './components/layout/ScrollToTop';
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
 import { Loader2 } from 'lucide-react';
-import MetaPixel from './components/common/MetaPixel';
+import { PixelProvider } from './context/PixelProvider';
 
 // Common Components for initial load
 import Home from './pages/Home'; // Home stays for faster LCP
@@ -52,10 +52,10 @@ function App() {
   return (
     <AuthProvider>
       <CartProvider>
-        <Router>
-          <MetaPixel />
-          <ScrollToTop />
-          <MainLayout>
+        <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+          <PixelProvider>
+            <ScrollToTop />
+            <MainLayout>
             <Suspense fallback={<LoadingFallback />}>
               <Routes>
                 <Route path="/" element={<Home />} />
@@ -139,6 +139,7 @@ function App() {
               </Routes>
             </Suspense>
           </MainLayout>
+          </PixelProvider>
         </Router>
       </CartProvider>
     </AuthProvider>

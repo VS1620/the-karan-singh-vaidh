@@ -5,10 +5,7 @@ import ProductCard from '../components/home/ProductCard';
 import api, { getAssetUrl } from '../api/api';
 import { Star, Check, ShoppingCart, Truck, ShieldCheck, Heart, Info, Phone, ZoomIn, MousePointerClick } from 'lucide-react';
 import { CartContext } from '../context/CartContext';
-
-// Global tracking state to prevent double-firing (persists across re-renders)
-let lastTrackedViewContent = null;
-let lastTrackedViewTime = 0;
+import { metaPixelService } from '../services/metaPixel';
 
 const ProductDetails = () => {
     const { id } = useParams();
@@ -30,6 +27,8 @@ const ProductDetails = () => {
 
     useEffect(() => {
         const fetchProduct = async () => {
+            setLoading(true);
+            setProduct(null);
             try {
                 const { data } = await api.get(`/products/${id}`);
                 setProduct(data);
@@ -68,48 +67,16 @@ const ProductDetails = () => {
 
     // Track ViewContent when product is loaded
     useEffect(() => {
-        if (product && window.fbq) {
-            const now = Date.now();
-            const currentEventData = JSON.stringify({
-                id: product._id || product.id,
-                packIndex: selectedPackIndex,
-                price: product.packs?.[selectedPackIndex]?.sellingPrice || 0
-            });
-
-            // STRICT GUARD: Don't fire if it's the exact same data within 2 seconds
-            if (lastTrackedViewContent === currentEventData && now - lastTrackedViewTime < 2000) {
-                return;
-            }
-
-            window.fbq('track', 'ViewContent', {
-                content_name: product.name,
-                content_category: product.category?.name,
-                content_ids: [product._id || product.id],
-                content_type: 'product',
-                value: product.packs?.[selectedPackIndex]?.sellingPrice || 0,
-                currency: 'INR'
-            });
-            
-            lastTrackedViewContent = currentEventData;
-            lastTrackedViewTime = now;
+        if (product) {
+            metaPixelService.trackViewContent(product);
         }
-    }, [product, selectedPackIndex]);
+    }, [product]);
 
     const handleAddToCart = () => {
         if (!product || !product.packs || product.packs.length === 0) return;
         const pack = product.packs[selectedPackIndex];
         
-        // Track AddToCart
-        if (window.fbq) {
-            window.fbq('track', 'AddToCart', {
-                content_name: product.name,
-                content_category: product.category?.name,
-                content_ids: [product._id || product.id],
-                content_type: 'product',
-                value: pack.sellingPrice * qty,
-                currency: 'INR'
-            });
-        }
+        metaPixelService.trackAddToCart(product, qty, pack.sellingPrice);
 
         addToCart(product, pack, qty);
         navigate('/cart');
@@ -151,7 +118,7 @@ const ProductDetails = () => {
     return (
         <div className="bg-white min-h-screen pt-16 lg:pt-20 pb-20 lg:pb-12 font-sans">
             <SEO 
-                title={product.metaTitle || `${product.name} | Ayurvedic Treatment & Medicine`}
+                title={product.metaTitle || `${product.name} | Authentic Ayurvedic Care - Karan Singh Vaidh`}
                 description={product.metaDescription || product.shortDescription || `Buy ${product.name} online. Authentic Ayurvedic remedy by Karan Singh Vaidh. Effective results, 100% natural ingredients.`}
                 url={`/product/${product.slug || product._id || product.id || id}`}
                 image={getAssetUrl(product.image)}
@@ -799,6 +766,7 @@ const ProductDetails = () => {
                             <div className="flex-shrink-0">
                                 <a
                                     href="tel:+918219658454"
+                                    onClick={() => metaPixelService.trackContact({ type: 'phone_call', location: 'consultation_banner', page: 'product_details' })}
                                     className="relative flex flex-col items-center group"
                                 >
                                     {/* Pulsing Button Effect */}

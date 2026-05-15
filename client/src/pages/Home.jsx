@@ -22,6 +22,19 @@ const SectionLoader = () => (
 );
 
 const Home = () => {
+    const renderCount = React.useRef(0);
+
+    React.useEffect(() => {
+        if (import.meta.env.DEV) {
+            console.log('%c[Meta Pixel] Homepage mounted', 'color: #065f46; font-weight: bold');
+        }
+    }, []);
+
+    renderCount.current++;
+    if (import.meta.env.DEV && renderCount.current > 1) {
+        console.log(`%c[Meta Pixel] Homepage rerender detected (#${renderCount.current})`, 'color: #0d9488');
+    }
+
     return (
         <div className="bg-ayur-beige/20 min-h-screen">
             <SEO 
@@ -106,7 +119,7 @@ const Home = () => {
                                 "@type": "WebPage",
                                 "@id": "https://thekaransinghvaidh.com/#webpage",
                                 "url": "https://thekaransinghvaidh.com/",
-                                "name": "Best Ayurvedic Doctor in Solan | Karan Singh Vaidh",
+                                "name": "Best Ayurvedic Doctor in Solan | Dr. Karan Singh Vaidh",
                                 "isPartOf": {
                                     "@id": "https://thekaransinghvaidh.com/#website"
                                 },
@@ -173,4 +186,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default React.memo(Home);

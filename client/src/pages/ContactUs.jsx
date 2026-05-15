@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import SEO from '../components/seo/SEO';
 import { Mail, Phone, MapPin, Send, Clock, MessageSquare } from 'lucide-react';
+import { metaPixelService } from '../services/metaPixel';
 
 const ContactUs = () => {
     const [formData, setFormData] = useState({
@@ -17,6 +18,10 @@ const ContactUs = () => {
         e.preventDefault();
         // Here you would typically send the form data to your backend
         console.log('Form submitted:', formData);
+        metaPixelService.trackContact({
+            name: formData.name,
+            subject: formData.subject
+        });
         setSubmitted(true);
         setTimeout(() => setSubmitted(false), 3000);
     };
@@ -58,7 +63,7 @@ const ContactUs = () => {
     return (
         <div className="bg-[#FCFAFA] min-h-screen pt-24 pb-12">
             <SEO 
-                title="Contact Ayurvedic Clinic in Solan | Get Expert Care"
+                title="Contact Us | Expert Ayurvedic Consultation - Karan Singh Vaidh"
                 description="Contact Ayurvedic Clinic in Solan to get expert Ayurvedic advice. Book consultation for natural treatment, personalized care & holistic healing support."
                 keywords="Contact Ayurvedic Clinic in Solan"
                 url="/contact"

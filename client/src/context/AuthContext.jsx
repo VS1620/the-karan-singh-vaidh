@@ -4,15 +4,18 @@ import api from '../api/api';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [userInfo, setUserInfo] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [userInfo, setUserInfo] = useState(() => {
+        try {
+            const stored = localStorage.getItem('userInfo');
+            return stored ? JSON.parse(stored) : null;
+        } catch (e) {
+            return null;
+        }
+    });
+    const [loading, setLoading] = useState(false); // Initial loading can be false if we read sync
 
     useEffect(() => {
-        const storedUserInfo = localStorage.getItem('userInfo');
-        if (storedUserInfo) {
-            setUserInfo(JSON.parse(storedUserInfo));
-        }
-        setLoading(false);
+        // Just verify if needed, but the state is already set
     }, []);
 
     const login = async (email, password) => {

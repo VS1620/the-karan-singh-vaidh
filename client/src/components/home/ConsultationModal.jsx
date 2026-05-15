@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Calendar, Clock, User, Phone, Mail, FileText, Send, CheckCircle2, ChevronDown, Lock } from 'lucide-react';
 import api from '../../api/api';
+import { metaPixelService } from '../../services/metaPixel';
 
 const ConsultationModal = ({ isOpen, onClose }) => {
     const [formData, setFormData] = useState({
@@ -77,6 +78,13 @@ const ConsultationModal = ({ isOpen, onClose }) => {
 
                         const { data: appointmentData } = await api.post('/appointments', appointmentPayload);
                         
+                        // Track Lead/Appointment in Meta Pixel
+                        metaPixelService.trackLead({
+                            service: formData.service,
+                            value: selectedAmount,
+                            currency: 'INR'
+                        });
+
                         // Show success state
                         setSuccess(true);
                         setLoading(false);

@@ -3,15 +3,18 @@ import React, { createContext, useState, useEffect } from 'react';
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-    const [cartItems, setCartItems] = useState([]);
-
-    // Load cart from local storage on mount
-    useEffect(() => {
-        const storedCart = localStorage.getItem('cartItems');
-        if (storedCart) {
-            setCartItems(JSON.parse(storedCart));
+    const [cartItems, setCartItems] = useState(() => {
+        try {
+            const storedCart = localStorage.getItem('cartItems');
+            return storedCart ? JSON.parse(storedCart) : [];
+        } catch (error) {
+            console.error('Error parsing cart from localStorage:', error);
+            return [];
         }
-    }, []);
+    });
+
+    // Save cart to local storage whenever it changes
+    // We don't need the first mount effect anymore
 
     // Save cart to local storage whenever it changes
     useEffect(() => {
