@@ -102,17 +102,17 @@ export const metaPixelService = {
     if (!cartItems || cartItems.length === 0) return;
 
     track('ViewCart', {
-      content_ids: cartItems.map(item => item.product?._id || item.product?.id || item._id || item.id),
+      content_ids: cartItems.map(item => (item.product || item._id || item.id || '').toString()),
       content_type: 'product',
       contents: cartItems.map(item => ({
-        id: item.product?._id || item.product?.id || item._id || item.id,
-        quantity: item.quantity || item.qty || 1,
+        id: (item.product || item._id || item.id || '').toString(),
+        quantity: item.qty || item.quantity || 1,
         item_price: item.price
       })),
       value: totalValue || 0,
       currency: CURRENCY,
-      num_items: cartItems.reduce((acc, item) => acc + (item.quantity || item.qty || 1), 0),
-    }, true); // Tracked as custom event for better granularity
+      num_items: cartItems.reduce((acc, item) => acc + (item.qty || item.quantity || 1), 0),
+    }, true);
   },
 
   /**
@@ -122,11 +122,11 @@ export const metaPixelService = {
     if (!cartItems || cartItems.length === 0) return;
 
     track('ViewContent', {
-      content_ids: cartItems.map(item => (item.product?._id || item.product?.id || item._id || item.id || '').toString()),
+      content_ids: cartItems.map(item => (item.product || item._id || item.id || '').toString()),
       content_type: 'product',
       contents: cartItems.map(item => ({
-        id: (item.product?._id || item.product?.id || item._id || item.id || '').toString(),
-        quantity: item.quantity || item.qty || 1,
+        id: (item.product || item._id || item.id || '').toString(),
+        quantity: item.qty || item.quantity || 1,
         item_price: item.price
       })),
       value: totalValue || 0,
@@ -142,11 +142,11 @@ export const metaPixelService = {
     if (!cartItems || cartItems.length === 0) return;
 
     track('InitiateCheckout', {
-      content_ids: cartItems.map(item => item.product?._id || item.product?.id || item._id || item.id),
+      content_ids: cartItems.map(item => (item.product || item._id || item.id || '').toString()),
       content_type: 'product',
       contents: cartItems.map(item => ({
-        id: item.product?._id || item.product?.id || item._id || item.id,
-        quantity: item.quantity || item.qty || 1,
+        id: (item.product || item._id || item.id || '').toString(),
+        quantity: item.qty || item.quantity || 1,
         item_price: item.price
       })),
       value: totalValue || 0,
@@ -162,11 +162,11 @@ export const metaPixelService = {
     if (!orderData || !orderData.orderId) return;
 
     track('Purchase', {
-      content_ids: orderData.items?.map(item => item.product?._id || item.product?.id || item._id || item.id) || [],
+      content_ids: orderData.items?.map(item => (item.product || item._id || item.id || '').toString()) || [],
       content_type: 'product',
       contents: orderData.items?.map(item => ({
-        id: item.product?._id || item.product?.id || item._id || item.id,
-        quantity: item.quantity || item.qty || 1,
+        id: (item.product || item._id || item.id || '').toString(),
+        quantity: item.qty || item.quantity || 1,
         item_price: item.price
       })) || [],
       transaction_id: orderData.orderId,
