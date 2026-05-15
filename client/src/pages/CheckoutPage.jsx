@@ -41,7 +41,9 @@ const CheckoutPage = () => {
     // Track InitiateCheckout only once per mount
     useEffect(() => {
         if (cartItems.length > 0) {
-            metaPixelService.trackInitiateCheckout(cartItems, getCartTotal());
+            const totalAmount = getCartTotal();
+            metaPixelService.trackInitiateCheckout(cartItems, totalAmount);
+            metaPixelService.trackCartViewContent(cartItems, totalAmount, 'checkout_page');
         }
     }, []); // Only run once on mount
 

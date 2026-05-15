@@ -137,9 +137,9 @@ export const metaPixelService = {
   },
 
   /**
-   * trackCartViewContent - Special ViewContent for the Cart page
+   * trackCartViewContent - Special ViewContent for the Cart/Checkout page
    */
-  trackCartViewContent: (cartItems, totalValue) => {
+  trackCartViewContent: (cartItems, totalValue, source = 'cart_page') => {
     if (!cartItems || cartItems.length === 0) return;
 
     track('ViewContent', {
@@ -153,6 +153,7 @@ export const metaPixelService = {
       value: totalValue || 0,
       currency: CURRENCY,
       num_items: cartItems.reduce((acc, item) => acc + (item.quantity || item.qty || 1), 0),
+      source: source // Unique signature per page
     });
   },
 
