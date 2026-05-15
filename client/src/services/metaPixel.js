@@ -116,6 +116,26 @@ export const metaPixelService = {
   },
 
   /**
+   * trackCartViewContent - Special ViewContent for the Cart page
+   */
+  trackCartViewContent: (cartItems, totalValue) => {
+    if (!cartItems || cartItems.length === 0) return;
+
+    track('ViewContent', {
+      content_ids: cartItems.map(item => (item.product?._id || item.product?.id || item._id || item.id || '').toString()),
+      content_type: 'product',
+      contents: cartItems.map(item => ({
+        id: (item.product?._id || item.product?.id || item._id || item.id || '').toString(),
+        quantity: item.quantity || item.qty || 1,
+        item_price: item.price
+      })),
+      value: totalValue || 0,
+      currency: CURRENCY,
+      num_items: cartItems.reduce((acc, item) => acc + (item.quantity || item.qty || 1), 0),
+    });
+  },
+
+  /**
    * InitiateCheckout - Tracks checkout start
    */
   trackInitiateCheckout: (cartItems, totalValue) => {

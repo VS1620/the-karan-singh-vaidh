@@ -15,6 +15,7 @@ const CartPage = () => {
         if (cartItems.length > 0) {
             const total = getCartTotal();
             metaPixelService.trackViewCart(cartItems, total);
+            metaPixelService.trackCartViewContent(cartItems, total);
         }
     }, []); // Only run once on mount
     const total = getCartTotal();
