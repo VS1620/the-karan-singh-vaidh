@@ -5,7 +5,6 @@
 import { isDuplicateEvent } from '../utils/pixelDeduplication';
 
 const CURRENCY = 'INR';
-const PIXEL_ID = import.meta.env.VITE_META_PIXEL_ID || '1287897736635293';
 
 /**
  * Core tracking function with safety checks and deduplication
@@ -80,7 +79,7 @@ export const metaPixelService = {
     const category = typeof product.category === 'object' ? product.category.name : (product.category || 'Ayurvedic Products');
 
     track('AddToCart', {
-      content_category: category.toUpperCase(), // Match uppercase style in screenshots
+      content_category: category.toUpperCase(),
       content_ids: [id.toString()],
       content_name: product.name,
       content_type: 'product',
@@ -116,14 +115,14 @@ export const metaPixelService = {
   },
 
   /**
-   * trackCartAddToCart - Special AddToCart for the Cart page
+   * trackCartAddToCart - Special AddToCart for the Cart page (Bypasses deduplication)
    */
   trackCartAddToCart: (cartItems, totalValue) => {
-    if (!cartItems || cartItems.length === 0) return;
+    if (!cartItems || cartItems.length === 0 || typeof window.fbq !== 'function') return;
 
-    // Small delay to ensure concurrent events (like PageView) don't drop this one
+    // Use a delay and bypass the local 'track' function to ensure it fires
     setTimeout(() => {
-      track('AddToCart', {
+      const payload = {
         content_ids: cartItems.map(item => (item.product || item._id || item.id || '').toString()),
         content_type: 'product',
         contents: cartItems.map(item => ({
@@ -134,9 +133,14 @@ export const metaPixelService = {
         value: totalValue || 0,
         currency: CURRENCY,
         num_items: cartItems.reduce((acc, item) => acc + (item.qty || item.quantity || 1), 0),
-        source: 'cart_page' // Unique signature
-      });
-    }, 150);
+        event_time: Date.now(), // Force uniqueness
+        source: 'cart_page_forced'
+      };
+
+      window.fbq('track', 'AddToCart', payload);
+      window.fbq('trackCustom', 'Cart_Page_Debug', { timestamp: Date.now(), items: cartItems.length });
+      console.log('%c[Meta Pixel] FORCE FIRING AddToCart for Cart Page', 'color: white; background: #0080ff; padding: 2px 5px; border-radius: 2px;', payload);
+    }, 400);
   },
 
   /**
