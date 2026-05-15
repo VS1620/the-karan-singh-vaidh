@@ -16,18 +16,29 @@
     })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '1287897736635293', { autoConfig: false });
 
-    // GLOBAL EVENT SHIELD: Intercept and block restricted events from ANY source (GTM, Meta AI, etc.)
-    const originalFbq = window.fbq;
-    window.fbq = function () {
-      const args = arguments;
-      if (args && args[0] === 'track' && (args[1] === 'AddToCart' || args[1] === 'Purchase' || args[1] === 'InitiateCheckout')) {
-        console.warn(`[Meta Pixel Shield] Blocked restricted event: ${args[1]}`);
-        return; 
-      }
-      if (typeof originalFbq === 'function') {
+    // GLOBAL EVENT SHIELD: Intercept and block restricted events with property sync
+    (function () {
+      const originalFbq = window.fbq;
+      if (!originalFbq) return;
+
+      const fbqProxy = function () {
+        const args = arguments;
+        if (args && args[0] === 'track' && (args[1] === 'AddToCart' || args[1] === 'Purchase' || args[1] === 'InitiateCheckout')) {
+          console.warn(`[Meta Pixel Shield] Blocked restricted event: ${args[1]}`);
+          return;
+        }
         return originalFbq.apply(this, args);
+      };
+
+      // Sync all properties (loaded, version, queue, etc.) to prevent Meta script from crashing
+      for (var key in originalFbq) {
+        if (Object.prototype.hasOwnProperty.call(originalFbq, key)) {
+          fbqProxy[key] = originalFbq[key];
+        }
       }
-    };
+
+      window.fbq = fbqProxy;
+    })();
 
   </script>
   <!-- End Meta Pixel Code -->
