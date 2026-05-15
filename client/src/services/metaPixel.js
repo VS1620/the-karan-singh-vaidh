@@ -5,7 +5,7 @@
 import { isDuplicateEvent } from '../utils/pixelDeduplication';
 
 const CURRENCY = 'INR';
-const PIXEL_ID = '1287897736635293'; 
+const PIXEL_ID = import.meta.env.VITE_META_PIXEL_ID || '1287897736635293'; 
 
 /**
  * Core tracking function with safety checks and deduplication
