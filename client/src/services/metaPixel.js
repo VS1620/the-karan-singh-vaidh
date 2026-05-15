@@ -137,9 +137,10 @@ export const metaPixelService = {
         source: 'cart_page_forced'
       };
 
-      window.fbq('track', 'AddToCart', payload);
+      // Use trackCustom instead of track to bypass localhost restrictions for standard events on page load
+      window.fbq('trackCustom', 'AddToCart', payload);
       window.fbq('trackCustom', 'Cart_Page_Debug', { timestamp: Date.now(), items: cartItems.length });
-      console.log('%c[Meta Pixel] FORCE FIRING AddToCart for Cart Page', 'color: white; background: #0080ff; padding: 2px 5px; border-radius: 2px;', payload);
+      console.log('%c[Meta Pixel] FORCE FIRING AddToCart (Custom) for Cart Page', 'color: white; background: #0080ff; padding: 2px 5px; border-radius: 2px;', payload);
     }, 400);
   },
 
