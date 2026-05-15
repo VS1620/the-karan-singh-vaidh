@@ -121,19 +121,22 @@ export const metaPixelService = {
   trackCartAddToCart: (cartItems, totalValue) => {
     if (!cartItems || cartItems.length === 0) return;
 
-    track('AddToCart', {
-      content_ids: cartItems.map(item => (item.product || item._id || item.id || '').toString()),
-      content_type: 'product',
-      contents: cartItems.map(item => ({
-        id: (item.product || item._id || item.id || '').toString(),
-        quantity: item.qty || item.quantity || 1,
-        item_price: item.price
-      })),
-      value: totalValue || 0,
-      currency: CURRENCY,
-      num_items: cartItems.reduce((acc, item) => acc + (item.qty || item.quantity || 1), 0),
-      source: 'cart_page' // Unique signature to avoid deduplication blocking
-    });
+    // Small delay to ensure concurrent events (like PageView) don't drop this one
+    setTimeout(() => {
+      track('AddToCart', {
+        content_ids: cartItems.map(item => (item.product || item._id || item.id || '').toString()),
+        content_type: 'product',
+        contents: cartItems.map(item => ({
+          id: (item.product || item._id || item.id || '').toString(),
+          quantity: item.qty || item.quantity || 1,
+          item_price: item.price
+        })),
+        value: totalValue || 0,
+        currency: CURRENCY,
+        num_items: cartItems.reduce((acc, item) => acc + (item.qty || item.quantity || 1), 0),
+        source: 'cart_page' // Unique signature
+      });
+    }, 150);
   },
 
   /**

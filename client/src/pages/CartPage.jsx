@@ -10,12 +10,12 @@ const CartPage = () => {
     const { cartItems, removeFromCart, updateQty, getCartTotal } = useContext(CartContext);
     const navigate = useNavigate();
 
-    // Track ViewCart only once per mount
+    // Track Cart actions only once per mount
     useEffect(() => {
         if (cartItems.length > 0) {
             const total = getCartTotal();
+            // We only trigger ViewCart (Custom) and AddToCart (Standard) on this page
             metaPixelService.trackViewCart(cartItems, total);
-            metaPixelService.trackCartViewContent(cartItems, total);
             metaPixelService.trackCartAddToCart(cartItems, total);
         }
     }, []); // Only run once on mount
