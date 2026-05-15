@@ -16,6 +16,20 @@
     })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '1287897736635293', { autoConfig: false });
 
+    // GLOBAL EVENT SHIELD: Intercept and block restricted events from ANY source (GTM, Meta AI, etc.)
+    const originalFbq = window.fbq;
+    window.fbq = function () {
+      const args = Array.from(arguments);
+      const eventName = args[1];
+      const restrictedEvents = ['AddToCart', 'Purchase', 'InitiateCheckout', 'AddPaymentInfo', 'StartTrial'];
+      
+      if (args[0] === 'track' && restrictedEvents.includes(eventName)) {
+        console.warn(`[Meta Pixel Shield] Blocked restricted event: ${eventName}`);
+        return; 
+      }
+      return originalFbq.apply(this, arguments);
+    };
+
   </script>
   <!-- End Meta Pixel Code -->
 
