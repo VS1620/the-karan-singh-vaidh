@@ -16,28 +16,26 @@
     })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '1287897736635293', { autoConfig: false });
 
-    // GLOBAL EVENT SHIELD: Intercept and block restricted events with property sync
+    // GLOBAL EVENT SHIELD: Using modern Proxy API for 100% transparency and zero conflicts
     (function () {
+      if (!window.fbq || window.fbq._isProxy) return;
+
       const originalFbq = window.fbq;
-      if (!originalFbq) return;
+      const restrictedEvents = ['AddToCart', 'Purchase', 'InitiateCheckout', 'AddPaymentInfo', 'StartTrial'];
 
-      const fbqProxy = function () {
-        const args = arguments;
-        if (args && args[0] === 'track' && (args[1] === 'AddToCart' || args[1] === 'Purchase' || args[1] === 'InitiateCheckout')) {
-          console.warn(`[Meta Pixel Shield] Blocked restricted event: ${args[1]}`);
-          return;
+      window.fbq = new Proxy(originalFbq, {
+        apply(target, thisArg, args) {
+          if (args[0] === 'track' && restrictedEvents.indexOf(args[1]) !== -1) {
+            console.warn(`[Meta Pixel Shield] Blocked restricted event: ${args[1]}`);
+            return;
+          }
+          return Reflect.apply(target, thisArg, args);
+        },
+        get(target, prop, receiver) {
+          if (prop === '_isProxy') return true;
+          return Reflect.get(target, prop, receiver);
         }
-        return originalFbq.apply(this, args);
-      };
-
-      // Sync all properties (loaded, version, queue, etc.) to prevent Meta script from crashing
-      for (var key in originalFbq) {
-        if (Object.prototype.hasOwnProperty.call(originalFbq, key)) {
-          fbqProxy[key] = originalFbq[key];
-        }
-      }
-
-      window.fbq = fbqProxy;
+      });
     })();
 
   </script>
