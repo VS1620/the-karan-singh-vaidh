@@ -52,42 +52,46 @@ export const metaPixelService = {
     track('PageView');
   },
 
-  /**
-   * ViewContent - Tracks product detail views
-   */
   trackViewContent: (product) => {
     if (!product) return;
     const id = product._id || product.id || product.slug;
     const price = product.price || product.packs?.[0]?.sellingPrice || 0;
+    const category = typeof product.category === 'object' ? product.category.name : (product.category || 'Ayurvedic Products');
 
     track('ViewContent', {
-      content_ids: [id],
+      content_category: category.toUpperCase(),
+      content_ids: [id.toString()],
       content_name: product.name,
-      content_category: typeof product.category === 'object' ? product.category.name : (product.category || 'Ayurveda'),
       content_type: 'product',
-      contents: [{ id: id, quantity: 1, item_price: price }],
-      value: price,
+      contents: [{
+        id: id.toString(),
+        quantity: 1,
+        item_price: price
+      }],
       currency: CURRENCY,
+      value: price,
     });
   },
 
-  /**
-   * AddToCart - Tracks when user adds items to cart
-   */
   trackAddToCart: (product, quantity = 1, priceOverride = null) => {
     if (!product) return;
     const id = product._id || product.id || product.slug;
     const unitPrice = priceOverride !== null ? priceOverride : (product.price || product.packs?.[0]?.sellingPrice || 0);
+    const category = typeof product.category === 'object' ? product.category.name : (product.category || 'Ayurvedic Products');
 
     track('AddToCart', {
-      content_ids: [id],
+      content_category: category.toUpperCase(), // Match uppercase style in screenshots
+      content_ids: [id.toString()],
       content_name: product.name,
-      content_category: typeof product.category === 'object' ? product.category.name : (product.category || 'Ayurveda'),
       content_type: 'product',
-      contents: [{ id: id, quantity: quantity, item_price: unitPrice }],
-      value: unitPrice * quantity,
+      contents: [{
+        id: id.toString(),
+        quantity: quantity,
+        item_price: unitPrice
+      }],
       currency: CURRENCY,
-      num_items: quantity,
+      value: unitPrice * quantity,
+      num_items: quantity
     });
   },
 
