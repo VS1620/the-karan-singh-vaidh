@@ -127,13 +127,7 @@ export const metaPixelService = {
       currency: CURRENCY
     };
 
-    // 1. Standard Event (Minimal payload to reduce block risk)
-    track('AddToCart', {
-      value: Number(unitPrice * quantity),
-      currency: CURRENCY
-    }, false, force);
-
-    // 2. Custom Event (BYPASS NAME: Meta won't suppress this)
+    // Custom Event (BYPASS NAME: Meta won't suppress this)
     track('Added_To_Cart', {
       ...payload,
       event_source: 'button_click'
@@ -159,13 +153,7 @@ export const metaPixelService = {
     const itemIds = cartItems.map(item => String(item.product || item._id || item.id));
     const totalQty = Number(cartItems.reduce((acc, item) => acc + (item.qty || 1), 0));
 
-    // 1. Standard Event (Minimal payload)
-    track('AddToCart', {
-      value: Number(totalValue || 0),
-      currency: CURRENCY
-    }, false, true);
-
-    // 2. Custom Event (BYPASS NAME: Guaranteed visibility)
+    // Custom Event (BYPASS NAME: Guaranteed visibility)
     track('Added_To_Cart', {
       content_ids: itemIds,
       content_type: 'product',
@@ -181,7 +169,7 @@ export const metaPixelService = {
       event_source: 'cart_page_view'
     }, true, true);
     
-    console.log(`[Meta Pixel] Anti-Suppression Dual-track executed`);
+    console.log(`[Meta Pixel] Anti-Suppression Custom-track executed`);
   },
 
   /**
@@ -194,13 +182,7 @@ export const metaPixelService = {
     const itemIds = cartItems.map(item => String(item.product || item._id || item.id || ''));
     const totalQty = Number(cartItems.reduce((acc, item) => acc + (item.quantity || item.qty || 1), 0));
 
-    // 1. Standard Event (Minimal payload to bypass health filters)
-    track('InitiateCheckout', {
-      value: Number(totalValue || 0),
-      currency: CURRENCY
-    }, false, true);
-
-    // 2. Custom Event (Guaranteed visibility)
+    // Custom Event (Guaranteed visibility)
     track('Checkout_Start', {
       content_ids: itemIds,
       content_type: 'product',
@@ -227,14 +209,7 @@ export const metaPixelService = {
     const itemIds = orderData.items?.map(item => String(item.product || item._id || item.id || '')) || [];
     const totalQty = Number(orderData.items?.reduce((acc, item) => acc + (item.quantity || item.qty || 1), 0) || 0);
 
-    // 1. Standard Event (Minimal payload)
-    track('Purchase', {
-      value: Number(orderData.totalAmount || 0),
-      currency: CURRENCY,
-      transaction_id: String(orderData.orderId)
-    }, false, true);
-
-    // 2. Custom Event (Guaranteed visibility)
+    // Custom Event (Guaranteed visibility)
     track('Order_Success', {
       transaction_id: String(orderData.orderId),
       content_ids: itemIds,
