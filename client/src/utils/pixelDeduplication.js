@@ -3,7 +3,7 @@
  * Prevents duplicate events caused by React StrictMode, re-renders, and rapid navigation.
  */
 
-const EVENT_EXPIRY_MS = 1500; // 1.5 seconds window to block identical events
+const EVENT_EXPIRY_MS = 1000; // 1 second window to block identical events
 
 // Store for event history
 const eventHistory = new Map();

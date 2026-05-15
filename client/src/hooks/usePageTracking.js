@@ -3,25 +3,38 @@ import { useLocation } from 'react-router-dom';
 import { metaPixelService } from '../services/metaPixel';
 import { isDuplicatePageView } from '../utils/pixelDeduplication';
 
+// Global singleton lock to prevent double-firing during StrictMode/Hydration
+const pageViewLock = {
+  path: '',
+  timestamp: 0
+};
+
 /**
  * usePageTracking Hook
  * Centralized hook for automatic PageView tracking across all React routes.
- * Includes deduplication for React StrictMode and hydration.
  */
 export const usePageTracking = () => {
   const location = useLocation();
 
   useEffect(() => {
-    // Generate full path including query strings for precise tracking
     const fullPath = location.pathname + location.search;
+    const now = Date.now();
     
-    // Check if this specific path was tracked in the last 1500ms
-    if (!isDuplicatePageView(fullPath)) {
-      if (import.meta.env.DEV) {
-        console.log(`[Meta Pixel] Navigated to: ${fullPath}`);
-      }
-      metaPixelService.trackPageView();
+    // STRICT LOCK: Prevent identical fires within 2000ms
+    if (fullPath === pageViewLock.path && (now - pageViewLock.timestamp < 2000)) {
+      return;
     }
+
+    // Update lock
+    pageViewLock.path = fullPath;
+    pageViewLock.timestamp = now;
+
+    if (import.meta.env.DEV) {
+      console.log(`[Meta Pixel] Navigated to: ${fullPath}`);
+    }
+    
+    // MUTED: Let GTM/Static handle the PageView to prevent double-firing
+    // metaPixelService.trackPageView();
   }, [location]);
 };
 

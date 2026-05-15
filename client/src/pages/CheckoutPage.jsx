@@ -38,14 +38,14 @@ const CheckoutPage = () => {
         }
     }, [userInfo, authLoading, navigate]);
 
-    // Track InitiateCheckout only once per mount
+    // Track InitiateCheckout cleanly
+    const hasTrackedCheckout = useRef(false);
     useEffect(() => {
-        if (cartItems.length > 0) {
-            const totalAmount = getCartTotal();
-            metaPixelService.trackInitiateCheckout(cartItems, totalAmount);
-            metaPixelService.trackCartViewContent(cartItems, totalAmount, 'checkout_page');
+        if (cartItems.length > 0 && !hasTrackedCheckout.current) {
+            metaPixelService.trackInitiateCheckout(cartItems, getCartTotal());
+            hasTrackedCheckout.current = true;
         }
-    }, []); // Only run once on mount
+    }, [cartItems, getCartTotal]);
 
     // Load Razorpay Script
     useEffect(() => {

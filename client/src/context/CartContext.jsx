@@ -4,9 +4,14 @@ export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
     const [cartItems, setCartItems] = useState(() => {
+        console.log('[Cart] Cart hydration started');
         try {
             const storedCart = localStorage.getItem('cartItems');
-            return storedCart ? JSON.parse(storedCart) : [];
+            if (storedCart) {
+                console.log('[Cart] Cart restored from storage');
+                return JSON.parse(storedCart);
+            }
+            return [];
         } catch (error) {
             console.error('Error parsing cart from localStorage:', error);
             return [];
@@ -37,6 +42,7 @@ export const CartProvider = ({ children }) => {
                 return [...prevItems, {
                     product: product._id,
                     name: product.name,
+                    category: typeof product.category === 'object' ? product.category.name : (product.category || 'Ayurvedic Products'),
                     image: product.image,
                     price: selectedPack.sellingPrice, // Use pack price
                     pack: selectedPack,

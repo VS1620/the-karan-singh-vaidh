@@ -35,8 +35,7 @@ const OrderSuccess = () => {
                 items: order.orderItems
             });
 
-            // Enhanced ViewContent tracking for the success page
-            metaPixelService.trackCartViewContent(order.orderItems, order.totalPrice, 'success_page');
+            // Enhanced ViewContent tracking for the success page removed as redundant with trackPurchase
         }
     }, [order]);
 

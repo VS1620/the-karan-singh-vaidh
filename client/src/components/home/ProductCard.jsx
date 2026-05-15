@@ -32,8 +32,12 @@ const ProductCard = ({ product }) => {
     const discount = selectedPack.discount || (mrp > price ? Math.round(((mrp - price) / mrp) * 100) : 0);
 
     const handleAddToCart = () => {
-        metaPixelService.trackAddToCart(product, quantity, selectedPack?.sellingPrice || price);
+        console.log('[Meta Pixel] AddToCart button clicked');
+        
         addToCart(product, selectedPack, quantity);
+        console.log('[Meta Pixel] Cart updated successfully');
+        
+        metaPixelService.trackAddToCart(product, quantity, selectedPack?.sellingPrice || price);
     };
 
     return (

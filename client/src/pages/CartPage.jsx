@@ -10,35 +10,19 @@ const CartPage = () => {
     const { cartItems, removeFromCart, updateQty, getCartTotal } = useContext(CartContext);
     const navigate = useNavigate();
 
-    // Track Cart actions - Triple-Fire for 100% reliability
+    // Track the cart state on mount using the centralized service
     const hasTracked = useRef(false);
     useEffect(() => {
+        // We use a small delay to ensure Meta Pixel script is ready and bypass hydration blocks
         if (cartItems.length > 0 && !hasTracked.current) {
-            const total = getCartTotal();
-            const fireEvent = (delay) => {
-                setTimeout(() => {
-                    if (window.fbq) {
-                        window.fbq('track', 'AddToCart', {
-                            content_ids: cartItems.map(item => (item.product || item._id || item.id || '').toString()),
-                            content_type: 'product',
-                            value: total,
-                            currency: 'INR',
-                            num_items: cartItems.length,
-                            source: 'cart_page_retry_' + delay
-                        });
-                        console.log(`[Meta Pixel] Firing AddToCart (${delay}ms delay)`);
-                    }
-                }, delay);
-            };
-
-            // Fire 3 times to be 100% sure Meta catches it
-            fireEvent(1000);
-            fireEvent(2000);
-            fireEvent(3000);
-            
-            hasTracked.current = true;
+            const timer = setTimeout(() => {
+                console.log('[CartPage] Firing trackViewCart...');
+                metaPixelService.trackViewCart(cartItems, getCartTotal());
+                hasTracked.current = true;
+            }, 800); // 800ms for safety
+            return () => clearTimeout(timer);
         }
-    }, [cartItems, getCartTotal]); 
+    }, [cartItems, getCartTotal]);
     const total = getCartTotal();
 
     if (cartItems.length === 0) {
