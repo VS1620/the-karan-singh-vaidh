@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Trash2, ShoppingBag, ArrowRight, Phone } from 'lucide-react';
 import { CartContext } from '../context/CartContext';
@@ -10,15 +10,17 @@ const CartPage = () => {
     const { cartItems, removeFromCart, updateQty, getCartTotal } = useContext(CartContext);
     const navigate = useNavigate();
 
-    // Track Cart actions only once per mount
+    // Track Cart actions - Using a ref to ensure it only fires ONCE per mount
+    const hasTracked = useRef(false);
     useEffect(() => {
-        if (cartItems.length > 0) {
+        if (cartItems.length > 0 && !hasTracked.current) {
             const total = getCartTotal();
-            // We only trigger ViewCart (Custom) and AddToCart (Standard) on this page
+            console.log('%c[Cart] Triggering Meta Pixel Tracking...', 'color: #10b981; font-weight: bold;');
             metaPixelService.trackViewCart(cartItems, total);
             metaPixelService.trackCartAddToCart(cartItems, total);
+            hasTracked.current = true;
         }
-    }, []); // Only run once on mount
+    }, [cartItems, getCartTotal]); 
     const total = getCartTotal();
 
     if (cartItems.length === 0) {
