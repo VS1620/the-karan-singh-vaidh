@@ -38,9 +38,9 @@ const track = (eventName, payload = {}, isCustom = false, force = false) => {
     // ANTI-SUPPRESSION BYPASS: Temporarily change page title to hide 'Ayurvedic' keywords from Meta's crawler
     const originalTitle = document.title;
     const needsBypass = originalTitle.toLowerCase().includes('ayurvedic') || originalTitle.toLowerCase().includes('vaidh');
-    
+
     if (needsBypass) {
-      document.title = 'Wellness Shopping Cart'; 
+      document.title = 'Wellness Shopping Cart';
     }
 
     if (isCustom) {
@@ -48,14 +48,14 @@ const track = (eventName, payload = {}, isCustom = false, force = false) => {
     } else {
       window.fbq('track', eventName, payload);
     }
-    
+
     // Restore original title after a short delay
     if (needsBypass) {
       setTimeout(() => {
         document.title = originalTitle;
       }, 500);
     }
-    
+
     console.log(`[Meta Pixel] ${eventName} sent successfully`);
     console.log(`[Meta Pixel] ${eventName} final payload:`, JSON.stringify(payload, null, 2));
   } catch (error) {
@@ -88,7 +88,7 @@ export const metaPixelService = {
     const category = typeof product.category === 'object' ? product.category.name : (product.category || 'Ayurvedic Products');
 
     console.log(`[Meta Pixel] ViewContent triggered for: ${product.name}`);
-    
+
     track('ViewContent', {
       content_category: String(category).toUpperCase(),
       content_ids: [String(id)],
@@ -110,7 +110,7 @@ export const metaPixelService = {
   trackAddToCart: (product, quantity = 1, priceOverride = null, force = true) => {
     if (!product) return;
     console.log('[Meta Pixel] trackAddToCart called');
-    
+
     const id = product._id || product.id || product.slug || product.product;
     const unitPrice = Number(priceOverride !== null ? priceOverride : (product.price || product.packs?.[0]?.sellingPrice || 0));
 
@@ -149,7 +149,7 @@ export const metaPixelService = {
       console.log('[Meta Pixel] ViewCart skipped - Empty cart');
       return;
     }
-    
+
     const itemIds = cartItems.map(item => String(item.product || item._id || item.id));
     const totalQty = Number(cartItems.reduce((acc, item) => acc + (item.qty || 1), 0));
 
@@ -168,7 +168,7 @@ export const metaPixelService = {
       content_name: 'Wellness Bundle',
       event_source: 'cart_page_view'
     }, true, true);
-    
+
     console.log(`[Meta Pixel] Anti-Suppression Custom-track executed`);
   },
 
