@@ -15,9 +15,20 @@ const CartPage = () => {
     useEffect(() => {
         if (cartItems.length > 0 && !hasTracked.current) {
             const total = getCartTotal();
-            console.log('%c[Cart] Triggering Meta Pixel Tracking...', 'color: #10b981; font-weight: bold;');
-            metaPixelService.trackViewCart(cartItems, total);
-            metaPixelService.trackCartAddToCart(cartItems, total);
+            
+            // DIRECT HARD-FIRE BYPASS
+            if (window.fbq) {
+                window.fbq('track', 'AddToCart', {
+                    content_ids: cartItems.map(item => (item.product || item._id || item.id || '').toString()),
+                    content_type: 'product',
+                    value: total,
+                    currency: 'INR',
+                    num_items: cartItems.length,
+                    source: 'direct_cart_page'
+                });
+                console.log('%c[Meta Pixel] DIRECT FIRE: AddToCart', 'color: #fbbf24; font-weight: bold;');
+            }
+            
             hasTracked.current = true;
         }
     }, [cartItems, getCartTotal]); 
