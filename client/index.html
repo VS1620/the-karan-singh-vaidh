@@ -8,16 +8,21 @@
       if (f.fbq) return;
       n = f.fbq = function () {
         const args = Array.from(arguments);
-        // Master Interceptor: Block duplicate PageViews within 2 seconds
+        
+        // 1. Block duplicate PageViews within 2 seconds
         if (args[0] === 'track' && args[1] === 'PageView') {
           const now = Date.now();
           window._lastP = window._lastP || 0;
-          if (now - window._lastP < 2000) {
-            console.log('[Meta Pixel] Interceptor blocked duplicate PageView');
-            return;
-          }
+          if (now - window._lastP < 2000) return;
           window._lastP = now;
         }
+
+        // 2. FORCE BLOCK ViewContent on the Cart page (as requested)
+        if (args[0] === 'track' && args[1] === 'ViewContent' && window.location.pathname === '/cart') {
+          console.log('[Meta Pixel] Interceptor blocked ViewContent on Cart page');
+          return;
+        }
+
         n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
       };
       if (!f._fbq) f._fbq = n;
@@ -25,8 +30,10 @@
       t = b.createElement(e); t.async = !0; t.src = v;
       s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s);
     })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1287897736635293');
+    
+    // Disable AutoConfig BEFORE init for maximum effect
     fbq('set', 'autoConfig', false, '1287897736635293');
+    fbq('init', '1287897736635293');
   </script>
 
   <!-- END INTERCEPTOR -->
