@@ -132,6 +132,7 @@ export const metaPixelService = {
       value: totalValue || 0,
       currency: CURRENCY,
       num_items: cartItems.reduce((acc, item) => acc + (item.qty || item.quantity || 1), 0),
+      source: 'cart_page' // Unique signature to avoid deduplication blocking
     });
   },
 

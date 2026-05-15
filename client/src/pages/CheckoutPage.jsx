@@ -13,6 +13,7 @@ const CheckoutPage = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState('COD'); // 'COD' or 'RAZORPAY'
+    const isRedirecting = useRef(false);
 
     const [form, setForm] = useState({
         name: '',
@@ -113,6 +114,7 @@ const CheckoutPage = () => {
                                 }
                             }
 
+                            isRedirecting.current = true;
                             clearCart();
                             navigate(`/order-success/${createdOrder._id}`);
                         }
@@ -138,7 +140,7 @@ const CheckoutPage = () => {
             const errorMessage = error.response?.data?.message || error.message || 'Error initiating Razorpay payment. Please try again.';
             alert(errorMessage);
         } finally {
-            setLoading(false);
+            if (!isRedirecting.current) setLoading(false);
         }
     };
 
@@ -180,6 +182,7 @@ const CheckoutPage = () => {
         } else {
             try {
                 const { data: createdOrder } = await api.post('/orders', orderData);
+                isRedirecting.current = true;
                 clearCart();
                 navigate(`/order-success/${createdOrder._id}`);
             } catch (error) {
@@ -190,8 +193,13 @@ const CheckoutPage = () => {
         }
     };
 
-    if (cartItems.length === 0) {
-        navigate('/cart');
+    useEffect(() => {
+        if (!isRedirecting.current && cartItems.length === 0) {
+            navigate('/cart');
+        }
+    }, [cartItems, navigate]);
+
+    if (!isRedirecting.current && cartItems.length === 0) {
         return null;
     }
 
