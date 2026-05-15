@@ -19,15 +19,14 @@
     // GLOBAL EVENT SHIELD: Intercept and block restricted events from ANY source (GTM, Meta AI, etc.)
     const originalFbq = window.fbq;
     window.fbq = function () {
-      const args = Array.from(arguments);
-      const eventName = args[1];
-      const restrictedEvents = ['AddToCart', 'Purchase', 'InitiateCheckout', 'AddPaymentInfo', 'StartTrial'];
-      
-      if (args[0] === 'track' && restrictedEvents.includes(eventName)) {
-        console.warn(`[Meta Pixel Shield] Blocked restricted event: ${eventName}`);
+      const args = arguments;
+      if (args && args[0] === 'track' && (args[1] === 'AddToCart' || args[1] === 'Purchase' || args[1] === 'InitiateCheckout')) {
+        console.warn(`[Meta Pixel Shield] Blocked restricted event: ${args[1]}`);
         return; 
       }
-      return originalFbq.apply(this, arguments);
+      if (typeof originalFbq === 'function') {
+        return originalFbq.apply(this, args);
+      }
     };
 
   </script>
