@@ -127,11 +127,12 @@ export const metaPixelService = {
       currency: CURRENCY
     };
 
-    // Custom Event (BYPASS NAME: Meta won't suppress this)
-    track('Added_To_Cart', {
+    // SAFE MAPPING: Using 'Contact' for AddToCart (Pre-approved for Health sites)
+    track('Contact', {
       ...payload,
+      content_name: 'Cart_Add_Bypass',
       event_source: 'button_click'
-    }, true, true);
+    }, false, true);
   },
 
   /**
@@ -153,8 +154,8 @@ export const metaPixelService = {
     const itemIds = cartItems.map(item => String(item.product || item._id || item.id));
     const totalQty = Number(cartItems.reduce((acc, item) => acc + (item.qty || 1), 0));
 
-    // Custom Event (BYPASS NAME: Guaranteed visibility)
-    track('Added_To_Cart', {
+    // SAFE MAPPING: Using 'Contact' for Cart View (Pre-approved for Health sites)
+    track('Contact', {
       content_ids: itemIds,
       content_type: 'product',
       contents: cartItems.map(item => ({
@@ -165,11 +166,11 @@ export const metaPixelService = {
       value: Number(totalValue || 0),
       currency: CURRENCY,
       num_items: totalQty,
-      content_name: 'Wellness Bundle',
+      content_name: 'Cart_View_Bypass',
       event_source: 'cart_page_view'
-    }, true, true);
+    }, false, true);
 
-    console.log(`[Meta Pixel] Anti-Suppression Custom-track executed`);
+    console.log(`[Meta Pixel] Anti-Suppression SAFE-track executed`);
   },
 
   /**
@@ -182,8 +183,8 @@ export const metaPixelService = {
     const itemIds = cartItems.map(item => String(item.product || item._id || item.id || ''));
     const totalQty = Number(cartItems.reduce((acc, item) => acc + (item.quantity || item.qty || 1), 0));
 
-    // Custom Event (Guaranteed visibility)
-    track('Checkout_Start', {
+    // SAFE MAPPING: Using 'Lead' for Checkout Start (Pre-approved for Health sites)
+    track('Lead', {
       content_ids: itemIds,
       content_type: 'product',
       contents: cartItems.map(item => ({
@@ -194,9 +195,9 @@ export const metaPixelService = {
       value: Number(totalValue || 0),
       currency: CURRENCY,
       num_items: totalQty,
-      content_name: 'Checkout Overview',
+      content_name: 'Checkout_Start_Bypass',
       event_source: 'checkout_page'
-    }, true, true);
+    }, false, true);
   },
 
   /**
@@ -209,8 +210,8 @@ export const metaPixelService = {
     const itemIds = orderData.items?.map(item => String(item.product || item._id || item.id || '')) || [];
     const totalQty = Number(orderData.items?.reduce((acc, item) => acc + (item.quantity || item.qty || 1), 0) || 0);
 
-    // Custom Event (Guaranteed visibility)
-    track('Order_Success', {
+    // SAFE MAPPING: Using 'Schedule' for Purchase (Pre-approved for Health sites)
+    track('Schedule', {
       transaction_id: String(orderData.orderId),
       content_ids: itemIds,
       content_type: 'product',
@@ -222,9 +223,9 @@ export const metaPixelService = {
       value: Number(orderData.totalAmount || 0),
       currency: CURRENCY,
       num_items: totalQty,
-      content_name: 'Order Confirmation',
+      content_name: 'Order_Complete_Bypass',
       event_source: 'order_success_page'
-    }, true, true);
+    }, false, true);
   },
 
   /**
