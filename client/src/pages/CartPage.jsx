@@ -10,24 +10,31 @@ const CartPage = () => {
     const { cartItems, removeFromCart, updateQty, getCartTotal } = useContext(CartContext);
     const navigate = useNavigate();
 
-    // Track Cart actions - Using a ref to ensure it only fires ONCE per mount
+    // Track Cart actions - Triple-Fire for 100% reliability
     const hasTracked = useRef(false);
     useEffect(() => {
         if (cartItems.length > 0 && !hasTracked.current) {
             const total = getCartTotal();
-            
-            // DIRECT HARD-FIRE BYPASS
-            if (window.fbq) {
-                window.fbq('track', 'AddToCart', {
-                    content_ids: cartItems.map(item => (item.product || item._id || item.id || '').toString()),
-                    content_type: 'product',
-                    value: total,
-                    currency: 'INR',
-                    num_items: cartItems.length,
-                    source: 'direct_cart_page'
-                });
-                console.log('%c[Meta Pixel] DIRECT FIRE: AddToCart', 'color: #fbbf24; font-weight: bold;');
-            }
+            const fireEvent = (delay) => {
+                setTimeout(() => {
+                    if (window.fbq) {
+                        window.fbq('track', 'AddToCart', {
+                            content_ids: cartItems.map(item => (item.product || item._id || item.id || '').toString()),
+                            content_type: 'product',
+                            value: total,
+                            currency: 'INR',
+                            num_items: cartItems.length,
+                            source: 'cart_page_retry_' + delay
+                        });
+                        console.log(`[Meta Pixel] Firing AddToCart (${delay}ms delay)`);
+                    }
+                }, delay);
+            };
+
+            // Fire 3 times to be 100% sure Meta catches it
+            fireEvent(1000);
+            fireEvent(2000);
+            fireEvent(3000);
             
             hasTracked.current = true;
         }

@@ -2,27 +2,11 @@
 <html lang="en">
 
 <head>
-  <!-- Meta Pixel Master Interceptor - Blocks duplicate PageViews from GTM/React -->
+  <!-- Meta Pixel Code -->
   <script>
     !(function (f, b, e, v, n, t, s) {
       if (f.fbq) return;
       n = f.fbq = function () {
-        const args = Array.from(arguments);
-        console.log(`%c[Meta Pixel Interceptor] Received: ${args[1]}`, 'color: #3b82f6; font-weight: bold;', args[2] || 'No Payload');
-
-        // 1. Block duplicate PageViews within 2 seconds
-        if (args[0] === 'track' && args[1] === 'PageView') {
-          const now = Date.now();
-          window._lastP = window._lastP || 0;
-          if (now - window._lastP < 2000) return;
-          window._lastP = now;
-        }
-
-        // 2. FORCE BLOCK ViewContent on the Cart page (as requested)
-        if (args[0] === 'track' && args[1] === 'ViewContent' && window.location.pathname === '/cart') {
-          return;
-        }
-
         n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
       };
       if (!f._fbq) f._fbq = n;
@@ -30,12 +14,10 @@
       t = b.createElement(e); t.async = !0; t.src = v;
       s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s);
     })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
-    
-    fbq('set', 'autoConfig', false, '1287897736635293');
     fbq('init', '1287897736635293');
+    fbq('track', 'PageView');
   </script>
-
-  <!-- END INTERCEPTOR -->
+  <!-- End Meta Pixel Code -->
 
   <!-- Google Tag Manager -->
   <script>(function (w, d, s, l, i) {
@@ -44,7 +26,7 @@
           new Date().getTime(), event: 'gtm.js'
       }); var f = d.getElementsByTagName(s)[0],
         j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
-          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
     })(window, document, 'script', 'dataLayer', 'GTM-5PL65H47');</script>
   <!-- End Google Tag Manager -->
 
