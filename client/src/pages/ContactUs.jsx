@@ -62,10 +62,10 @@ const ContactUs = () => {
 
     return (
         <div className="bg-[#FCFAFA] min-h-screen pt-24 pb-12">
-            <SEO 
+            <SEO
                 title="Contact Us | Expert Ayurvedic Consultation - Karan Singh Vaidh"
-                description="Contact Ayurvedic Clinic in Solan to get expert Ayurvedic advice. Book consultation for natural treatment, personalized care & holistic healing support."
-                keywords="Contact Ayurvedic Clinic in Solan"
+                description="Contact Ayurvedic hospital in Solan to get expert Ayurvedic advice. Book consultation for natural treatment, personalized care & holistic healing support."
+                keywords="Contact Ayurvedic hospital in Solan"
                 url="/contact"
             />
             {/* Hero Section */}
@@ -76,7 +76,7 @@ const ContactUs = () => {
                             Get In Touch
                         </span>
                     </div>
-                    <h1 className="text-3xl md:text-6xl font-serif font-bold text-ayur-green mb-6">Contact Ayurvedic Clinic in Solan for Ayurvedic Advice</h1>
+                    <h1 className="text-3xl md:text-6xl font-serif font-bold text-ayur-green mb-6">Contact Ayurvedic Hospital in Solan for Ayurvedic Advice</h1>
                     <p className="text-xl text-gray-600 leading-relaxed">
                         Have questions about our Ayurvedic products or need personalized wellness guidance? We're here to help you on your journey to holistic health.
                     </p>

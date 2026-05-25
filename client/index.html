@@ -4,52 +4,28 @@
 <head>
   <!-- Meta Pixel Code -->
   <script>
-    !(function (f, b, e, v, n, t, s) {
-      if (f.fbq) return;
-      n = f.fbq = function () {
-        n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
-      };
-      if (!f._fbq) f._fbq = n;
-      n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = [];
-      t = b.createElement(e); t.async = !0; t.src = v;
-      s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s);
-    })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1287897736635293', { autoConfig: false });
-
-    // GLOBAL EVENT SHIELD: Using modern Proxy API for 100% transparency and zero conflicts
-    (function () {
-      if (!window.fbq || window.fbq._isProxy) return;
-
-      const originalFbq = window.fbq;
-      const restrictedEvents = ['AddToCart', 'Purchase', 'InitiateCheckout', 'AddPaymentInfo', 'StartTrial'];
-
-      window.fbq = new Proxy(originalFbq, {
-        apply(target, thisArg, args) {
-          if (args[0] === 'track' && restrictedEvents.indexOf(args[1]) !== -1) {
-            console.warn(`[Meta Pixel Shield] Blocked restricted event: ${args[1]}`);
-            return;
-          }
-          return Reflect.apply(target, thisArg, args);
-        },
-        get(target, prop, receiver) {
-          if (prop === '_isProxy') return true;
-          return Reflect.get(target, prop, receiver);
-        }
-      });
-    })();
-
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '931230597559392');
+  fbq('track', 'PageView');
   </script>
   <!-- End Meta Pixel Code -->
 
   <!-- Google Tag Manager -->
-  <script>(function (w, d, s, l, i) {
+  <!-- <script>(function (w, d, s, l, i) {
       w[l] = w[l] || []; w[l].push({
         'gtm.start':
           new Date().getTime(), event: 'gtm.js'
       }); var f = d.getElementsByTagName(s)[0],
         j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
         'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
-    })(window, document, 'script', 'dataLayer', 'GTM-5PL65H47');</script>
+    })(window, document, 'script', 'dataLayer', 'GTM-5PL65H47');</script> -->
   <!-- End Google Tag Manager -->
 
   <meta charset="UTF-8" />
@@ -66,7 +42,10 @@
 </head>
 
 <body>
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5PL65H47" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- Meta Pixel NoScript -->
+  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=931230597559392&ev=PageView&noscript=1" /></noscript>
+  <!-- End Meta Pixel NoScript -->
+  <!-- <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5PL65H47" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> -->
   <div id="root"></div>
   <script type="module" src="/src/main.jsx"></script>
 </body>

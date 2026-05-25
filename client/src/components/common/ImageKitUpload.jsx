@@ -4,7 +4,7 @@ import { Upload, X, Check, Loader2 } from 'lucide-react';
 
 // Use same logic as api.js for consistency
 const BASE_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
-  ? "http://localhost:5000"
+  ? window.location.origin
   : (import.meta.env.VITE_API_URL || window.location.origin);
 
 const API_ORIGIN = BASE_URL.replace(/\/$/, "");

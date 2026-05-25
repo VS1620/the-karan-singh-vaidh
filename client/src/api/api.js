@@ -20,14 +20,14 @@ const getBaseURL = () => {
                     hostname.startsWith("10.") || 
                     hostname.endsWith(".local");
                     
-    if (isLocal) return "http://localhost:5000";
+    if (isLocal) return window.location.origin;
     
     // Priority 3: Fallback to Render Production URL
     return "https://the-karan-singh-vaidh.onrender.com";
 };
 
 const BASE_URL = getBaseURL();
-const API_ORIGIN = (BASE_URL && BASE_URL !== "/") ? BASE_URL.replace(/\/$/, "") : "http://localhost:5000";
+const API_ORIGIN = (BASE_URL !== undefined && BASE_URL !== "/") ? BASE_URL.replace(/\/$/, "") : "";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // getAssetUrl  — FASTEST IMAGE LOADING LOGIC

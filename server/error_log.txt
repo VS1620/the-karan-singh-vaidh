@@ -18655,3 +18655,23 @@ Error: The CORS policy for this site does not allow access from the specified Or
     at processParams (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:582:12)
     at next (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\router\index.js:291:5)
     at read (C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\node_modules\body-parser\lib\read.js:53:5)
+
+[2026-05-16T06:34:01.641Z] 401 - Invalid email or password
+Error: Invalid email or password
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:45:19
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+testtest
+[2026-05-18T09:00:56.928Z] 401 - Invalid email or password
+Error: Invalid email or password
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:45:19
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-05-18T09:01:01.967Z] 401 - Invalid email or password
+Error: Invalid email or password
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:45:19
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-05-18T09:01:04.821Z] 401 - Invalid email or password
+Error: Invalid email or password
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:45:19
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)

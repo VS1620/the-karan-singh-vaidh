@@ -22,6 +22,7 @@ const AboutUs = lazy(() => import('./pages/AboutUs'));
 const ContactUs = lazy(() => import('./pages/ContactUs'));
 const OrderSuccess = lazy(() => import('./pages/OrderSuccess'));
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 // Policy Pages
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
@@ -136,6 +137,9 @@ function App() {
                     <Route path="appointments" element={<Appointments />} />
                   </Route>
                 </Route>
+                
+                {/* Catch-all 404 Route */}
+                <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
           </MainLayout>

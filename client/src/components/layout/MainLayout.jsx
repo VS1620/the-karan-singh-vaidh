@@ -2,6 +2,7 @@ import React from 'react';
 import Header from './Header';
 import Footer from './Footer';
 import FloatingActionButtons from './FloatingActionButtons';
+import AuthPopup from './AuthPopup';
 
 const MainLayout = ({ children }) => {
     return (
@@ -12,6 +13,7 @@ const MainLayout = ({ children }) => {
             </main>
             <FloatingActionButtons />
             <Footer />
+            <AuthPopup />
         </div>
     );
 };
