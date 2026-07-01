@@ -112,4 +112,12 @@ const resetPassword = asyncHandler(async (req, res) => {
     });
 });
 
-module.exports = { authUser, registerUser, resetPassword };
+// @desc    Get all users
+// @route   GET /api/users
+// @access  Private/Admin
+const getUsers = asyncHandler(async (req, res) => {
+    const users = await User.find({}).select('-password').sort({ createdAt: -1 });
+    res.json(users);
+});
+
+module.exports = { authUser, registerUser, resetPassword, getUsers };

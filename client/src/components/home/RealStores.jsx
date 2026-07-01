@@ -79,7 +79,7 @@ const RealStores = () => {
 
                         {/* Secondary Button - Send Reports */}
                         <a
-                            href="https://wa.me/918219658454?text=Hi, I want to send my medical reports for consultation."
+                            href="https://wa.me/918091498454?text=Hi, I want to send my medical reports for consultation."
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={trackWhatsAppLead}

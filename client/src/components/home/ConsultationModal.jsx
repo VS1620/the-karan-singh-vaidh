@@ -131,7 +131,7 @@ const ConsultationModal = ({ isOpen, onClose }) => {
     };
 
     return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center px-4">
+        <div className="fixed inset-0 z-[1000] flex items-center justify-center px-4">
             {/* Backdrop */}
             <div
                 className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
@@ -139,7 +139,7 @@ const ConsultationModal = ({ isOpen, onClose }) => {
             ></div>
 
             {/* Modal Content */}
-            <div className="relative bg-[#fcfcfc] w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
+            <div className="relative bg-[#fcfcfc] w-full max-w-2xl rounded-2xl shadow-2xl overflow-y-auto max-h-[95vh] sm:max-h-[90vh] animate-in zoom-in-95 duration-300">
                 {/* Close Button */}
                 <button
                     onClick={onClose}

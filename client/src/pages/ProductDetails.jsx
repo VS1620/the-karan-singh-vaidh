@@ -149,7 +149,7 @@ const ProductDetails = () => {
                                 ],
                                 "contactPoint": {
                                     "@type": "ContactPoint",
-                                    "telephone": "+91-8219658454",
+                                    "telephone": "+91-8091498454",
                                     "contactType": "Customer Support",
                                     "areaServed": "IN",
                                     "availableLanguage": ["Hindi", "English"]
@@ -168,7 +168,7 @@ const ProductDetails = () => {
                                     "postalCode": "173211",
                                     "addressCountry": "IN"
                                 },
-                                "telephone": "+91-8219658454",
+                                "telephone": "+91-8091498454",
                                 "openingHours": "Mo-Su 10:00-17:00",
                                 "priceRange": "₹₹",
                                 "areaServed": "India"
@@ -773,7 +773,7 @@ const ProductDetails = () => {
 
                             <div className="flex-shrink-0">
                                 <a
-                                    href="tel:+918219658454"
+                                    href="tel:+918091498454"
                                     onClick={() => metaPixelService.trackContact({ type: 'phone_call', location: 'consultation_banner', page: 'product_details' })}
                                     className="relative flex flex-col items-center group"
                                 >
@@ -789,7 +789,7 @@ const ProductDetails = () => {
                                         <span className="text-white font-bold uppercase text-xs tracking-[0.3em] opacity-40 group-hover:opacity-100 transition-opacity">
                                             Tap to Connect
                                         </span>
-                                        <span className="text-ayur-beige text-[11px] font-bold tracking-widest">+91 82196 58454</span>
+                                        <span className="text-ayur-beige text-[11px] font-bold tracking-widest">+91 80914 98454</span>
                                     </div>
                                 </a>
                             </div>

@@ -38,6 +38,7 @@ const ProductForm = lazy(() => import('./pages/admin/ProductForm'));
 const Categories = lazy(() => import('./pages/admin/Categories'));
 const Orders = lazy(() => import('./pages/admin/Orders'));
 const Appointments = lazy(() => import('./pages/admin/Appointments'));
+const Users = lazy(() => import('./pages/admin/Users'));
 
 const AdminRoute = lazy(() => import('./components/admin/AdminRoute'));
 const AdminLayout = lazy(() => import('./components/admin/AdminLayout'));
@@ -135,6 +136,7 @@ function App() {
                     <Route path="categories" element={<Categories />} />
                     <Route path="orders" element={<Orders />} />
                     <Route path="appointments" element={<Appointments />} />
+                    <Route path="users" element={<Users />} />
                   </Route>
                 </Route>
                 

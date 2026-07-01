@@ -9,6 +9,7 @@ const ProductForm = () => {
     // Price removed
     const [image, setImage] = useState('');
     const [images, setImages] = useState([]);
+    const [draggedImgIdx, setDraggedImgIdx] = useState(null);
     const [category, setCategory] = useState('');
     const [categories, setCategories] = useState([]);
     const [countInStock, setCountInStock] = useState(100);
@@ -200,6 +201,26 @@ const ProductForm = () => {
         }
     };
 
+    const handleDragStart = (idx) => {
+        setDraggedImgIdx(idx);
+    };
+
+    const handleDragOver = (e) => {
+        e.preventDefault();
+    };
+
+    const handleDrop = (idx) => {
+        if (draggedImgIdx === null || draggedImgIdx === idx) return;
+        
+        const newImages = [...images];
+        const draggedImg = newImages[draggedImgIdx];
+        newImages.splice(draggedImgIdx, 1);
+        newImages.splice(idx, 0, draggedImg);
+        
+        setImages(newImages);
+        setDraggedImgIdx(null);
+    };
+
     return (
         <div className="max-w-4xl mx-auto pb-10">
             <h2 className="text-3xl font-bold text-gray-800 mb-6">{isEditMode ? 'Edit Product' : 'Create Product'}</h2>
@@ -268,8 +289,15 @@ const ProductForm = () => {
                     <label className="block text-sm font-bold text-gray-700 uppercase tracking-wider">Gallery Images (Optional)</label>
                     <div className="flex flex-wrap gap-4">
                         {Array.isArray(images) && images.map((img, idx) => (
-                            <div key={idx} className="relative w-24 h-24 border-2 border-emerald-50 rounded-lg overflow-hidden shadow-md group">
-                                <img src={getAssetUrl(img)} alt="" className="w-full h-full object-cover transition-transform group-hover:scale-110" />
+                            <div 
+                                key={idx} 
+                                draggable
+                                onDragStart={() => handleDragStart(idx)}
+                                onDragOver={handleDragOver}
+                                onDrop={() => handleDrop(idx)}
+                                className={`relative w-24 h-24 border-2 ${draggedImgIdx === idx ? 'border-dashed border-emerald-500 opacity-50' : 'border-emerald-50'} rounded-lg overflow-hidden shadow-md group cursor-move`}
+                            >
+                                <img src={getAssetUrl(img)} alt="" draggable="false" className="w-full h-full object-cover transition-transform group-hover:scale-110" />
                                 <button
                                     type="button"
                                     onClick={() => setImages(images.filter((_, i) => i !== idx))}

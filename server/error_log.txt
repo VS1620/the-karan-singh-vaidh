@@ -18675,3 +18675,31 @@ Error: Invalid email or password
 Error: Invalid email or password
     at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:45:19
     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-05-27T06:30:42.357Z] 404 - Product not found
+Error: Product not found
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\productController.js:121:15
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-05-27T06:30:42.804Z] 404 - Product not found
+Error: Product not found
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\productController.js:121:15
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-05-29T07:54:41.649Z] 401 - Invalid email or password
+Error: Invalid email or password
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:40:23
+
+[2026-05-29T07:56:54.522Z] 401 - Invalid email or password
+Error: Invalid email or password
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:45:19
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-07-01T10:18:50.019Z] 401 - Invalid email or password
+Error: Invalid email or password
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\controllers\authController.js:45:19
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+[2026-07-01T11:35:02.994Z] 401 - Not authorized, token failed
+Error: Not authorized, token failed
+    at C:\react project\x\the-karan-singh-vaidh\the-karan-singh-vaidh\server\middleware\authMiddleware.js:27:19

@@ -61,7 +61,7 @@ const Home = () => {
                                 ],
                                 "contactPoint": {
                                     "@type": "ContactPoint",
-                                    "telephone": "+91-8219658454",
+                                    "telephone": "+91-8091498454",
                                     "contactType": "Customer Support",
                                     "areaServed": "IN",
                                     "availableLanguage": ["Hindi", "English"]
@@ -80,7 +80,7 @@ const Home = () => {
                                     "postalCode": "173211",
                                     "addressCountry": "IN"
                                 },
-                                "telephone": "+91-8219658454",
+                                "telephone": "+91-8091498454",
                                 "openingHours": "Mo-Su 10:00-17:00",
                                 "priceRange": "₹₹",
                                 "areaServed": "India"

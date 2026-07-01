@@ -4,12 +4,12 @@ import ConsultationModal from '../home/ConsultationModal';
 
 const FloatingActionButtons = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const phoneNumber = "8219658454";
-    const whatsappNumber = "918219658454";
+    const phoneNumber = "8091498454";
+    const whatsappNumber = "918091498454";
     
     return (
         <>
-            <div className="fixed bottom-6 right-6 z-[100] flex flex-col gap-4 items-end">
+            <div className={`fixed bottom-6 right-6 z-[90] flex flex-col gap-4 items-end transition-opacity duration-300 ${isModalOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
                 {/* Lead Form Button */}
                 <button
                     onClick={() => setIsModalOpen(true)}

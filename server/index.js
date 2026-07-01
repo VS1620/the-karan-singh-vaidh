@@ -115,6 +115,13 @@ app.use('/uploads',
 );
 
 // Routes
+app.use('/api', (req, res, next) => {
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, private');
+    res.set('Expires', '0');
+    res.set('Pragma', 'no-cache');
+    next();
+});
+
 app.use('/api/users', userRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/products', productRoutes);

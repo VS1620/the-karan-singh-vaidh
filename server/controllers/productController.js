@@ -315,8 +315,9 @@ const updateProduct = asyncHandler(async (req, res) => {
         product.metaTitle = metaTitle !== undefined ? metaTitle : product.metaTitle;
         product.metaDescription = metaDescription !== undefined ? metaDescription : product.metaDescription;
 
-        // Required for Mongoose to detect changes inside Mixed-type arrays (medicines)
+        // Required for Mongoose to detect changes inside arrays
         product.markModified('packs');
+        product.markModified('images');
 
         const updatedProduct = await product.save();
         res.json(updatedProduct);

@@ -58,6 +58,7 @@ const Hero = () => {
     const slides = [
         {
             id: 'banner1',
+            desktopOnly: true,
             title: null,
             subtitle: null,
             cta: null,
@@ -65,10 +66,11 @@ const Hero = () => {
             bgImage: banner1Web,
             theme: "dark",
             icon: null,
-            hasOverlay: true
+            hasOverlay: false
         },
         {
             id: 'himAward',
+            desktopOnly: true,
             title: null,
             subtitle: null,
             cta: null,
@@ -79,45 +81,29 @@ const Hero = () => {
             hasOverlay: false
         },
         {
-            id: 1,
-            title: "Ayurvedic Legacy Since 2003",
-            subtitle: "Trusted ancient formulations for modern lifestyle diseases",
+            id: 'nirmalRishi1',
+            title: null,
+            subtitle: null,
             cta: null,
-            link: "/ayurvedic-products",
-            bgImage: "https://img.freepik.com/free-photo/high-angle-assortment-fine-powders-bowls-with-stones_23-2148774961.jpg",
+            link: "/contact",
+            bgImage: '/Nirmal Rishi banner for Web.png',
+            mobileBgImage: '/Nirmal rishi Banner 4.png',
             theme: "dark",
-            icon: <Leaf className="text-yellow-400 mb-4" size={48} />
+            icon: null,
+            hasOverlay: false
         },
         {
-            id: 2,
-            title: "Proven Results. Natural Healing.",
-            subtitle: "Clinically inspired Ayurvedic medicines with no side effects",
+            id: 'nirmalRishi2',
+            title: null,
+            subtitle: null,
             cta: null,
-            link: "/consult",
-            bgImage: "https://img.freepik.com/free-photo/hand-holding-rosemary-fresh-plant-bottle-rosemary-oil_1150-35585.jpg",
+            link: "/about-ayurvedic-doctor-in-solan",
+            bgImage: '/VIDHUVADHA X NIRMAL RISHI JI.png',
+            mobileBgImage: '/KSV X NR !.png',
             theme: "dark",
-            icon: <ShieldCheck className="text-green-400 mb-4" size={48} />
+            icon: null,
+            hasOverlay: false
         },
-        {
-            id: 3,
-            title: "Targeted Relief for Chronic Disorders",
-            subtitle: "Diabetes, Joint Pain, Digestion, Immunity & Lifestyle Issues",
-            cta: null,
-            link: "/ayurvedic-products",
-            bgImage: "https://img.freepik.com/premium-photo/midsection-doctor-patient-shaking-hand-while-sitting-clinic_1048944-15396134.jpg",
-            theme: "dark",
-            icon: <Star className="text-yellow-400 mb-4" size={48} />
-        },
-        {
-            id: 4,
-            title: "Trusted by Thousands of Happy Patients",
-            subtitle: "⭐⭐⭐⭐⭐ Verified reviews with real success stories",
-            cta: null,
-            link: "/reviews",
-            bgImage: "https://img.freepik.com/free-photo/happy-senior-man-handshaking-with-female-doctor-while-talking-lobby-clinic_637285-460.jpg",
-            theme: "dark",
-            icon: <Users className="text-blue-400 mb-4" size={48} />
-        }
     ];
 
     const getOptimizedImage = (url, index) => {
@@ -127,18 +113,18 @@ const Hero = () => {
     };
 
     return (
-        <section className="relative overflow-hidden w-full h-[500px] md:h-[700px]">
+        <section className="relative overflow-hidden w-full aspect-[2/3] md:aspect-auto md:h-[700px]">
             <Slider {...settings} className="hero-slider h-full">
                 {slides.filter(slide => !slide.desktopOnly || isDesktop).map((slide, index) => (
-                    <div key={slide.id} className="relative h-[500px] md:h-[700px] w-full outline-none">
+                    <div key={slide.id} className="relative aspect-[2/3] md:aspect-auto md:h-[700px] w-full outline-none">
                         {/* Background Image with Overlay */}
                         <div className="absolute inset-0 overflow-hidden">
                              <img
-                                 src={getOptimizedImage(slide.bgImage, index)}
+                                 src={getOptimizedImage(!isDesktop && slide.mobileBgImage ? slide.mobileBgImage : slide.bgImage, index)}
                                  alt={slide.title || slide.subtitle || "The Karan Singh Vaidh Ayurvedic Banner"}
                                 fetchPriority={index === 0 ? "high" : "auto"}
                                 loading={index === 0 ? "eager" : "lazy"}
-                                className={`w-full h-full object-center transition-transform duration-[5000ms] ${slide.hasOverlay !== false ? "object-cover hover:scale-105" : "object-cover md:object-fill"
+                                className={`w-full h-full object-center transition-transform duration-[5000ms] ${slide.hasOverlay !== false ? "object-cover hover:scale-105" : "object-cover bg-white"
                                     }`}
                             />
                             {/* Gradient Overlay for Readability - Only for slides with text */}

@@ -110,11 +110,11 @@ const Footer = () => {
                             {/* Contact Info */}
                             <div className="space-y-3 pt-3 border-t border-[#d4af37]/30">
                                 <a
-                                    href="tel:8219658454"
+                                    href="tel:8091498454"
                                     className="flex items-center gap-3 text-base text-gray-100 hover:text-[#d4af37] transition-colors group"
                                 >
                                     <Phone size={20} className="text-[#d4af37] group-hover:scale-110 transition-transform" />
-                                    <span className="font-medium">82196 58454 | 80911 34027 | 88947 72187</span>
+                                    <span className="font-medium">80914 98454</span>
                                 </a>
 
                                 <a

@@ -44,7 +44,7 @@ const categories = [
         id: 5,
         name: 'Asthma Care',
         description: 'Strengthen your lungs and breathe purely with ancient respiratory support.',
-        image: asthmaImg,
+        image: "https://res.cloudinary.com/diqj5p308/image/upload/v1779861934/dil_bqzvgc.jpg",
         link: '/product/asthma-ayurvedic-treatment'
     },
     {
@@ -65,8 +65,9 @@ const categories = [
         id: 8,
         name: 'Over Weight',
         description: 'Natural metabolism booster and fat burner to achieve your ideal weight safely.',
-        image: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=2070",
-        link: '/product/weight-loss-ayurvedic-treatment'
+        image: "https://res.cloudinary.com/diqj5p308/image/upload/v1779862485/Over_Weight_smdxs0.jpg",
+        link: '/product/weight-loss-ayurvedic-treatment',
+        imgClass: 'object-top'
     }
 ];
 
@@ -88,7 +89,7 @@ const FeatureCategories = () => {
                             <div className="aspect-[4/3] overflow-hidden relative">
                                 <img loading="lazy" src={cat.image}
                                     alt={cat.name}
-                                    className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-1000"
+                                    className={`w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-1000 ${cat.imgClass || ''}`}
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                             </div>

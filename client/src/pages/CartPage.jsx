@@ -151,7 +151,7 @@ const CartPage = () => {
 
                         <div className="flex flex-col items-center">
                             <a
-                                href="tel:+918219658454"
+                                href="tel:+918091498454"
                                 onClick={() => metaPixelService.trackContact({ type: 'phone_call', location: 'cart_consultation_banner' })}
                                 className="w-28 h-28 md:w-36 md:h-36 bg-[#FDFCFB] rounded-full flex items-center justify-center text-[#2D5A41] shadow-2xl hover:scale-105 transition-all duration-500 relative group/btn"
                             >
@@ -161,7 +161,7 @@ const CartPage = () => {
                             </a>
                             <div className="mt-8 text-center">
                                 <div className="text-white/60 text-[10px] font-bold uppercase tracking-[0.4em] mb-2">Tap to Connect</div>
-                                <div className="text-2xl font-bold tracking-wider text-white">+91 82196 58454</div>
+                                <div className="text-2xl font-bold tracking-wider text-white">+91 80914 98454</div>
                             </div>
                         </div>
                     </div>

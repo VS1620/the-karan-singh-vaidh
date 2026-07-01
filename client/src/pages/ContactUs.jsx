@@ -37,8 +37,8 @@ const ContactUs = () => {
         {
             icon: Phone,
             title: 'Phone Numbers',
-            details: '82196 58454',
-            link: 'tel:+918219658454',
+            details: '80914 98454',
+            link: 'tel:+918091498454',
             color: 'text-emerald-600',
             bg: 'bg-emerald-50'
         },
@@ -218,9 +218,9 @@ const ContactUs = () => {
                                         <MapPin size={20} className="flex-shrink-0 mt-1" />
                                         <span className="font-medium"> Near Apex Hospital, Kotlanala, Solan, Himachal Pradesh – 173212</span>
                                     </div>
-                                    <a href="tel:+918219658454" className="flex items-center gap-3 text-white hover:text-ayur-gold transition-colors">
+                                    <a href="tel:+918091498454" className="flex items-center gap-3 text-white hover:text-ayur-gold transition-colors">
                                         <Phone size={20} />
-                                        <span className="font-semibold">82196 58454</span>
+                                        <span className="font-semibold">80914 98454</span>
                                     </a>
                                     <a href="mailto:info@thekaransinghvaidh.com" className="flex items-center gap-3 text-white hover:text-ayur-gold transition-colors">
                                         <Mail size={20} />

@@ -11,19 +11,9 @@ const getBaseURL = () => {
     const envUrl = import.meta.env.VITE_API_URL;
     if (envUrl && envUrl !== "/" && envUrl !== "") return envUrl;
     
-    const { hostname, origin } = window.location;
-    
-    // Priority 2: Check for local development
-    const isLocal = hostname === "localhost" || 
-                    hostname === "127.0.0.1" || 
-                    hostname.startsWith("192.168.") || 
-                    hostname.startsWith("10.") || 
-                    hostname.endsWith(".local");
-                    
-    if (isLocal) return window.location.origin;
-    
-    // Priority 3: Fallback to Render Production URL
-    return "https://the-karan-singh-vaidh.onrender.com";
+    // Priority 2: Use current origin. This perfectly handles both localhost (Vite proxy)
+    // and live cPanel servers (where frontend and backend share the domain).
+    return window.location.origin;
 };
 
 const BASE_URL = getBaseURL();

@@ -164,8 +164,8 @@ export const products = [
         description: "A blend of Guggul, Vrikshamla, and green tea extract to help you manage your weight naturally and effectively.",
         rating: 4.8,
         reviews: 450,
-        image: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=2070",
-        images: ["https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=2070"],
+        image: "https://res.cloudinary.com/diqj5p308/image/upload/v1779862485/Over_Weight_smdxs0.jpg",
+        images: ["https://res.cloudinary.com/diqj5p308/image/upload/v1779862485/Over_Weight_smdxs0.jpg"],
         packs: [
             { id: '1p', label: '60 Caps', quantity_desc: '60 Capsules', mrp: 799, price: 699, discount: 12 },
             { id: '2p', label: '120 Caps', quantity_desc: '120 Capsules', mrp: 1598, price: 1299, discount: 18, isPopular: true }
