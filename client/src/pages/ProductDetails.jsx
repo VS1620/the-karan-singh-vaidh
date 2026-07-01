@@ -467,7 +467,17 @@ const ProductDetails = () => {
                                                 {/* Mini Product Image */}
                                                 <div className="w-16 h-16 lg:w-16 lg:h-28 lg:mb-3 relative flex-shrink-0 flex items-center justify-center bg-gray-50 rounded-lg lg:bg-transparent">
                                                     <img
-                                                        src={imageError || !product.image ? fallbackImage : getAssetUrl(product.image)}
+                                                        src={(() => {
+                                                            if (pack.medicines && pack.medicines.length > 0) {
+                                                                let medData = pack.medicines[0];
+                                                                if (typeof medData === 'string' && medData.trim().startsWith('{')) {
+                                                                    try { medData = JSON.parse(medData); } catch(e) {}
+                                                                }
+                                                                if (typeof medData === 'object' && medData.image) return getAssetUrl(medData.image);
+                                                                if (typeof medData === 'string' && (medData.startsWith('http') || medData.startsWith('/'))) return getAssetUrl(medData);
+                                                            }
+                                                            return imageError || !product.image ? fallbackImage : getAssetUrl(product.image);
+                                                        })()}
                                                         className="w-full h-full object-contain relative z-10 mix-blend-multiply"
                                                         alt=""
                                                     />
