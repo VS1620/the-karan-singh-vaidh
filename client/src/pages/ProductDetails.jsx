@@ -845,7 +845,7 @@ const ProductDetails = () => {
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 w-full mx-auto">
                             {(product.name?.toLowerCase().includes('gallbladder') || product.name?.toLowerCase().includes('gall bladder') || id.toLowerCase().includes('gall-bladder') || id.toLowerCase().includes('gallbladder')) && (
                                 <>
-                                    {['YhOshhrkkoQ', 'A5XxPzQ-Lmo', 'veRMMSCFBfA', 'Dz2JQHmyTrE'].map((vidId, idx) => (
+                                    {['A5XxPzQ-Lmo', 'veRMMSCFBfA', 'Dz2JQHmyTrE'].map((vidId, idx) => (
                                         <div key={idx} className="w-full">
                                             <div className="aspect-[9/16] w-full rounded-2xl overflow-hidden shadow-2xl border border-gray-200 bg-gray-50">
                                                 <iframe 
