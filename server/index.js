@@ -187,6 +187,21 @@ app.get('/api/diagnose', (req, res) => {
     });
 });
 
+// DB Diagnostics
+app.get('/api/db-diagnose', async (req, res) => {
+    try {
+        const mongoURI = process.env.MONGO_URI || '';
+        const cleanedURI = mongoURI.replace(/:([^@]+)@/, ':****@');
+        res.json({
+            mongoURI: cleanedURI,
+            connectedHost: mongoose.connection.host,
+            connectedName: mongoose.connection.name
+        });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
 // Error Handling
 app.use(notFound);
 app.use(errorHandler);
