@@ -32,6 +32,7 @@ const Hero = () => {
         slidesToScroll: 1,
         autoplay: true,
         autoplaySpeed: 6000,
+        adaptiveHeight: true,
         fade: true,
         speed: 800,
         cssEase: "linear",
@@ -104,6 +105,71 @@ const Hero = () => {
             icon: null,
             hasOverlay: false
         },
+        {
+            id: 'gallbladder-mobile',
+            mobileOnly: true,
+            title: null,
+            subtitle: null,
+            cta: null,
+            link: "/gallbladder-stone-ayurvedic-treatment",
+            bgImage: '/Gallbladder stone Mobile Banner Size 800 x 1200px.png',
+            mobileBgImage: '/Gallbladder stone Mobile Banner Size 800 x 1200px.png',
+            theme: "dark",
+            icon: null,
+            hasOverlay: false
+        },
+        {
+            id: 'gallbladder-ak-cap-mobile',
+            mobileOnly: true,
+            title: null,
+            subtitle: null,
+            cta: null,
+            link: "/gallbladder-stone-ayurvedic-treatment",
+            bgImage: '/Gallbladder stone AK CAP Mobile Banner Size 800 x 1200px.png',
+            mobileBgImage: '/Gallbladder stone AK CAP Mobile Banner Size 800 x 1200px.png',
+            theme: "dark",
+            icon: null,
+            hasOverlay: false
+        },
+        {
+            id: 'diabetes-mobile',
+            mobileOnly: true,
+            title: null,
+            subtitle: null,
+            cta: null,
+            link: "/ayurvedic-diabetes-treatment",
+            bgImage: '/Diabetes Banner Mobile Banner Size 800 x 1200px.png',
+            mobileBgImage: '/Diabetes Banner Mobile Banner Size 800 x 1200px.png',
+            theme: "dark",
+            icon: null,
+            hasOverlay: false
+        },
+        {
+            id: 'piles-mobile',
+            mobileOnly: true,
+            title: null,
+            subtitle: null,
+            cta: null,
+            link: "/ayurvedic-piles-treatment",
+            bgImage: '/Piles Mobile Banner Size 800 x 1200px.png',
+            mobileBgImage: '/Piles Mobile Banner Size 800 x 1200px.png',
+            theme: "dark",
+            icon: null,
+            hasOverlay: false
+        },
+        {
+            id: 'kidney-stone-mobile',
+            mobileOnly: true,
+            title: null,
+            subtitle: null,
+            cta: null,
+            link: "/kidney-stone-ayurvedic-treatment",
+            bgImage: '/Kidney stone Mobile Banner Size 800 x 1200px.png',
+            mobileBgImage: '/Kidney stone Mobile Banner Size 800 x 1200px.png',
+            theme: "dark",
+            icon: null,
+            hasOverlay: false
+        },
     ];
 
     const getOptimizedImage = (url, index) => {
@@ -113,29 +179,32 @@ const Hero = () => {
     };
 
     return (
-        <section className="relative overflow-hidden w-full aspect-[2/3] md:aspect-auto md:h-[700px]">
-            <Slider {...settings} className="hero-slider h-full">
-                {slides.filter(slide => !slide.desktopOnly || isDesktop).map((slide, index) => (
-                    <div key={slide.id} className="relative aspect-[2/3] md:aspect-auto md:h-[700px] w-full outline-none">
+        <section className="relative w-full">
+            <Slider {...settings} className="hero-slider">
+                {slides.filter(slide => {
+                    if (slide.desktopOnly && !isDesktop) return false;
+                    if (slide.mobileOnly && isDesktop) return false;
+                    return true;
+                }).map((slide, index) => (
+                    <div key={slide.id} className="relative w-full outline-none">
                         {/* Background Image with Overlay */}
-                        <div className="absolute inset-0 overflow-hidden">
+                        <div className="w-full relative overflow-hidden flex items-center justify-center">
                              <img
                                  src={getOptimizedImage(!isDesktop && slide.mobileBgImage ? slide.mobileBgImage : slide.bgImage, index)}
                                  alt={slide.title || slide.subtitle || "The Karan Singh Vaidh Ayurvedic Banner"}
                                 fetchPriority={index === 0 ? "high" : "auto"}
                                 loading={index === 0 ? "eager" : "lazy"}
-                                className={`w-full h-full object-center transition-transform duration-[5000ms] ${slide.hasOverlay !== false ? "object-cover hover:scale-105" : "object-cover bg-white"
-                                    }`}
+                                className={`w-full h-auto block transition-transform duration-[5000ms] ${slide.hasOverlay !== false ? "hover:scale-105" : "bg-white"}`}
                             />
                             {/* Gradient Overlay for Readability - Only for slides with text */}
                             {slide.hasOverlay !== false && (
-                                <div className="absolute inset-0 bg-gradient-to-r from-[#0d2e1b]/90 via-[#0d2e1b]/60 to-transparent"></div>
+                                <div className="absolute inset-0 bg-gradient-to-r from-[#0d2e1b]/90 via-[#0d2e1b]/60 to-transparent pointer-events-none"></div>
                             )}
                         </div>
 
                         {/* Content Container - Render if any text or CTA exists */}
                         {(slide.title || slide.subtitle || slide.cta) && (
-                            <div className="relative z-10 container mx-auto px-4 md:px-12 h-full flex flex-col justify-center max-w-7xl">
+                            <div className="absolute inset-0 z-10 container mx-auto px-4 md:px-12 flex flex-col justify-center max-w-7xl">
                                 <motion.div
                                     initial={{ opacity: 0, y: 30 }}
                                     whileInView={{ opacity: 1, y: 0 }}

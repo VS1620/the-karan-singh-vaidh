@@ -12,7 +12,7 @@ const Authenticity = () => {
         "Specialized in kidney & Gallbladder stone and more than 100+ chronic deases",
         "Over 23+ Years of Expert Experience",
         "Deep Rooted Ayurvedic Wisdom",
-        "Duration: 15 Min (₹999) | 30 Min (₹1999) | 45 Min (₹2999)"
+        "Duration: 15 Min | 30 Min | 45 Min"
     ];
 
     return (

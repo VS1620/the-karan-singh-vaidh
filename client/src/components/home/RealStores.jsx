@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FileText, MessageCircle, ArrowRight, MapPin } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { metaPixelService } from '../../services/metaPixel';
 
 const RealStores = () => {
@@ -56,7 +57,7 @@ const RealStores = () => {
                     </h2>
 
                     {/* Description */}
-                    <p className="text-gray-200 text-lg md:text-xl leading-relaxed mb-12 md:mb-16 max-w-2xl mx-auto font-light antialiased opacity-90">
+                    <p className="text-gray-200 text-lg md:text-xl leading-relaxed mb-12 max-w-2xl mx-auto font-light antialiased opacity-90">
                         We believe in transparency and authenticity. That is why real patient medical reports have been shared on our website. These case studies provide insight into the treatment approach, process, and outcomes, helping visitors evaluate the information objectively.
                     </p>
 
@@ -64,18 +65,16 @@ const RealStores = () => {
                     <div className="flex flex-col sm:flex-row justify-center items-center gap-5 sm:gap-8">
 
                         {/* Primary Button - Download Guide */}
-                        <a
-                            href="https://thekaransinghvaidh.com/real-stores-real-people.pdf"
-                            target="_blank"
-                            rel="noopener noreferrer"
+                        <Link
+                            to="/patient-reports"
                             onClick={trackPDFView}
-                            className="group relative w-full sm:w-auto overflow-hidden bg-white text-[#132e1b] px-8 py-4 md:px-10 md:py-5 rounded-full font-bold text-sm md:text-base tracking-widest uppercase transition-all duration-300 hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] hover:scale-[1.02] active:scale-95 text-center"
+                            className="group relative w-full sm:w-auto overflow-hidden bg-white text-[#132e1b] px-8 py-4 md:px-10 md:py-5 rounded-full font-bold text-sm md:text-base tracking-widest uppercase transition-all duration-300 hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] hover:scale-[1.02] active:scale-95 text-center inline-block"
                         >
                             <span className="relative z-10 flex items-center justify-center gap-3">
                                 <FileText size={18} className="text-ayur-green" />
                                 See Our Patients Report
                             </span>
-                        </a>
+                        </Link>
 
                         {/* Secondary Button - Send Reports */}
                         <a

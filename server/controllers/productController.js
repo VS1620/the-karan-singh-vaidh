@@ -24,8 +24,13 @@ const getProducts = asyncHandler(async (req, res) => {
                 .map(word => word.charAt(0).toUpperCase() + word.slice(1))
                 .join(' ');
 
+            const escapedSearchName = searchName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
             const foundCategory = await Category.findOne({
-                name: { $regex: new RegExp(`^${searchName}$`, 'i') }
+                $or: [
+                    { name: category }, // Try matching exact provided string as name
+                    { slug: category }, // Try matching exact provided string as slug
+                    { name: { $regex: new RegExp(`^${escapedSearchName}$`, 'i') } }
+                ]
             });
 
             if (foundCategory) {

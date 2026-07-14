@@ -75,7 +75,7 @@ const ProductDetails = () => {
     const handleAddToCart = () => {
         if (!product || !product.packs || product.packs.length === 0) return;
         const pack = product.packs[selectedPackIndex];
-        
+
         // 1. Log click
         console.log('[Meta Pixel] AddToCart button clicked');
 
@@ -125,7 +125,7 @@ const ProductDetails = () => {
 
     return (
         <div className="bg-white min-h-screen pt-16 lg:pt-20 pb-20 lg:pb-12 font-sans">
-            <SEO 
+            <SEO
                 title={product.metaTitle || `${product.name} | Authentic Ayurvedic Care - Karan Singh Vaidh`}
                 description={product.metaDescription || product.shortDescription || `Buy ${product.name} online. Authentic Ayurvedic remedy by Karan Singh Vaidh. Effective results, 100% natural ingredients.`}
                 url={`/product/${product.slug || product._id || product.id || id}`}
@@ -471,7 +471,7 @@ const ProductDetails = () => {
                                                             if (pack.medicines && pack.medicines.length > 0) {
                                                                 let medData = pack.medicines[0];
                                                                 if (typeof medData === 'string' && medData.trim().startsWith('{')) {
-                                                                    try { medData = JSON.parse(medData); } catch(e) {}
+                                                                    try { medData = JSON.parse(medData); } catch (e) { }
                                                                 }
                                                                 if (typeof medData === 'object' && medData.image) return getAssetUrl(medData.image);
                                                                 if (typeof medData === 'string' && (medData.startsWith('http') || medData.startsWith('/'))) return getAssetUrl(medData);
@@ -535,7 +535,7 @@ const ProductDetails = () => {
                                             if (typeof med === 'string' && med.trim().startsWith('{')) {
                                                 try {
                                                     medData = JSON.parse(med);
-                                                } catch (e) {}
+                                                } catch (e) { }
                                             }
 
                                             let medName = '';
@@ -587,16 +587,16 @@ const ProductDetails = () => {
                                                 </div>
                                             );
                                         })}
-                                        
+
                                         {/* Clickable Text to Enlarge First Image */}
                                         {currentPack.medicines.length > 0 && (
-                                            <div 
+                                            <div
                                                 className="flex items-center justify-center cursor-pointer pl-3 hover:opacity-80 transition-opacity select-none"
                                                 onClick={() => {
                                                     // Logic to open the first image in lightbox
                                                     let medData = currentPack.medicines[0];
                                                     if (typeof medData === 'string' && medData.trim().startsWith('{')) {
-                                                        try { medData = JSON.parse(medData); } catch (e) {}
+                                                        try { medData = JSON.parse(medData); } catch (e) { }
                                                     }
                                                     let medImage = '';
                                                     if (typeof medData === 'string') {
@@ -824,6 +824,63 @@ const ProductDetails = () => {
                             {relatedProducts.map(relProduct => (
                                 <ProductCard key={relProduct._id || relProduct.id} product={relProduct} />
                             ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Patient Review Videos Section - Visible only for Gallbladder and Kidney stone products */}
+                {product && (
+                    product.name?.toLowerCase().includes('gallbladder') || 
+                    product.name?.toLowerCase().includes('gall bladder') || 
+                    id.toLowerCase().includes('gall-bladder') ||
+                    id.toLowerCase().includes('gallbladder') ||
+                    product.name?.toLowerCase().includes('kidney') ||
+                    id.toLowerCase().includes('kidney')
+                ) && (
+                    <div className="mt-16 lg:mt-24 px-4 md:px-0 flex flex-col items-center">
+                        <div className="text-center mb-8">
+                            <h2 className="text-3xl lg:text-4xl font-serif text-gray-900 mb-2">Patient Reviews</h2>
+                            <p className="text-gray-500 max-w-2xl mx-auto">Real stories from our patients who have experienced the healing power of authentic Ayurveda.</p>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 w-full mx-auto">
+                            {(product.name?.toLowerCase().includes('gallbladder') || product.name?.toLowerCase().includes('gall bladder') || id.toLowerCase().includes('gall-bladder') || id.toLowerCase().includes('gallbladder')) && (
+                                <>
+                                    {['YhOshhrkkoQ', 'A5XxPzQ-Lmo', 'veRMMSCFBfA', 'Dz2JQHmyTrE'].map((vidId, idx) => (
+                                        <div key={idx} className="w-full">
+                                            <div className="aspect-[9/16] w-full rounded-2xl overflow-hidden shadow-2xl border border-gray-200 bg-gray-50">
+                                                <iframe 
+                                                    width="100%" 
+                                                    height="100%" 
+                                                    src={`https://www.youtube.com/embed/${vidId}?rel=0&modestbranding=1&autohide=1&showinfo=0`}
+                                                    title={`Patient Review ${idx + 1}`}
+                                                    frameBorder="0" 
+                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                                    allowFullScreen
+                                                ></iframe>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </>
+                            )}
+                            {(product.name?.toLowerCase().includes('kidney') || id.toLowerCase().includes('kidney')) && (
+                                <>
+                                    {['xp7dAZGASTs', 'TbmUMHF04A8'].map((vidId, idx) => (
+                                        <div key={idx} className="w-full">
+                                            <div className="aspect-[9/16] w-full rounded-2xl overflow-hidden shadow-2xl border border-gray-200 bg-gray-50">
+                                                <iframe 
+                                                    width="100%" 
+                                                    height="100%" 
+                                                    src={`https://www.youtube.com/embed/${vidId}?rel=0&modestbranding=1&autohide=1&showinfo=0`}
+                                                    title={`Patient Review Kidney Stone ${idx + 1}`}
+                                                    frameBorder="0" 
+                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                                    allowFullScreen
+                                                ></iframe>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </>
+                            )}
                         </div>
                     </div>
                 )}

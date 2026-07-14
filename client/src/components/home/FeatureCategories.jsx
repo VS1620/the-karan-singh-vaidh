@@ -44,7 +44,7 @@ const categories = [
         id: 5,
         name: 'Asthma Care',
         description: 'Strengthen your lungs and breathe purely with ancient respiratory support.',
-        image: "https://res.cloudinary.com/diqj5p308/image/upload/v1779861934/dil_bqzvgc.jpg",
+        image: "/Asthma 2.png",
         link: '/product/asthma-ayurvedic-treatment'
     },
     {
@@ -65,7 +65,7 @@ const categories = [
         id: 8,
         name: 'Over Weight',
         description: 'Natural metabolism booster and fat burner to achieve your ideal weight safely.',
-        image: "https://res.cloudinary.com/diqj5p308/image/upload/v1779862485/Over_Weight_smdxs0.jpg",
+        image: "/Overweight.png",
         link: '/product/weight-loss-ayurvedic-treatment',
         imgClass: 'object-top'
     }

@@ -163,7 +163,7 @@ const AboutUs = () => {
                             className="text-3xl md:text-5xl font-serif font-bold text-[#1b3a27] leading-tight"
                         >
                             Experienced Ayurveda Specialist in <br />
-                            Himachal Pradesh – Dr. Karan Singh Vaidh
+                            Himachal Pradesh – Karan Singh Vaidh
                         </motion.h1>
                         <motion.p
                             initial={{ opacity: 0, y: 20 }}

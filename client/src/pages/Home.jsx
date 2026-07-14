@@ -12,7 +12,6 @@ const WhyUs = lazy(() => import('../components/home/WhyUs'));
 const HowItWorks = lazy(() => import('../components/home/HowItWorks'));
 const Authenticity = lazy(() => import('../components/home/Authenticity'));
 const RealStores = lazy(() => import('../components/home/RealStores'));
-const FactoryVideo = lazy(() => import('../components/home/FactoryVideo'));
 const Reviews = lazy(() => import('../components/home/Reviews'));
 
 const SectionLoader = () => (
@@ -179,7 +178,6 @@ const Home = () => {
                 <HowItWorks />
                 <Authenticity />
                 <RealStores />
-                <FactoryVideo />
                 <Reviews />
             </Suspense>
         </div>

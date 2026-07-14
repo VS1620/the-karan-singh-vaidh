@@ -202,13 +202,8 @@ const Shop = ({ defaultCategory }) => {
         setLoading(true);
         try {
             const params = new URLSearchParams();
-            // If defaultCategory is set, filter by name; otherwise use ID from search params
             if (selectedCategory !== 'All') {
-                if (defaultCategory) {
-                    params.append('categoryName', selectedCategory);
-                } else {
-                    params.append('category', selectedCategory);
-                }
+                params.append('category', selectedCategory);
             }
             params.append('sort', sortBy);
 
@@ -257,7 +252,7 @@ const Shop = ({ defaultCategory }) => {
         'Diabetes': { image: diabetesImg, color: 'bg-purple-100 text-purple-600', label: 'Diabetes' },
         'Tuberculosis (TB)': { image: tuberculosisImg, color: 'bg-cyan-100 text-cyan-600', label: 'Tuberculosis' },
         'Migraine': { image: migraineImg, color: 'bg-yellow-100 text-yellow-600', label: 'Migraine' },
-        'Thyroid': { image: thyroidImg, color: 'bg-pink-100 text-pink-600', label: 'Thyroid' },
+        'Thyroid': { image: '/Thyroid.jpeg', color: 'bg-pink-100 text-pink-600', label: 'Thyroid' },
         'Kidney Stone': { image: kidneyStoneImg, color: 'bg-emerald-100 text-emerald-600', label: 'Kidney Stone' },
     };
 
@@ -357,7 +352,7 @@ const Shop = ({ defaultCategory }) => {
                             return (
                                 <div
                                     key={cat._id}
-                                    onClick={() => slug ? navigate(slug) : setSearchParams({ category: cat._id })}
+                                    onClick={() => slug ? navigate(slug) : navigate(`/ayurvedic-products?category=${cat._id}`)}
                                     className={`flex flex-col items-center gap-3 min-w-[90px] cursor-pointer group snap-start transition-all duration-300 ${isSelected ? 'scale-110' : 'scale-100'}`}
                                 >
                                     <div className={`w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-500 border overflow-hidden ${isSelected ? `border-ayur-green/20 shadow-lg shadow-gray-100 -rotate-2` : 'border-gray-100 bg-white group-hover:border-ayur-green/10 group-hover:shadow-md'}`}>
@@ -438,7 +433,7 @@ const Shop = ({ defaultCategory }) => {
                                     return (
                                         <li key={cat._id}>
                                             <button
-                                                onClick={() => slug ? navigate(slug) : setSearchParams({ category: cat._id })}
+                                                onClick={() => slug ? navigate(slug) : navigate(`/ayurvedic-products?category=${cat._id}`)}
                                                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group ${isSelected ? 'bg-ayur-green text-white font-bold shadow-md shadow-ayur-green/10 translate-x-1' : 'text-gray-600 hover:bg-gray-50 hover:translate-x-1'}`}
                                             >
                                                 <div className={`w-8 h-8 rounded-lg transition-colors overflow-hidden ${isSelected ? 'ring-2 ring-white/50' : 'bg-gray-100 group-hover:bg-gray-200'}`}>
@@ -510,7 +505,7 @@ const Shop = ({ defaultCategory }) => {
                             <div className="text-center py-32 bg-white rounded-xl shadow-sm border border-gray-50">
                                 <p className="text-gray-400 font-serif text-xl italic mb-4">No products found in this category.</p>
                                 <button
-                                    onClick={() => setSearchParams({})}
+                                    onClick={() => navigate('/ayurvedic-products')}
                                     className="bg-ayur-green text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg hover:shadow-xl transition-all"
                                 >
                                     View All Products

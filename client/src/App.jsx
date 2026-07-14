@@ -29,6 +29,7 @@ const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const TermsAndConditions = lazy(() => import('./pages/TermsAndConditions'));
 const ShippingPolicy = lazy(() => import('./pages/ShippingPolicy'));
 const RefundCancellation = lazy(() => import('./pages/RefundCancellation'));
+const PatientReports = lazy(() => import('./pages/PatientReports'));
 
 // Admin Pages
 const AdminLogin = lazy(() => import('./pages/admin/AdminLogin'));
@@ -116,6 +117,8 @@ function App() {
                 <Route path="/about-ayurvedic-doctor-in-solan" element={<AboutUs />} />
                 {/* Redirect old /about URL */}
                 <Route path="/about" element={<Navigate to="/about-ayurvedic-doctor-in-solan" replace />} />
+
+                <Route path="/patient-reports" element={<PatientReports />} />
 
                 <Route path="/contact" element={<ContactUs />} />
 
